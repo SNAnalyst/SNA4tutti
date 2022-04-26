@@ -27,7 +27,7 @@ Translation of tutti – Italian–English dictionary
 
 adjective
 
-all [adjective, pronoun] every one (of a group) when taken together
+all [adjective, pronoun] every one (of a group) when taken together in a single place
  
 pronoun
 
