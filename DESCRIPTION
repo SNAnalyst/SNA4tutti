@@ -1,0 +1,54 @@
+Package: SNA4tutti
+Type: Package
+Title: Social Network Analysis for Everyone
+Version: 0.0.1
+Authors@R:
+	c(person(given = "Roger",
+					family = "Leenders",
+					role = c("aut", "cre"),
+					email = "SNA4DS@jads.nl"),
+	  person(given = "Claudia",
+					family = "Zucca",
+					role = c("aut"),
+					email = "SNA4DS@jads.nl"))
+Maintainer: Roger Leenders <r.t.a.j.leenders@jads.nl>
+Description: Contains the tutorials for the JADS course "Social Network Analysis for Data Science" (2022-2023). The package contains a vignette that shows the most important functions you need to know for this course.
+Depends: 
+	R (>= 4.1.0)
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/SNAnalyst/SNA4tutti
+BugReports: https://github.com/SNAnalyst/SNA4DS/issues
+Imports:
+  btergm,
+  ergm,
+	fontawesome,
+  glue,
+  gradethis,
+	igraph,
+	igraphdata,
+	influenceR,
+	intergraph,
+  knitr,
+	ndtv,
+	network,
+	networkDynamic,
+	remotes,
+  rmarkdown,
+	rstudioapi,
+	sna,
+	stringr,
+	tsna
+Remotes:
+	github::rstudio-education/gradethis,
+	github::SNAnalyst/SNA4DSData,
+  github::matthewjdenny/GERGM,
+  github::rstudio/learnr
+Suggests:
+	desc,
+	fs,
+	rlang,
+	rprojroot,
+	usethis
+License: AGPL (>= 3) + file LICENSE
+RoxygenNote: 7.1.2
