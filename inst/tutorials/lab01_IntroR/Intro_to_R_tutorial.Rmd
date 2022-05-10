@@ -1,6 +1,6 @@
 ---
 title: "Lab 01 - Intro to R"
-description: "Week 1: An iIntroductory tutorial for programming in the R language"
+description: "Week 1: An Introductory tutorial for programming in the R language"
 output: 
   learnr::tutorial:
     fig_caption: no
@@ -16,14 +16,74 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(gradethis)
-tutorial_options(exercise.checker = gradethis::grade_learnr)
+
 knitr::opts_chunk$set(
 	echo = FALSE,
 	message = FALSE,
 	warning = FALSE,
 	cache = FALSE
 )
+
+source("../R/helper_code.R")
+
+# Check whether required packages are installed
+
+# no packages needed for tutorial one since everything is in R base
+
+# RStudio, at least 2022.2.2.485
+check_RStudio <- SNA4tutti:::check_rstudio
+
+
+# R check version (required 4.2.0)
+check_R <- function(x) {
+  SNA4tutti:::check_r_equal(4, 2.0)
+}
 ```
+
+
+```{css, echo = FALSE}
+.tip {
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid #136CB9;
+  background-color: #136CB9;
+  background-color: rgba(19, 108, 185, 0.1);
+  color: #2C5577;
+}
+
+.warning {
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid #f3e2c4;
+  background-color: #f3e2c4;
+  background-color: rgba(243, 226, 196, 0.1);
+  color: #775418;
+}
+
+.infobox {
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid #868e96;
+  background-color: #868e96;
+  background-color: rgba(134, 142, 150, 0.1);
+  color: #2F4F4F;
+}
+
+# # create a horizontal scroll bar when code is too wide
+# pre, code {white-space:pre !important; overflow-x:auto}
+```
+
+```{html, echo = FALSE}
+<style>
+pre {
+  white-space: pre-wrap;
+  background: #F5F5F5;
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
+```
+
 
 
 
@@ -47,85 +107,34 @@ So, let's get started!
 
 ## Checking installation
 
-Before starting to use R, we need to check whether you have the *right* software 
-installed. If you are running this tutorial, you must have something installed. 
-However, we need to make sure you have the right versions and that you have all 
-the packages we need.
+You need to have installed R version 4.2.0 (or higher) and this tutorial
+is going to check it for you. Please hit the `Run Code` button.
 
-### R Version 
-
-You need to have installed R version 4.1.1 and this tutorial is going to check it
-for you. Please read the message below.
-```{r rcheck, include = TRUE}
-# R check version (required 4.1.1)
-
-major <- R.Version()$major
-minor <- R.Version()$minor
-
-if((major == 4) & (minor == 1.1 )) {
-
-  cat("Great! You have the right version!")
-
-} else {
-
-  cat("Sorry! You have the wrong version. Please update R to version 4.4.1")
-
-}
-
-
+```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_R()
 ```
-
 
 ### R Studio Version
 
-You need to have installed RStudio version 1.4.1717 or above.
-Please read the message below.
+You need to have installed RStudio version 2021.9.0.351 or above. Let's
+check by clicking `Run Code`:
 
-```{r rstudio check, include = TRUE}
-# R studio check version (required 1.4.1725 or above)
-SNA4tutti:::check_rstudio()
+```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_RStudio()
 ```
-
-
 
 ### Packages
 
-You need to have a few packages installed:
+You need to have a few packages installed to ensure safe travels. Click
+the `Run Code` to check. It will check whether you have the required
+packages installed and will attempt to install any missing packages in
+case there are any (or it will advise you to upgrade `SNA4DS`).
 
+```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
 
+check_pkgs()
 
-```{r}
-# Function to check whether package is installed
-
-# insert here packages that the students need to have installed.
-# pkg <- c("igraph", "sna", "gradethis", "papaja", "ina")
-# 
-# 
-# is.installed <- function(mypkg){
-#   is.element(mypkg, installed.packages()[,1])
-# }
-# 
-# 
-# 
-# for (i in 1:length(pkg)){
-# 
-# if (isFALSE(is.installed(pkg[i]))){
-# 
-#   install.packages(pkg[i], repos = "http://cran.us.r-project.org")
-# 
-# } else {
-# 
-#   cat(paste0("Great! You have the ", pkg[i], " package\n"))
-# 
-#   }
-# }
 ```
-
-Do you have `SNA4DSData` installed? If not run this line of code on your *R*
-console:
-
-`remotes::install_github("SNAnalyst/SNA4DSData", dependencies = TRUE)`
-
 Ok, check up completed! 
 Did you pass the checks? Yes? Great! Let's get started for real!
 If not, please close the tutorial, update/download and come back!

@@ -167,27 +167,27 @@ check_packages <- function(reqs) {
 #'
 #' @return message with the result
 #' @keywords internal
-check_rstudio <- function(version1 = "1.4.1717", version2021 = "2019.9.0.351") {
+check_rstudio <- function(version1 = "2.2.485", version2022 = "2022.2.2.485") {
   ver <- rstudioapi::versionInfo()$version
 
   ver_split <- strsplit(as.character(ver), ".", fixed = TRUE)[[1]]
-  
+
   if ((length(ver_split) == 3) & (ver_split[1] == "1")) {
     if(ver < version1) {
-      
+
       verdict <- "Sorry! Your Rstudio is not up-to-date. Please upgrade your Rstudio version."
-      
+
     } else {
-      
+
       verdict <- "Great! Your Rstudio is up to date!"
     }
-  } else if ((length(ver_split) == 4) & ver_split[1] == "2021") {
-    if(ver < version2021) {
-      
+  } else if ((length(ver_split) == 4) & ver_split[1] == "2022") {
+    if(ver < version2022) {
+
       verdict <- "Sorry! Your Rstudio is not up-to-date. Please upgrade your Rstudio version."
-      
+
     } else {
-      
+
       verdict <- "Great! Your Rstudio is up to date!"
     }
   } else {
@@ -215,7 +215,7 @@ check_rstudio <- function(version1 = "1.4.1717", version2021 = "2019.9.0.351") {
 #'
 #' @return message with the result
 #' @keywords internal
-check_r_equal <- function(Major = 4, Minor = 1.1) {
+check_r_equal <- function(Major = 4, Minor = 2.0) {
   major <- R.Version()$major
   minor <- R.Version()$minor
 
@@ -225,7 +225,7 @@ check_r_equal <- function(Major = 4, Minor = 1.1) {
 
   } else {
 
-    verdict <- "Sorry! You have the wrong R version. Please update R to version 4.1.1"
+    verdict <- "Sorry! You have the wrong R version. Please update R to version 4.2.0"
 
   }
   return(verdict)
