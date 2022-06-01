@@ -15,7 +15,7 @@ NULL
 #'
 #' Functions, datasets, and tutorials, useful for the SNA4DS course.
 #'
-#' @name SNA4tutti
+#' @name sna4tutti
 #' @keywords package
 #' @docType package
 NULL

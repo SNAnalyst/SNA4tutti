@@ -1,4 +1,4 @@
-Package: SNA4tutti
+Package: sna4tutti
 Type: Package
 Title: Social Network Analysis for Everyone
 Version: 0.0.1
@@ -17,7 +17,7 @@ Depends:
 	R (>= 4.1.0)
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/SNAnalyst/SNA4tutti
+URL: https://github.com/SNAnalyst/sna4tutti
 BugReports: https://github.com/SNAnalyst/SNA4DS/issues
 Imports:
   btergm,

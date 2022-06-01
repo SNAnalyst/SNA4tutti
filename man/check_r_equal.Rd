@@ -4,7 +4,7 @@
 \alias{check_r_equal}
 \title{Check for correct version of R}
 \usage{
-check_r_equal(Major = 4, Minor = 1.1)
+check_r_equal(Major = 4, Minor = 2)
 }
 \arguments{
 \item{Major}{Major version number, e.g., 4}

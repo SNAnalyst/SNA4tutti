@@ -31,12 +31,12 @@ source("../R/helper_code.R")
 # no packages needed for tutorial one since everything is in R base
 
 # RStudio, at least 2022.2.2.485
-check_RStudio <- SNA4tutti:::check_rstudio
+check_RStudio <- sna4tutti:::check_rstudio
 
 
 # R check version (required 4.2.0)
 check_R <- function(x) {
-  SNA4tutti:::check_r_equal(4, 2.0)
+  sna4tutti:::check_r_equal(4, 2.0)
 }
 ```
 

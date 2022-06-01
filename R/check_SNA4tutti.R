@@ -1,12 +1,12 @@
 
 
 
-#' Check SNA4tutti version
+#' Check sna4tutti version
 #'
-#' Check the installed SNA4tutti version
+#' Check the installed sna4tutti version
 #'
 #' With this function you can check if you have the most recent version of
-#' the SNA4tutti package installed.
+#' the sna4tutti package installed.
 #'
 #' If you are current, the function returns a message that tells you so.
 #' If there is a more recent version on Github, the function will inform you
@@ -18,10 +18,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' check_SNA4tutti()
+#' check_sna4tutti()
 #' }
-check_SNA4tutti <- function() {
-  check_and_update_github("SNAnalyst/SNA4tutti")
+check_sna4tutti <- function() {
+  check_and_update_github("SNAnalyst/sna4tutti")
 }
 
 
@@ -44,7 +44,7 @@ check_and_update_github <- function(pkg) {
   } else {
     print(paste0("You do not have the latest version of the ", check$package, " package."))
 
-    choice <- utils::menu(c("Y", "N"), title = "Do you want me to update SNA4tutti?")
+    choice <- utils::menu(c("Y", "N"), title = "Do you want me to update sna4tutti?")
     if (choice == 1) {
       remotes::install_github(repo = pkg, dependencies = TRUE)
     }

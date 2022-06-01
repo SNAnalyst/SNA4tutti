@@ -1,13 +1,13 @@
 # INDEX <- read.table(
-#   file = "C:/Dropbox/R/eigen_packages/=git/SNA4tutti/doc/INDEX",
+#   file = "C:/Dropbox/R/eigen_packages/=git/sna4tutti/doc/INDEX",
 #   header = TRUE, sep = ",", strip.white = TRUE)
 
 
-#' Open a SNA4tutti vignette in the browser
+#' Open a sna4tutti vignette in the browser
 #'
-#' Open a SNA4tutti vignette in your browser
+#' Open a sna4tutti vignette in your browser
 #'
-#' Shows a list of currently available online vignettes for the #' \code{SNA4tutti} package.
+#' Shows a list of currently available online vignettes for the #' \code{sna4tutti} package.
 #' The user can pick the preferred vignette by entering the number that corresponds
 #' to the preferred vignette. The vignette will then open in the user's default
 #' web browser.
@@ -24,10 +24,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' open_SNA4tutti_vignettes()
+#' open_sna4tutti_vignettes()
 #' }
-open_SNA4tutti_vignettes <- function(graphics = TRUE) {
-  paths <- find.package("SNA4tutti", lib.loc = NULL, quiet = TRUE)
+open_sna4tutti_vignettes <- function(graphics = TRUE) {
+  paths <- find.package("sna4tutti", lib.loc = NULL, quiet = TRUE)
 
   if (dir.exists(file.path(paths, "doc"))) {
     paths <- file.path(paths, "doc")

@@ -1,8 +1,8 @@
 #' Pick a tutorial
 #'
-#' Pick a tutorial from the SNA4tutti package
+#' Pick a tutorial from the sna4tutti package
 #'
-#' Shows a list of currently available tutorials in the #' \code{SNA4tutti} package.
+#' Shows a list of currently available tutorials in the #' \code{sna4tutti} package.
 #' The user can pick the preferred tutorial by entering the number that corresponds
 #' to the preferred tutorial. The tutorial will then open in the user's default
 #' web browser.
@@ -19,13 +19,13 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' SNA4tutti_tutorials()
+#' sna4tutti_tutorials()
 #' }
-SNA4tutti_tutorials <- function(graphics = TRUE) {
+sna4tutti_tutorials <- function(graphics = TRUE) {
   suppressMessages(require("learnr"))
   if (!is.logical(graphics)) stop("You need to set 'graphics' to TRUE or FALSE only (without parentheses)")
-  all_tuts <- learnr::available_tutorials("SNA4tutti")
-  perform <- glue::glue("learnr::run_tutorial('{tuto}', package = 'SNA4tutti')",
+  all_tuts <- learnr::available_tutorials("sna4tutti")
+  perform <- glue::glue("learnr::run_tutorial('{tuto}', package = 'sna4tutti')",
                         tuto = all_tuts$name)
 
   cat("\n\nPlease pick which tutorial you want to run, it will open in your default browser.\n")
