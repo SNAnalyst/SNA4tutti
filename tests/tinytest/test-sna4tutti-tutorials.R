@@ -7,6 +7,6 @@ library(shinytest)
   # on a Mac, and they will differ from screenshots taken on the CI platform,
   # which runs on Linux.
 
-  appdir <- system.file("tutorials/lab01_IntroR", package = "sna4tutti")
+  appdir <- system.file("tutorials/T01_IntroR", package = "sna4tutti")
   # expect_pass(testApp(appdir, compareImages = FALSE)) ADAPT TO TINYTEST
 

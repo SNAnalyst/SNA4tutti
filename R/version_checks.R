@@ -222,7 +222,7 @@ check_r_equal <- function(Major = 4, Minor = 2.0) {
   if((major == Major) & (minor == Minor )) {
 
     verdict <- "Great! You have the correct R version!"
-_r_equal
+
   } else {
 
     verdict <- "Sorry! You have the wrong R version. Please update R to version 4.2.0"

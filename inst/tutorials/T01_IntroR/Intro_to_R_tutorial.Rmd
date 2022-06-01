@@ -1,5 +1,5 @@
 ---
-title: "Lab 01 - Intro to R"
+title: "T01 - Intro to R"
 description: "Week 1: An Introductory tutorial for programming in the R language"
 output: 
   learnr::tutorial:
@@ -117,19 +117,6 @@ check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
 check_RStudio()
-```
-
-### Packages
-
-You need to have a few packages installed to ensure safe travels. Click
-the `Run Code` to check. It will check whether you have the required
-packages installed and will attempt to install any missing packages in
-case there are any (or it will advise you to upgrade `SNA4DS`).
-
-```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
-
-check_pkgs()
-
 ```
 
 Ok, check up completed! Did you pass the checks? Yes? Great! Let's get
@@ -490,7 +477,7 @@ typeof(var2)
 You can also change the type of your variables
 
 ```{r try_something7, exercise=TRUE, echo = TRUE}
-c<- c(0,1,1,0)
+c <- c(0,1,1,0)
 typeof(c)
 c1 <- as.character(c)
 typeof(c1)
@@ -518,7 +505,7 @@ Try to play a bit with this function
 class(FALSE)
 ```
 
-You will learn the practical differences with practice.
+You will learn the practical differences with ... practice!
 
 For the data analysis that we do it is better to use `class`.
 
