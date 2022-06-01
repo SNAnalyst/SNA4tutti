@@ -1,4 +1,4 @@
-# SNA4tutti
+# sna4tutti
 Tutorials for the SNA4DS course
 
 
