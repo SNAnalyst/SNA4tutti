@@ -49,6 +49,7 @@ Suggests:
 	fs,
 	rlang,
 	rprojroot,
+	tinytest,
 	usethis
 License: AGPL (>= 3) + file LICENSE
 RoxygenNote: 7.1.2

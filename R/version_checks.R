@@ -217,7 +217,7 @@ check_rstudio <- function(version1 = "2.2.485", version2022 = "2022.2.2.485") {
 #' @keywords internal
 check_r_equal <- function(Major = 4, Minor = 2.0) {
   major <- R.Version()$major
-  minor <- R.Version()$minor
+  minor <- as.numeric(R.Version()$minor)
 
   if((major == Major) & (minor == Minor )) {
 
