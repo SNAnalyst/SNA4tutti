@@ -256,11 +256,15 @@ This last plot does not meet any of the goal we stated above.
 
 
 ```{r testquiz, echo = FALSE}
-question("What is the main problem with the plots of igraphNet and networkNet?",
-    answer("nodes are too small"),
-    answer("the colors are not color blind friendly"),
-    answer("the plot does not inform us on what the network represents", correct = TRUE)
-  )
+quiz(question("What is the main problem with the plots of igraphNet and networkNet?",
+              answer("nodes are too small"),
+              answer("the colors are not color blind friendly"),
+              answer("the plot does not inform us on what the network represents", correct = TRUE),
+              correct = "Yes! Well done!",
+              random_answer_order = TRUE,
+              allow_retry = TRUE
+)
+)
 ```
 
 Yes, unless we are working with a toy network, we are not going to tell a story just using 
