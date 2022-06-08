@@ -31,4 +31,4 @@ cont <- attributes(grades)
 
 expect_equal(cont$class, "factor")
 
-############################# tests T02 ########################################
+

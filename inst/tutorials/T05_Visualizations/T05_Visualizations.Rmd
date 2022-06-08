@@ -29,9 +29,9 @@ source("../R/helper_code.R")
 
 # Check whether required packages are installed
 pkgs <- matrix(c(
-  "learnr", "0.10.0", "CRAN",
-  "gradethis", "0.2.3.9001", "rstudio/gradethis",
-  "outliertree", "1.7.4", "CRAN"
+  "learnr", "0.10.1", "CRAN",
+  "gradethis", "0.2.8.9000", "rstudio/gradethis",
+  "outliertree", "1.8.1", "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
@@ -44,9 +44,9 @@ check_pkgs <- function(.pkgs = pkgs) {
 check_RStudio <- sna4tutti:::check_rstudio
 
 
-# R check version (required 4.1.1)
+# R check version (required 4.2.0) -updated June 2022
 check_R <- function(x) {
-  sna4tutti:::check_r_equal(4, 1.1)
+  sna4tutti:::check_r_equal(4, 2.0)
 }
 ```
 
@@ -689,4 +689,4 @@ Let's say goodbye with the visualization of someone that knew how to tell (funny
 
 ![](images/hieronymus-bosch.jpg)
 
-
+rmarkdown::shiny_prerendered_clean("../doc.Rmd")

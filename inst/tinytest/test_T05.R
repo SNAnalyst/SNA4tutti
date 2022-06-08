@@ -12,7 +12,7 @@ expect_equal(y2, c(2, 8, 18, 32, 50, 72, 98, 128, 162, 200))
 
 # test "r testquiz" line 258
 
-# test 5-2 test on quiz output
+# test 5-2 test on quiz() output
 q1 <- quiz(question("What is the main problem with the plots of igraphNet and networkNet?",
                     answer("nodes are too small"),
                     answer("the colors are not color blind friendly"),
@@ -27,7 +27,7 @@ q1 <- quiz(question("What is the main problem with the plots of igraphNet and ne
 expect_true(q1$questions[[1]]$question == "What is the main problem with the plots of igraphNet and networkNet?")
 
 
-# test 5-3 testing correct answer
+# test 5-3 testing correct answer on question() structure
 q1in <- question("What is the main problem with the plots of igraphNet and networkNet?",
                  answer("nodes are too small"),
                  answer("the colors are not color blind friendly"),
@@ -68,3 +68,21 @@ expect_equal(as.vector(table(igraph::E(net)$frequency)), c(28, 37, 32, 38, 15))
 ## test 5-9 test that the attribute "closeness" is properly loaded (implicitly checking for number of edges)
 
 expect_equal(as.vector(table(igraph::E(net)$closeness)), c(60, 52, 34, 3, 1))
+
+
+# test "r quiz_viz1" line 405
+
+## test 5-10
+q2 <- quiz(
+  question("How do you interpret this visualization?",
+           answer("The year matters for friednship formation but the gender does not"),
+           answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
+           answer("The year does not matter for friendship formation but the gender does"),
+           answer("Both the year and the gender equally matter in predicting friendship"),
+           correct = "Yes! Well done!",
+           random_answer_order = TRUE,
+           allow_retry = TRUE
+  )
+)
+
+

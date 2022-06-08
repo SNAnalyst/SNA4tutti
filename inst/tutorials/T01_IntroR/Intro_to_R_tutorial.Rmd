@@ -37,7 +37,7 @@ knitr::opts_chunk$set(
 check_RStudio <- sna4tutti:::check_rstudio
 
 
-# R check version (required 4.2.0)
+# R check version (required 4.2.0) -updated June 2022
 check_R <- function(x) {
   sna4tutti:::check_r_equal(4, 2.0)
 }
