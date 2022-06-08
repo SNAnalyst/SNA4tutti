@@ -88,11 +88,11 @@ pre {
 
 ## Intro to Programming in R
 
-Welcome to this tutorial! R is a programming language and free software
+Welcome to this tutorial! `r rproj()` is a programming language and free software
 environment for statistical computing and graphics supported by the R
-Core Team and the R Foundation for Statistical Computing.
+Core Team and the `r rproj()` Foundation for Statistical Computing.
 
-Even if you are excellent at programming, if you haven't used R before
+Even if you are excellent at programming, if you haven't used `r rproj()` before
 you need a bit of help to translate your existing knowledge to this
 other language.
 
@@ -102,9 +102,11 @@ concept that will get you to the next level!
 
 So, let's get started!
 
+![](images/programmer.png){width=75%}
+
 ## Checking installation
 
-You need to have installed R version 4.2.0 (or higher) and this tutorial
+You need to have installed `r rproj()` version 4.2.0 (or higher) and this tutorial
 is going to check it for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -239,7 +241,7 @@ This is the way you should specify a variable in R
 
 C \<- 2 + 2
 
-If you want R to print it while you specify it, you use round brackets
+If you want `r rproj()` to print it while you specify it, you use round brackets
 
 (C \<- 2 + 2)
 
@@ -312,7 +314,7 @@ There are three things that improve the readability of your code:
 
 It is also good if you comment your code every time. So you will be able
 to read it in the future. Even more so if you are doing collaborative
-work. In R you comment using \#
+work. In `r rproj()` you comment using \#
 
 Can you write on the top of this operation that it is a summation?
 
@@ -324,9 +326,9 @@ Can you write on the top of this operation that it is a summation?
 
 ### Indenting
 
-In R indentation is important to keep your code readable, but it is not
+In `r rproj()` indentation is important to keep your code readable, but it is not
 crucial. It will be running even if you write it in the most terrible
-way. R uses curly braces and that's what matters the most.
+way. `r rproj()` uses curly braces and that's what matters the most.
 
 .center[Just please DON'T!]
 
@@ -361,7 +363,7 @@ It is better for doing certain things.
 
 R is also a functional language; still, there are ways to specify the
 features of an object (protocols S3 and S4). You would need to learn how
-to do it if you decide to write a package in R while using R for data
+to do it if you decide to write a package in `r rproj()` while using `r rproj()` for data
 analysis, you don't need that.
 
 As a data analyst, you need the ability to check the object you are
@@ -371,12 +373,12 @@ Let's start to check the object types that we can have in R.
 
 ### Types of Variables
 
-To make the best of the R language, you'll need a strong understanding
+To make the best of the `r rproj()` language, you'll need a strong understanding
 of the basic data types and how to operate on them.
 
 -   *character*: "a", "swc"
 -   *numeric*: 2, 15.5
--   *integer*: 2L (the L tells R to store this as an integer)
+-   *integer*: 2L (the L tells `r rproj()` to store this as an integer)
 -   *logical*: TRUE, FALSE
 -   *complex*: 1+4i (complex numbers with real and imaginary parts) (we
     are not going to use it)
@@ -685,7 +687,7 @@ R offers you a quick way to get info about its functions (and the
 functions of the packages too. More about that later)
 
 if you type a question mark before the function name, all the
-information you need will pop up on your R studio window (or open on
+information you need will pop up on your `r rproj()` studio window (or open on
 browser)
 
 Uncomment the code below and give it a go!
@@ -703,7 +705,7 @@ account that sometimes (often), the data is missing.
 R stores missing values in two ways
 
 -   NA: (Not Available) is a missing value indicator. It suggests that a
-    value should be present but is unknown. R considers NA as logical.
+    value should be present but is unknown. `r rproj()` considers NA as logical.
 
 -   NULL: implies that a value should not be present and it is not
     there.
@@ -784,7 +786,7 @@ Unless you pass to the function the class it requires, it won't work!
 
 ## Data Structures
 
-To make the best of the R language, you'll need a strong understanding
+To make the best of the `r rproj()` language, you'll need a strong understanding
 of the basic data types and data structures that this language handles
 and how to operate with them. We covered data types already, let's move
 on to data structures.
@@ -817,7 +819,7 @@ not work.
 
 A data frame is what comes closest to our perception of a traditional
 data table. Each column can host different types or classes of data. You
-can create one in R with the function `data.frame()`. Every column needs
+can create one in `r rproj()` with the function `data.frame()`. Every column needs
 to have the same length.
 
 Try to run the code below
@@ -909,7 +911,7 @@ gradethis::grade_code(correct = "Bravo! It is still colnames()!")
 
 ### Matrix
 
-A matrix in R is like a data frame but it can host only one type or
+A matrix in `r rproj()` is like a data frame but it can host only one type or
 class of data. It can either be numeric, character etc... The parameters
 *nrow* and *ncol* define the matrix dimension.
 
@@ -997,9 +999,9 @@ import the most common data extensions.
 
 ### Setting your directory
 
-When you start to work in R (as in any other language), you need to set
+When you start to work in `r rproj()` (as in any other language), you need to set
 up your working directory. In fact, you won't be able to import any data
-unless R knows where to find it first.
+unless `r rproj()` knows where to find it first.
 
 If you simply want to check what is the current working directory, you
 use the function `getwd()`.
@@ -2188,7 +2190,7 @@ apply(iris[1:4], 2, function(x) mean(c(max(x), min(x))))
 
 You can be creative with the `apply()` family as much as with for loops!
 
-## Very basic r graphics
+## Very basic R graphics
 
 Doing good visualizations is almost an art. However, everyone, with a
 bit of practice, can produce images to show data.
@@ -2524,5 +2526,10 @@ polygon(dens, col = "steelblue")
 
 That's all for now! Hopefully you learned something helpful and did not
 get too bored! See you in the next tutorial!
+
+![](images/artworks-000192822861-zqs0r2-t500x500.jpg)
+
+
+
 
 rmarkdown::shiny_prerendered_clean("../doc.Rmd")
