@@ -13,6 +13,7 @@ runtime: shiny_prerendered
 editor_options: 
   markdown: 
     wrap: 72
+    
 ---
 
 ```{r setup, include=FALSE}
@@ -2523,3 +2524,5 @@ polygon(dens, col = "steelblue")
 
 That's all for now! Hopefully you learned something helpful and did not
 get too bored! See you in the next tutorial!
+
+rmarkdown::shiny_prerendered_clean("../doc.Rmd")

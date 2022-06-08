@@ -14,7 +14,7 @@
 <meta name="allow-skip" content="true" />
 <meta name="learnr-version-prerender" content="0.10.1.9022" />
 
-<title>Lab 01 - Intro to R</title>
+<title>T01 - Intro to R</title>
 
 <!-- header-includes START -->
 <!-- HEAD_CONTENT -->
@@ -490,7 +490,7 @@ typeof(var2)</code></pre>
 <div class="tutorial-exercise" data-label="try_something7"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>c&lt;- c(0,1,1,0)
+<pre class="text"><code>c &lt;- c(0,1,1,0)
 typeof(c)
 c1 &lt;- as.character(c)
 typeof(c1)
@@ -518,7 +518,7 @@ data-lines="0">
 <pre class="text"><code>class(FALSE)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>You will learn the practical differences with practice.</p>
+<p>You will learn the practical differences with … practice!</p>
 <p>For the data analysis that we do it is better to use
 <code>class</code>.</p>
 </div>
@@ -2265,7 +2265,8 @@ polygon(dens, col = &quot;steelblue&quot;)</code></pre>
 <div id="section-the-end" class="section level2">
 <h2>The End</h2>
 <p>That’s all for now! Hopefully you learned something helpful and did
-not get too bored! See you in the next tutorial!
+not get too bored! See you in the next tutorial!</p>
+<p>rmarkdown::shiny_prerendered_clean(“../doc.Rmd”)
 
 <script type="application/shiny-prerendered" data-context="server-start">
 library(learnr)
@@ -3023,7 +3024,7 @@ learnr:::store_exercise_cache(structure(list(label = "try_something7", global_se
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4, 2.0)", "}"), chunk_opts = list(
     label = "setup", include = FALSE)), setup = NULL, chunks = list(
-    list(label = "try_something7", code = "c<- c(0,1,1,0)\ntypeof(c)\nc1 <- as.character(c)\ntypeof(c1)\nc2 <- as.logical(c)\ntypeof(c2)\n\n# careful though when you do these kind of transformations\n(c3 <- as.character(c2))\n", 
+    list(label = "try_something7", code = "c <- c(0,1,1,0)\ntypeof(c)\nc1 <- as.character(c)\ntypeof(c1)\nc2 <- as.logical(c)\ntypeof(c2)\n\n# careful though when you do these kind of transformations\n(c3 <- as.character(c2))\n", 
         opts = list(label = "\"try_something7\"", exercise = "TRUE", 
             echo = "TRUE"), engine = "r")), code_check = NULL, 
     error_check = NULL, check = NULL, solution = NULL, test_cases = NULL, 
@@ -3045,7 +3046,7 @@ learnr:::store_exercise_cache(structure(list(label = "try_something7", global_se
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        label = "try_something7", exercise = TRUE, code = c("c<- c(0,1,1,0)", 
+        label = "try_something7", exercise = TRUE, code = c("c <- c(0,1,1,0)", 
         "typeof(c)", "c1 <- as.character(c)", "typeof(c1)", "c2 <- as.logical(c)", 
         "typeof(c2)", "", "# careful though when you do these kind of transformations", 
         "(c3 <- as.character(c2))", ""), out.width.px = 624, 
@@ -6631,7 +6632,7 @@ learnr:::store_exercise_cache(structure(list(label = "try_something55", global_s
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","cli","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","highr","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","sna4tutti","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4.1","4.2.0","0.3.1","2.1.0","3.3.0","4.2.0","4.3.2","4.2.0","0.6.29","0.3.2","0.15","1.1.0","0.2.8.9000","4.2.0","4.2.0","0.9","0.5.2","1.5.4","1.6.5","0.1.4","1.8.0","1.39","1.3.0","0.10.1.9022","1.0.1","2.0.3","1.1","4.2.0","0.12","1.2.0.1","2.5.1","1.0.8.3","1.0.2","2.14","2.0.3","0.4.1","1.7.1","0.0.1","4.2.0","1.7.6","1.4.0","4.2.0","4.2.0","2.5.0","0.30","1.8-4","2.3.5"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","cli","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","highr","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","rstudioapi","sass","shiny","sna4tutti","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4.1","4.2.0","0.3.1","2.1.0","3.3.0","4.2.0","4.3.2","4.2.0","0.6.29","0.3.2","0.15","1.1.0","0.2.8.9000","4.2.0","4.2.0","0.9","0.5.2","1.5.4","1.6.5","0.1.4","1.8.0","1.39","1.3.0","0.10.1.9022","1.0.1","2.0.3","1.1","4.2.0","0.12","1.2.0.1","2.5.1","1.0.8.3","1.0.2","2.14","2.0.3","0.13","0.4.1","1.7.1","0.0.1","4.2.0","1.7.6","1.4.0","4.2.0","4.2.0","2.5.0","0.30","1.8-4","2.3.5"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>
@@ -6645,8 +6646,7 @@ learnr:::store_exercise_cache(structure(list(label = "try_something55", global_s
 
 <!-- begin doc-metadata -->
 <div id="doc-metadata">
-<h2 class="title toc-ignore" style="display:none;">Lab 01 - Intro to
-R</h2>
+<h2 class="title toc-ignore" style="display:none;">T01 - Intro to R</h2>
 </div>
 <!-- end doc-metadata -->
 

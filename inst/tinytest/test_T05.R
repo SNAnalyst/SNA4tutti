@@ -1,0 +1,44 @@
+############################# tests T05 ########################################
+
+## test "r 07nonNetPlot" line 192
+
+# test 5-1 (numeration is important for the final check with tinytest::test_all)
+
+x <- 1:10
+y1 <- x*x
+y2  <- 2*y1
+
+expect_equal(y2, c(2, 8, 18, 32, 50, 72, 98, 128, 162, 200))
+
+
+
+# test "r dataload" line 280
+
+## test 5-3 test that data name is properly loaded (implicitly checking for number of nodes)
+
+net <- SNA4DSData::DSstudents
+
+expect_equal(igraph::V(net)$name, c(paste0("S", 1:81)))
+
+
+## test 5-4 test that the attribute "year" is properly loaded (implicitly checking for number of nodes)
+
+expect_equal(as.vector(table(igraph::V(net)$year)), c(54, 19, 8))
+
+
+## test 5-5 test that the attribute "Hang.Out" is properly loaded (implicitly checking for number of nodes)
+
+expect_equal(as.vector(table(igraph::V(net)$Hang.Out)), c(3, 16, 31, 18, 13))
+
+
+## test 5-6 test that the attribute "gender" is properly loaded (implicitly checking for number of nodes)
+
+expect_equal(as.vector(table(igraph::V(net)$gender)), c(30, 51))
+
+## test 5-7 test that the attribute "frequency" is properly loaded (implicitly checking for number of edges)
+
+expect_equal(as.vector(table(igraph::E(net)$frequency)), c(28, 37, 32, 38, 15))
+
+## test 5-7 test that the attribute "closeness" is properly loaded (implicitly checking for number of edges)
+
+expect_equal(as.vector(table(igraph::E(net)$closeness)), c(60, 52, 34, 3, 1))
