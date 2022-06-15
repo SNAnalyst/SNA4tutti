@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 	cache = FALSE
 )
 
-# source("../R/helper_code.R")
+source("../R/helper_code.R")
 
 # Check whether required packages are installed
 
@@ -2532,4 +2532,4 @@ get too bored! See you in the next tutorial!
 
 
 
-rmarkdown::shiny_prerendered_clean("../doc.Rmd")
+

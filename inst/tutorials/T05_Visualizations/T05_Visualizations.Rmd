@@ -282,7 +282,6 @@ Still, this is your story!
 
 
 ```{r dataload, results = "hide"}
-
 net <- SNA4DSData::DSstudents
 
 # igraph::V(net)$name
@@ -291,9 +290,23 @@ net <- SNA4DSData::DSstudents
 # igraph::V(net)$gender
 # igraph::E(net)$frequency
 # igraph::E(net)$closeness
+#
+```
 
+
+
+```{r test DataLoad, results='asis'}
+
+net <- SNA4DSData::DSstudents
+
+if (table(igraph::V(net)$name == c(paste0("S", 1:81))) == 81) {
+  cat("let's have fun with this!")
+} else {
+  cat("Codebox is broken, contact the mantainers")
+}
 
 ```
+
 
 
 Let's briefly explore the network.
@@ -689,4 +702,4 @@ Let's say goodbye with the visualization of someone that knew how to tell (funny
 
 ![](images/hieronymus-bosch.jpg)
 
-rmarkdown::shiny_prerendered_clean("../doc.Rmd")
+
