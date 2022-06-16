@@ -1,6 +1,6 @@
 ---
 title: "T05 - Network Visualizations"
-description: "An iIntroductory tutorial for visualizing networks in the R language"
+description: "Week 7: An iIntroductory tutorial for visualizing networks in the R language"
 output: 
   learnr::tutorial:
     fig_caption: no
@@ -48,6 +48,11 @@ check_RStudio <- sna4tutti:::check_rstudio
 check_R <- function(x) {
   sna4tutti:::check_r_equal(4, 2.0)
 }
+
+
+
+
+
 ```
 
 
@@ -283,7 +288,7 @@ Still, this is your story!
 
 ```{r dataload, results = "hide"}
 net <- SNA4DSData::DSstudents
-
+Sys.sleep(10)
 # igraph::V(net)$name
 # igraph::V(net)$year
 # igraph::V(net)$Hang.Out
@@ -295,17 +300,40 @@ net <- SNA4DSData::DSstudents
 
 
 
-```{r test DataLoad, results='asis'}
+#### HERE IS A TEST
 
-net <- SNA4DSData::DSstudents
 
-if (table(igraph::V(net)$name == c(paste0("S", 1:81))) == 81) {
-  cat(" HERE ")
+```{r test_DataLoad, results='asis'}
+ net <- SNA4DSData::DSstudents
+
+if (table(igraph::V(net)$name == c(paste0("S", 1:81))) != 81) {
+  sna4tutti::broken_info()
 } else {
-  cat("Codebox is broken, contact the mantainers")
+  cat(" ")
 }
 
 ```
+
+THIS TEST SHOULD YIELD A MESSAGE
+
+```{r test_DataLoad2, results='asis'}
+
+# exercise=FALSE,
+
+# echo=TRUE, include=FALSE, exercise=TRUE, exercise.setup ="dataload"
+
+net <- SNA4DSData::DSstudents
+
+if (table(igraph::V(net)$name == c(paste0("S", 1:81))) != 8100) {
+  sna4tutti::broken_info()
+} else {
+  cat(" ")
+}
+
+```
+
+
+
 
 
 
@@ -325,6 +353,7 @@ We have
 
 Let's make sure it is anonymous.  
 
+
 ```{r datacheck1, echo=TRUE, exercise=TRUE, exercise.setup ="dataload"}
 igraph::V(net)$name
 ```
@@ -339,6 +368,22 @@ plot(net)
 ```
 
 
+#### manipulate the object
+
+
+```{r manip, echo=TRUE, exercise=TRUE, exercise.setup ="dataload"}
+net <- igraph::delete.vertices(net, v = 1:10)
+```
+
+
+<!-- ```{r after_manip} -->
+<!-- browser() -->
+<!-- print(igraph::ecount(net)) -->
+<!-- ``` -->
+
+
+
+
 We can do better than this, simply improving the graphics a little.
 
 Simply plot it, reducing the vertexes and the size of the arrow, removing the vertex label, and curving the edges a little, to make them more artistic.
@@ -350,9 +395,7 @@ plot(net,
      edge.arrow.size = .4, 
      vertex.label = NA, 
      edge.curved = .1)
- 
 ```
-
 
 
 Better right? Just playing around with these options, we achieved a much clearer output. 
@@ -703,5 +746,24 @@ certain extent, it is an art! So try to express your creativity and to have fun 
 Let's say goodbye with the visualization of someone that knew how to tell (funny) stories and after whom our school is named :)
 
 ![](images/hieronymus-bosch.jpg)
+
+
+
+
+
+
+```{r check_results, echo=FALSE, results='asis'}
+cat("\n\n\n\n\n\n")
+
+if (length(broken_list) > 0) {
+  cat("There were issues with the following chunk(s):\n\n")
+  print(unlist(broken_list))
+  cat("\n\n")
+  cat("Please contact Claudia and Roger with this info!\n")
+}
+
+```
+
+
 
 

@@ -1,6 +1,6 @@
 ---
 title: "T01 - Intro to R"
-description: "Week 1: An Introductory tutorial for programming in the R language"
+description: "An Introductory tutorial for programming in the R language"
 output: 
   learnr::tutorial:
     fig_caption: no
