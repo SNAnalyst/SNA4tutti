@@ -14,7 +14,8 @@
 broken_info <- function(broken_list = list() ) {
   lab <- knitr::opts_current$get(name = "label")
   broken_list <<- append(broken_list, lab)
-  cat("=====================================================================\n")
-  cat(">>> Codebox \'", lab , "\' is broken, please contact the maintainers! <<<\n")
-  cat("=====================================================================\n")
+  cat("=========================================\n")
+  cat(">>> Codebox \'", lab , "\' is broken \n")
+  cat("please contact the maintainers! <<<\n")
+  cat("=========================================\n")
 }
