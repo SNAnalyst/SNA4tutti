@@ -48,8 +48,6 @@ check_RStudio <- sna4tutti:::check_rstudio
 check_R <- function(x) {
   sna4tutti:::check_r_equal(4, 2.0)
 }
-
-
 errors <- list()
 ```
 
@@ -200,6 +198,21 @@ plot(x, y1, type = "b", pch = 19,
             col = "red", xlab = "x", ylab = "y")
 ```
 
+```{r test 07nonNetPlot, results = 'markup'}
+
+x <- 1:10
+y1 <- x*x
+y2  <- 2*y1
+
+if (as.character(table(y2 == c(2, 8, 18, 32, 50, 72, 98, 128, 162, 200))) != "10") {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
 However, it isn't easy to represent networks in the `R base` programming language only.
 
 R base does not recognize a network unless you tell it that it is one and does not provide a ready-made environment to plot them.
@@ -265,10 +278,47 @@ quiz(question("What is the main problem with the plots of igraphNet and networkN
               answer("the plot does not inform us on what the network represents", correct = TRUE),
               correct = "Yes! Well done!",
               random_answer_order = TRUE,
-              allow_retry = TRUE
-)
-)
+              allow_retry = TRUE))
 ```
+
+```{r test_testquiz, results = 'markup'}
+
+q1 <- learnr::quiz(learnr::question("What is the main problem with the plots of igraphNet and networkNet?",
+                    learnr::answer("nodes are too small"),
+                    learnr::answer("the colors are not color blind friendly"),
+                    learnr::answer("the plot does not inform us on what the network represents", correct = TRUE),
+                    correct = "Yes! Well done!",
+                    random_answer_order = TRUE,
+                    allow_retry = TRUE))
+
+if (q1$questions[[1]]$question != "What is the main problem with the plots of igraphNet and networkNet?") {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+
+```
+
+
+```{r test_testquiz2, results = 'markup'}
+# test correct answer
+q1in <- learnr::question("What is the main problem with the plots of igraphNet and networkNet?",
+                 learnr::answer("nodes are too small"),
+                 learnr::answer("the colors are not color blind friendly"),
+                 learnr::answer("the plot does not inform us on what the network represents", correct = TRUE)
+                 )
+
+
+if (isFALSE(q1in$answers[[3]]$correct)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+  
+}
+
+```
+
 
 Yes, unless we are working with a toy network, we are not going to tell a story just using 
 the `plot()` function with an object of class `igraph`.
@@ -286,56 +336,87 @@ Still, this is your story!
 
 ```{r dataload, results = "hide"}
 net <- SNA4DSData::DSstudents
-Sys.sleep(10)
-# igraph::V(net)$name
-# igraph::V(net)$year
-# igraph::V(net)$Hang.Out
-# igraph::V(net)$gender
-# igraph::E(net)$frequency
-# igraph::E(net)$closeness
-#
+
 ```
 
 
 
-#### HERE IS A TEST
+```{r test_DataLoad1, results = 'markup'}
 
-
-```{r test1 DataLoad}
 net <- SNA4DSData::DSstudents
 
-if (table(igraph::V(net)$name == c(paste0("S", 1:81))) != 81) {
+if (isFALSE(table(igraph::V(net)$name == c(paste0("S", 1:81))) == 81)) {
   sna4tutti::broken_info()
-  errors <- append(errors, "test1 DataLoad")
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
 }
 
 ```
 
-THIS TEST SHOULD YIELD A MESSAGE
-
-```{r test1a DataLoad}
+```{r test_DataLoad2, results = 'markup'}
 
 net <- SNA4DSData::DSstudents
 
-if (table(igraph::V(net)$name == c(paste0("S", 1:81))) != 8100) {
+if (isFALSE(as.vector(table(igraph::V(net)$year)[2]) == 19)) {
   sna4tutti::broken_info()
-  errors <- append(errors, "test1a DataLoad")
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
 }
 
 ```
 
 
-
-```{r test1b DataLoad}
+```{r test_DataLoad3, results = 'markup'}
 
 net <- SNA4DSData::DSstudents
 
-if (table(igraph::V(net)$name == c(paste0("S", 1:81))) != 8100) {
+if (isFALSE(as.vector(table(igraph::V(net)$Hang.Out))[4] == 18)) {
   sna4tutti::broken_info()
-  errors <- append(errors, "test1b DataLoad")
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
 }
 
 ```
+
+
+
+```{r test_DataLoad4, results = 'markup'}
+
+net <- SNA4DSData::DSstudents
+
+if (isFALSE(as.vector(table(igraph::V(net)$gender))[2] == 51)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+```{r test_DataLoad5, results = 'markup'}
+
+net <- SNA4DSData::DSstudents
+
+if (isFALSE(as.vector(table(igraph::E(net)$frequency))[2] == 37)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+```{r test_DataLoad6, results = 'markup'}
+
+net <- SNA4DSData::DSstudents
+
+if (isFALSE(as.vector(table(igraph::E(net)$closeness))[5] == 1)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
 
 
 Let's briefly explore the network.
@@ -354,7 +435,6 @@ We have
 
 Let's make sure it is anonymous.  
 
-
 ```{r datacheck1, echo=TRUE, exercise=TRUE, exercise.setup ="dataload"}
 igraph::V(net)$name
 ```
@@ -369,22 +449,6 @@ plot(net)
 ```
 
 
-#### manipulate the object
-
-
-```{r manip, echo=TRUE, exercise=TRUE, exercise.setup ="dataload"}
-net <- igraph::delete.vertices(net, v = 1:10)
-```
-
-
-<!-- ```{r after_manip} -->
-<!-- browser() -->
-<!-- print(igraph::ecount(net)) -->
-<!-- ``` -->
-
-
-
-
 We can do better than this, simply improving the graphics a little.
 
 Simply plot it, reducing the vertexes and the size of the arrow, removing the vertex label, and curving the edges a little, to make them more artistic.
@@ -396,7 +460,9 @@ plot(net,
      edge.arrow.size = .4, 
      vertex.label = NA, 
      edge.curved = .1)
+ 
 ```
+
 
 
 Better right? Just playing around with these options, we achieved a much clearer output. 
@@ -462,8 +528,7 @@ With this visualization, we can already see whether the year and the gender matt
 What do you think?
 
 ```{r quiz_viz1, echo = FALSE}
-quiz(
-  question("How do you interpret this visualization?",
+quiz(question("How do you interpret this visualization?",
     answer("The year matters for friednship formation but the gender does not"),
     answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
     answer("The year does not matter for friendship formation but the gender does"),
@@ -476,6 +541,49 @@ quiz(
 ```
 
 
+```{r test_quizviz1, results = 'markup'}
+
+q1 <- learnr::quiz(question("How do you interpret this visualization?",
+    answer("The year matters for friednship formation but the gender does not"),
+    answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
+    answer("The year does not matter for friendship formation but the gender does"),
+    answer("Both the year and the gender equally matter in predicting friendship"),
+    correct = "Yes! Well done!",
+    random_answer_order = TRUE,
+    allow_retry = TRUE
+  )
+)
+
+if (q1$questions[[1]]$question != "How do you interpret this visualization?") {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+
+```
+
+
+```{r test_quizviz2, results = 'markup'}
+# test correct answer
+q1in <- question("How do you interpret this visualization?",
+    answer("The year matters for friednship formation but the gender does not"),
+    answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
+    answer("The year does not matter for friendship formation but the gender does"),
+    answer("Both the year and the gender equally matter in predicting friendship"),
+    correct = "Yes! Well done!",
+    random_answer_order = TRUE,
+    allow_retry = TRUE
+  )
+
+if (isFALSE(q1in$answers[[2]]$correct)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+  
+}
+
+```
 
 We can also show a third node attribute at the same time: "How much students like data science." 
 
@@ -749,10 +857,6 @@ Let's say goodbye with the visualization of someone that knew how to tell (funny
 ![](images/hieronymus-bosch.jpg)
 
 
-
-
-
-
 ```{r check_results, echo = FALSE, results = 'markup'}
 cat("\n\n\n\n\n\n")
 
@@ -769,3 +873,5 @@ if (length(errors) > 0) {
 
 ```{r check_results_external, echo=FALSE, child = if (length(errors) > 0) "check_results.Rmd"}
 ```
+
+

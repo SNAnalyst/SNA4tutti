@@ -1,7 +1,7 @@
 
 ## (Challenges to be fixed)
 
-```{r check_results_separate, echo=FALSE, results='asis'}
+```{r check_results_separate, echo=FALSE, results='markup'}
 cat("\n\n\n\n\\n\n")
 
 cat("There were issues with the following chunk(s):\n\n")
