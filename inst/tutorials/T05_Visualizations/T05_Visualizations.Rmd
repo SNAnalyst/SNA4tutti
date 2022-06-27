@@ -48,6 +48,8 @@ check_RStudio <- sna4tutti:::check_rstudio
 check_R <- function(x) {
   sna4tutti:::check_r_equal(4, 2.0)
 }
+
+
 errors <- list()
 ```
 
