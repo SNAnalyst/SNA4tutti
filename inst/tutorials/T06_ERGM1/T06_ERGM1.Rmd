@@ -371,10 +371,13 @@ In the following tutorials, we will explore the appropriate GOFs for ERGMs. Feel
 
 ### Simulation
 
-We said that we are checking on the probability that our observed network is different from random others built using the same parameters but not having the specific features we observe in our real network (null distribution). This means that we are comparing our 
-observed Florentine network with many other simulated ones with the same parameters: Nodes and Edges. 
+We said that the ER model checks the probability that our observed network is different from random others generated using the same parameters (null distribution). 
 
-In Network Science, a random network with a fixed number of nodes and edges is an Erdos Renyi one. Let's try!
+It means we are comparing our observed Florentine network with many synthetic Florentine networks simulated with the same parameters: Nodes and Edges. 
+
+Still, please don't believe me blindly. Let's try it out!
+
+A random network with a fixed number of nodes and edges is an Erdos Renyi one. Here we go:
 
 ```{r erdos_renyi, exercise = TRUE}
 plot(igraph::erdos.renyi.game(16, 20, type = 'gnm'))
@@ -400,7 +403,7 @@ Enough with this easy toy model! we are ready for something juicier!
 
 ## P1
 
-The ER model ran as an ERGM is cute, but it explains reality to a very small extent. In this section, we will take a look at the P1 that is considered ERGM's father.
+The ER model is cute, but it explains reality to a very small extent. In this section, we will take a look at the P1 that is considered ERGM's father (it's a large family...).
 
 
 ```{r sampson_load, include = FALSE}
@@ -486,11 +489,9 @@ if (isFALSE(sum(network::get.edge.attribute(sampson, 'weight')) == 110)) {
 
 
 
+While the ER model can be applied both to directed and undirected networks since it only considers whether there are ties or not (not checking on what kind of ties), the P1 checks on the direction of ties, and for this reason, it was designed for a directed network. 
 
-
-
-
-While the ER model can also be applied to undirected networks since it only considers whether there are ties or not (not checking on what kind of ties), the P1 checks on the kind of ties, and for this reason, it was designed for a directed network. We are going to use now the Sampson data that you are also already familiar with. 
+We will now use the Sampson data that you are already familiar with. 
 
 I'm just going to remind you that it is an ethnographic study of a New England monastery's community structure by Samuel F. Sampson.
 Social relationships among a group of men (novices) who were preparing to join a monastic order.
@@ -507,11 +508,10 @@ plot(sampson)
 
 ```
 
-This subset of the Sampson data only considers whether the monks like each other (directional edge) or not (no edge). We know it's 18 nodes and 88 edges directed network with no loops and two attributes loaded in the network format.
+This subset of the Sampson data only considers whether the monks like each other (directional edge) or not (no edge). So we know it's 18 nodes and 88 edges directed network with no loops and two attributes loaded in the network format.
 
 
-The P1 model checks on the probability that the observed network is not random, 
-but that it's the outcome of some social dynamic focusing on: 
+The P1 model checks on the probability that the observed network is the outcome of some social dynamics and hence non-random. We will explain: 
 
 * edges formation (as the ER), 
 * sender of the tie, 
@@ -532,14 +532,13 @@ P1 <- ergm::ergm(sampson ~ edges + sender + receiver + mutual)
 
 summary(P1)
 ```
+Waw, what's this output? It's long! Well, some terms that you specify in the ERG models estimate one statistic summarizing the entire situation in your network. `edges`, and `mutual` do so in this case. Other terms such as `sender` and `receiver` compute a statistic for every node in the network. 
 
-Waw, what's this output? It's really long! Well, some terms that you specify in the ERG models estimate one statistic summarizing the entire situation in your network. `edges` and `mutual` do so in this case. Some other terms such as `sender` and `receiver` compute a statistic for every single node in the network. 
+That's why this output is so insanely long. When you choose the terms for your model, consider this because commenting on every node in a network with 200 of them or more is no fun. 
 
-That's why this output is so insanely long. When you choose the terms for your model, consider this because commenting on every node in a network with 200 of them is no fun. 
+`sender` and `receiver` look at the probability that every connection is non-random: If monk 2 likes monk 5, it is an entirely different situation from monk 5 liking monk 2, as much as monk 12 liking monk 18. This approach is perfect for an ethnographic study that aims to understand specific social dynamics in a small community. However, it would not be very helpful for explaining people's behaviour on a Twitter network while targeting a popular hashtag (many, many nodes!!). 
 
-`sender` and `receiver` look at the probability that every single connection is not random: an expression of likelihood between 2 and 5 is completely different from one between 5 and 2, as much as one between 12 and 18. This kind of approach is perfect for an ethnographic study that aims to understand specific social dynamics in a small community. It would not be very helpful for explaining the behavior of people in a Twitter network. 
-
-Note that not every node is in the output of the model, though. Node number one is missing. This is not a mistake. Removing one node is necessary to avoid a linear dependency between all the others. Node one constitutes the reference category, and every other result has to be compared to node one. Do you remember that we discussed that in the Bootcamp?
+Note that not every node is in the model's output, though. Node number 1 is missing. This is not a mistake. Removing one node is necessary to avoid a linear dependency between all the others. Node one constitutes the reference category, and every other result must be compared to node 1. Do you remember that we discussed that in the Bootcamp?
 
 
 Have you noticed how much time and computational power it takes to run this super small model? That is because `mutual` is an endogenous dyadic dependent term, and the model is running an MCMC simulation for you. 
@@ -547,34 +546,75 @@ Have you noticed how much time and computational power it takes to run this supe
 This time you can read `Monte Carlo Maximum Likelihood Results` in your model summary.
 
 
-ER and P1 consider only structural (endogenous) effects. When we run them, we don't consider any attribute. But is no longer going to be the case from the next section and afterward since explaining social reality requires way more sophistication than this :) 
+ER and P1 consider only structural (endogenous) effects. Also, these effects are elementary. When running these two models, we don't consider more complex network features or any attributes. But that will no longer be the case from the next section and afterwards. Since explaining social reality requires way more sophistication than this let's move on to our fully flexible ERGMs :) 
+
+
+
 
 
 ## ERGM
 
-An ERGM (pronunciation "eurcoom" "eurghum") is a statistical tool to assess causality using hypothesis testing when the outcome variable is a network. 
+An ERGM (for  Dutch speaker pronunciation "eurcoom" or "eurghum") is a statistical tool to assess causality using hypothesis testing when the outcome variable is a network. 
 
-So far, we have fitted an ER and a P1 model. We fitted using the `ergm::ergm` function, but we can do a lot more with this function. 
+So far, we have fitted an ER and a P1 model. We fitted using the `ergm::ergm` function, but we can do a lot more with this function by inserting more model terms. 
 
-While the ER and the P1 only employ few mostly dyadic independent endogenous terms (but the dyadic dependent `mutual`), the ERGM model allows you to test your hypotheses with a wide array of terms.
+While the ER and the P1 only employ a few mostly dyadic independent endogenous terms (but the dyadic dependent `mutual`), the ERGM model allows you to test your hypotheses with a wide array of terms.
 
 
-This class of models is employed to assess whether the structure of a network and its attributes are random or whether they originated by some sort of identifiable relational phenomena.
+This class of models is employed to assess whether the structure of a network and its attributes are random or whether they originated from some sort of identifiable relational phenomena.
 
-The observed data is compared to simulated data (like you do when you run an experiment with a treatment and a control group), so you need to make sure that your simulated data (control group) is truly comparable to the treatment group (the real network). The parameters you insert in the model set up the simulated reality of the control group (Sim City). If your simulated reality is too far from the real network, your model will simply fail (technically speaking, it will not converge). 
+The observed data is compared to simulated data (like you do when you run an experiment with a treatment and a control group), so you need to make sure that your simulated data (control group) is truly comparable to the treatment group (the real network). 
 
-This is a bit complicated, right? Let's take it step by step, starting from inserting exogenous effects in the model since we haven't done that yet! 
+When you run a clinical experiment to test a new drug, you have a "treatment group" taking the drug and a "control group" taking a placebo. When you check on the effects of the drug, you want to find great differences between your treatment and the control group. Otherwise, it means that your drug does nothing. 
 
-Let's get crunching some numbers! 
+We act using the same logic. We observe and collect data about a network that we believe to be relevant (treatment) and compare it to a bunch of simulated ones (control group). 
 
+It is not easy to simulate reality. The parameters you insert in the model set up the simulated reality of the control group (Sim City). Therefore, you need to find the right combination of model terms to make the control group comparable to the treatment one. 
+If your simulated reality is too far from the real network, your model will fail (technically speaking, it will not converge). 
+
+This is a bit complicated, right? Let's take it step by step, starting with inserting exogenous effects in the model since we haven't done that yet! 
+
+Let's get to virtual reality! 
+
+
+## ERGM Terms
+
+An ERG model is about finding the best 'dress' to fit our data.
+
+![](images/Tailored-Clothes.jpg){width=60%}
+The terms allow us to 'fit' our simulation to the observed data so that the synthetic control group is comparable to the treatment one. 
+
+We classify the model terms in two ways: 
+
+* Exogenous and Endogenous
+* Dyadic (inter)dependent and Dyadic independent 
+
+#### Exogenous and Endogenous
+We have exogenous and endogenous model terms not only with networks but with every statistical model.
+
+Endogenous variables are those variables affected by the other variables in the system. Hence, for us, these are the model terms that control the network's structure. 
+
+Exogenous variables are those variables that affect the endogenous ones, aka the network. 
+
+#### Dyadic (inter)dependent and Dyadic independent
+
+We only have Dyadic (inter)dependent and Dyadic independent in network models. 
+
+If the terms are dyadic independent, they look at the probability of tie formation independently from the surrounding network structure. For instance, two pupils in a school are friends because they are both girls (homophily). 
+
+If a term is a dyadic (inter)dependent, it looks at the probability of tie formation based on the other ties in the network. For instance, two pupils are friends because a common friend introduced them (triangle)
+
+These two types of terms have implications for the math in the model you are running and your computational time. Hence, you need to be very aware of when you are using one or the other. 
+
+#### Mixing the classifications
+
+You will find out that these two classifications overlap. For instance, `edges` is endogenous but dyadic independent, while `mutual` is also endogenous but dyadic (inter)dependent. Hence, you need to grasp the concept and think with your own head about what is what. Isn't it less boring? I hate memorizing stuff :) 
 
 ## Dyadic Independent Terms
 
-An ERG model is all about finding the best 'dress' to fit our data.
-
 The terms we employed so far, but `mutual` only look at independent effects since the probability
-of observing them does not depend on the existence of other ties but only on the properties of the individual nodes. But, even still focusing only on the effects that do not involve edge dependencies, there are many more options. We need to explore more ERGM terms. If you type in your `RStudio` console `search.ergmTerms`, it will appear to you the help file. Now we focus on the dyadic independent terms
-only, that you can print out using the following line of code:
+of observing them does not depend on the existence of other ties but only on the properties of the individual nodes. But, even still focusing only on the effects that do not involve edge dependencies, there are many more options. We need to explore more ERGM terms. If you type in your `RStudio` console `search.ergmTerms`, it will appear in the help file. Now we focus on the dyadic independent terms
+only, which you can print out using the following line of code:
 
 
 
@@ -583,9 +623,9 @@ ergm::search.ergmTerms(categories = 'dyad-independent')
 ```
 
 Sixty terms correspond to this description! Some of them are endogenous, but others are exogenous. 
-Exogenous terms allow inserting attributes in the model. Usually, they are dyadic independent since the presence or absence of attributes should not depend on ties. 
+Exogenous terms allow inserting attributes in the model. Usually, they are dyadic independent since the presence or absence of attributes should not depend on ties, but not always (hence watch out!). 
 
-Several terms allow you to insert exogenous variables (attributes) in the model.
+Several terms allow inserting exogenous variables (attributes) in the model.
 
 Let's experiment with one of the most popular: `nodecov`.
 
@@ -615,11 +655,18 @@ According to
 * BIC Model one and two are roughly the same, with model two a tiny bit better
 
 
-The `nodecov` term's result and say that it is likely that rich families are mutually married.
+The `nodecov` term's result says that it is likely that rich families marry each others.
 
-You read the results exactly like a logit model, so check the GLM tutorial in the `Bootcamp` package if you don't remember it. 
+How likely? what is the intensity of this effect? 
+Again, you read the results exactly like a logit model (odds ratios)
 
-For what concerns `edges` you can interpret it as the model intercept. 
+ALERT: check the GLM tutorial in the `Bootcamp` package if you still don't remember it. 
+
+But, as said before you can also estimate probabilities to interpret it.
+
+You will see that the term `edges` is in each and every model. This is because we use it as the model intercept. 
+
+
 
 We can also simulate flomodel.02.
 
@@ -630,7 +677,7 @@ simNodecov <- simulate(flomodel.02, burnin = 1e+6, verbose = TRUE, seed = 9)
 plot(simNodecov)
 ```
 
-This simulation represents our baseline random model, our control group in the experiment, our null hypothesis. The simulated data originated by the same features but does not show the remarkable qualities of our observed networks. There are families, and they marry, but randomly. 
+This simulation represents our baseline random model, our control group in the experiment, and our null hypothesis. The distribution of its results is our null distribution. The simulated data originated from the same features but does not show the remarkable qualities of our observed networks. There are families, and they marry, but randomly. 
 
 
 When we use `nodecov`, we compute the correlation of a vector that expresses the number of Liras that each family owns and the edge list of the network. 
@@ -643,7 +690,11 @@ One term that can help us do that is `absdiff`.
 ergm::search.ergmTerms(name = 'absdiff')
 ```
 
-This term computes the mixing matrix that calculates the absolute difference between the amount of money each family owes. Thus, rather than checking whether being rich influences the probability of marriage in old Florence, we check the likelihood of being equally rich (or equally non-rich). 
+This term computes the mixing matrix that calculates the absolute difference between the amount of money each family owes. 
+
+A mixing matrix is a matrix that provides information about how each node relates to the other with regard to an attribute of relevance (wealth, in this example). Hence the absolute difference between the amount of money each pair of married families has.  
+
+Thus, rather than checking whether being rich influences the probability of marriage in old Florence, we check the likelihood of being equally rich (or equally non-rich) influencing the marriage. 
 
 Should we try this out? 
 
@@ -663,7 +714,7 @@ From model three results, we also see that it is likely that being equally rich 
 
 The AIC and the BIC comparison also show that model 3 is better than the other two. 
 
-Ok, let's nest a fourth model where we put these two terms in the same model. Can you do this for me? 
+Ok, let's nest a fourth model where we put these two terms together in the same model. Can you do this for me? 
 
 Please re-run all of them and print them out next to each other. 
 
@@ -705,11 +756,11 @@ Even if in models two and three, our terms are significant, they are not anymore
 
 This could be because we are trying to estimate two effects that are too similar and interfere with each other. Remember, one estimates a vector and the other a matrix, but the substantive meaning is not that different. 
 
-In general, we know that model 4 is not a good fit for our network. We are going in the wrong direction, and when this happens, you simply discard that option and test others. But the good thing is that we checked! If we did not run model 3 and jump to model 4 (as I did in the ERGM 2 class), we would not have known that being equally rich is a better explanation than being just rich! It is, in fact, unlikely that people don't marry at all because they are not rich enough!  
+In general, we know that model 4 is not a good fit for our network. We are going in the wrong direction, and when this happens, you simply discard that option and test others. But the good thing is that we checked! If we did not run model 3 and jump to model 4, we would not have known that being equally rich is a better explanation than being just the richest! It is, in fact, unlikely that people don't marry at all because they are not rich enough!  
 
 That's how much you can fine-tune your hypothesis using ERG models! Isn't it awesome? I answer: it is. But it is also quite challenging, and unless you know what you are doing, you will be entangled in the almost unlimited options that this class of model offers you! 
 
-One last thing. Can you simulate the control group of model four for me? Use `seed = 8` and a burn-in of 1e+6. We will discuss what a burn it is next week!
+One last thing. Can you simulate the control group of model four for me? Use `seed = 8` and a burn-in of 1e+6. We will discuss what a burn-in is next week!
 
 
 ```{r absdiffModel4, exercise = TRUE, exercise.setup = "florentine_load"}
