@@ -30,15 +30,15 @@ source("../R/helper_code.R")
 
 # Check whether required packages are installed
 pkgs <- matrix(c(
-  "learnr", "0.10.0", "CRAN",
-  "gradethis", "0.2.3.9001", "rstudio/gradethis",
-  "igraph", "1.2.6", "CRAN",
-  "knitr", "1.34", "CRAN",
-  "sna", "2.6", "CRAN",
-  "SNA4DSData", "0.9.904", "SNAnalyst/SNA4DSData",
+  "learnr", "0.10.2", "CRAN",
+  "gradethis", "0.2.8.9000", "rstudio/gradethis",
+  "igraph", "1.3.2", "CRAN",
+  "knitr", "1.39", "CRAN",
+  "sna", "2.7", "CRAN",
+  "SNA4DSData", "0.9.91", "SNAnalyst/SNA4DSData",
   "ergm", "4.1.2", "CRAN",
   "network","1.17.1" , "CRAN",
-  "texreg", "1.37.5" , "CRAN"
+  "texreg", "1.38.6" , "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
@@ -113,10 +113,12 @@ In the first ERGM tutorial you learned
 * How to run an ERGM with the structural term `edges`, comparing it to an
 Erdos Renyi model
 * How to simulate networks from a specified model
+* How to read a model summary
 * How to specify a P1 model using the dyadic independent terms `edges` 
 `sender`, `receiver`, and the dyadic dependent term `mutual`
+* What types of model terms you can implement in an ERG model
 * How to search for terms with the function `ergm::search.ergmTerms`
-* How to use and interpret the nodal attribute terms `nodecov` and `absdiff`
+* How to use and interpret the dyadic independent, exogenous terms `nodecov` and `absdiff`
 
 In this tutorial we build on this, improve our understanding of ERG models and learn how to check whether the model we run has a good fit.
 
@@ -171,11 +173,10 @@ Turn on the oven, we are ready for some mouth watering bun to cook!
 
 
 
-## A dyadic independent model
+## A Dyadic independent model
 
 In the first ERGM tutorial, we run very simple models on very small networks. 
-However, very often, networks are larger than the Florentine or Sampson's ones and the relationships they map down require more sophisticated efforts to be 
-explained.
+However, very often, networks are larger than the Florentine or Sampson's ones and the relationships they map down require more sophisticated efforts to be explained.
 
 Let's take a look at the `faux.mesa.high` data set, one of the networks
 included in the `ergm` package and employed in the `statnet` tutorials. Remember,
@@ -189,10 +190,59 @@ The `faux.mesa.high` is modified data collected at the Mesa High School in the U
 Go Rabbits! Carry On!
 
 ```{r load_mesa, include = FALSE}
-data(faux.mesa.high, package = 'ergm')
 
+data(faux.mesa.high, package = 'ergm')
 mesa <- faux.mesa.high
+
 ```
+
+
+
+
+
+```{r test_load_mesa1, results = 'markup'}
+
+data(faux.mesa.high, package = 'ergm')
+mesa <- faux.mesa.high
+
+if (isFALSE(sum(network::get.vertex.attribute(mesa, 'Grade')) == 1790 )) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+```{r test_load_mesa2, results = 'markup'}
+
+data(faux.mesa.high, package = 'ergm')
+mesa <- faux.mesa.high
+
+if (isFALSE(table(network::get.vertex.attribute(mesa, 'Race'))[2] == 109 & table(network::get.vertex.attribute(mesa, 'Race'))[3] == 68 )) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+
+```
+
+
+```{r test_load_mesa3, results = 'markup'}
+
+data(faux.mesa.high, package = 'ergm')
+mesa <- faux.mesa.high
+
+if (isFALSE(table(network::get.vertex.attribute(mesa, 'Sex'))[1] == 99 & 
+            table(network::get.vertex.attribute(mesa, 'Sex'))[2] == 106)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
 
 Let's explore this network
 
@@ -200,7 +250,7 @@ Let's explore this network
 summary(mesa)
 ```
 
-The mesa network contains information about 203 relationships among 205 students enrolled at the Mesa High School. Well, not quite. The real information about the students is classified for privacy reasons, but we can look at something that is close enough. This way we can explore the network without revealing any sensitive data. 
+The mesa network contains information about 203 relationships among 205 students enrolled at the Mesa High School. Well, it's not entirely true. The real information about the students is classified for privacy reasons, but we can look at something that is close enough. This way we can explore the network without revealing any sensitive data. 
 
 We have three nodal attributes: 
 
@@ -263,7 +313,7 @@ Let's focus on Grade. This nodal attribute is categorical. Hence we need to choo
 Since we want to know whether being in the same grade fosters friendship formation, we can use the term `nodematch`. This term handles categorical data and explores the existence of homophilic relationships among people who share the same category (grade in this case).
 
 Another term that we can use with a categorical nodal attribute is`nodefactor`.
-This term outputs one statistic for each category in the attribute minus one to avoid linear dependency. Each of these statistics gives the number of times a node with that attribute, and that category appears in an edge in the network.
+This term outputs one statistics for each category in the attribute minus one to avoid linear dependency. Each of these statistics gives the number of times a node with that attribute, and that category appears in an edge in the network.
 
 Let's run a first exploratory round.
 
@@ -274,7 +324,7 @@ mesaM1 <- ergm::ergm(mesa ~ edges +
 summary(mesaM1)                     
 ```
 
-Every statistic in the result's table allows us to reject the null hypothesis of no effects. The coefficients produced by the `nodematch` term inform us of the existence of homophilic effects in each grade. Grade 12 is the one where these effects are less likely to take place. 
+Every statistics in the result's table allows us to reject the null hypothesis of no effects. The coefficients produced by the `nodematch` term inform us of the existence of homophilic effects in each grade. Grade 12 is the one where these effects are less likely to take place. 
 
 The `nodefactor` term informs us of the probability that a certain grade characterizes nodes connected to other nodes. We can say that students in grade 12 are more likely to have friends than students in other grades. We interpret it just like we would interpret a categorical variable in a logistic regression!
 
@@ -397,21 +447,94 @@ These are all important things to explore, and that's why we need to use
 dyadic dependent terms too.
 
 
-## Dyadic Dependent Terms
+## Dyadic dependent terms
 
-We just covered the conceptual difference between dyadic independence and dependence. To wrap this up: We have dyadic independence when the probability of edge formation is related to nodes properties or attributes; the second is related to the probability of other existing edges. 
+We covered the conceptual difference between dyadic independence and dependence. To wrap this up: We have dyadic independence when the probability of edge formation is related to nodes properties or attributes; the second is related to the probability of other existing edges. 
 
 In practice, you know when you are running a dyadic independent or dependent 
 model by reading the information that the model prints for you while running.
 
 ```{r load_flob, include = FALSE}
 
- 
 florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
 flobusiness <- intergraph::asNetwork(flo_bus)
 
 ```
+
+
+
+
+```{r test_load_flob1, results = 'markup'}
+
+florentine <- SNA4DSData::florentine
+flo_bus <- florentine$flobusiness
+flobusiness <- intergraph::asNetwork(flo_bus)
+
+if (isFALSE(table((network::get.vertex.attribute(flobusiness, 'vertex.names')) == c("Acciaiuoli", "Albizzi", "Barbadori", "Bischeri", "Castellani", "Ginori", "Guadagni", "Lamberteschi", "Medici", "Pazzi", "Peruzzi",       "Pucci", "Ridolfi", "Salviati", "Strozzi", "Tornabuoni")) == 16)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+```{r test_load_flob2, results = 'markup'}
+
+florentine <- SNA4DSData::florentine
+flo_bus <- florentine$flobusiness
+flobusiness <- intergraph::asNetwork(flo_bus)
+
+if (isFALSE(network::get.vertex.attribute(flobusiness, 'NumberPriorates')[2] == 65)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+```{r test_load_flob3, results = 'markup'}
+
+florentine <- SNA4DSData::florentine
+flo_bus <- florentine$flobusiness
+flobusiness <- intergraph::asNetwork(flo_bus)
+
+if (isFALSE(sum(network::get.vertex.attribute(flobusiness, 'NumberTies')) == 222)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+
+```{r test_load_flob4, results = 'markup'}
+
+florentine <- SNA4DSData::florentine
+flo_bus <- florentine$flobusiness
+flobusiness <- intergraph::asNetwork(flo_bus)
+
+if (isFALSE(network::get.vertex.attribute(flobusiness, 'Wealth')[9] == 103)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 Let's run a dyadic independent
 
@@ -485,20 +608,50 @@ The density plot should look like a normal distribution.
 
 ![](images/paranormal_distribution.jpg){width=75%}
 
-In this example, we are examining the results and commenting on the trace plots saying that 'the chains mixed well.' 
+If we look at the MCMC diagnostics above, we see that the distribution is approximately normal and centered around zero. However, the chains are not fuzzy at all. 
+
+This is because the model did not run long enough. Therefore, to make the simulation more stable, we need to use more advanced options in the model's configuration. 
+
+Let me introduce you to your new best friend. Its name is `control.ergm`, and it allows you to customize the option of your simulation even further. The specification below tells the simulation to run 10000 MCMC chains and to ignore the first 5000 so that we catch only the final part of the simulation that should be more stable already. That it the burn-in. It tells the simulation to ignore the first chains (what would be on the left-hand side of the trace plot) since it might take a while for the simulation to reach a stable state.
+
+I am also specifying a seed inside the model so you can observe the same output I see now. Finally, I tell the model to iterate 20 times. If in 20 iterations there is no convergence, the model will be killed. 
+
+These parameters must change according to the case and situations, but this configuration is a standard one and a very good starting point for most models. 
+
+```{r flob_mcmc_dia, exercise = TRUE, exercise.setup = "load_flob"}
+
+set.seed(1234)
+fit <- ergm::ergm(flobusiness ~ edges + degree(1), 
+                  control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20))
+
+ergm::mcmc.diagnostics(fit)
+
+```
+
+
+
+
+Now we can look at the trace plots saying that 'the chains mixed well.' 
+
+
 The density plot of the `degree` term is not precisely a bell curve. However, considering that this is a small sample, it is still close enough to a normal distribution.
 
 `mcmc.diagnostics` checks on two main issues
 
 1 - A large portion of the sample is drawn from distributions that are significantly different from the target
 
-2 - The size of the simulated sample is too small
+2 - The size of the simulated sample is too small (our previous example)
 
 If either of these two issues is true, you will observe a trace plot where the chains are not mixing well (non-fuzzy) and a density plot that does not look like a bell curve and or is not centered around zero.
 
 If you observe this, your model is not working as it should, and you are not simulating reality correctly.
 
-Remember that the first issue needs you to redesign your model specification. In contrast, the second issue can be addressed by increasing the number of simulated networks and the burn-in. The burn-in tells the simulation to ignore the first chains (the left-hand side of the trace plot) since it might take a while for the simulation to reach a stable state.
+Remember that the first issue needs you to redesign your model specification. 
+
+In contrast, the second issue can be addressed by increasing the number of simulated networks and the burn-in. 
 
 
 ### Model Degeneracy

@@ -29,7 +29,7 @@ source("../R/helper_code.R")
 
 # Check whether required packages are installed
 pkgs <- matrix(c(
-  "learnr", "0.10.1", "CRAN",
+  "learnr", "0.10.2", "CRAN",
   "gradethis", "0.2.8.9000", "rstudio/gradethis",
   "outliertree", "1.8.1", "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
