@@ -129,7 +129,7 @@ check_R()
 
 ### R Studio Version
 
-You need to have installed RStudio version 2021.9.0.351 or above.
+You need to have installed RStudio version 2022.02.3+492 or above.
 Let's check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}

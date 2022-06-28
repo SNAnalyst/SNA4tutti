@@ -1,5 +1,5 @@
 ---
-title: "T07 - ERGM3"
+title: "T08 - ERGM3"
 description: "Bipartite and Weighted ERGMs in the R language"
 output: 
   learnr::tutorial:
