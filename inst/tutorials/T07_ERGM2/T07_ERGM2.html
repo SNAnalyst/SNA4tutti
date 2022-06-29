@@ -577,26 +577,59 @@ as regular as possible, resembling a fuzzy caterpillar.</p>
 <p>The density plot should look like a normal distribution.</p>
 <p><img src="images/paranormal_distribution.jpg"
 style="width:75.0%" /></p>
-<p>In this example, we are examining the results and commenting on the
-trace plots saying that ‘the chains mixed well.’ The density plot of the
-<code>degree</code> term is not precisely a bell curve. However,
-considering that this is a small sample, it is still close enough to a
-normal distribution.</p>
+<p>If we look at the MCMC diagnostics above, we see that the
+distribution is approximately normal and centered around zero. However,
+the chains are not fuzzy at all.</p>
+<p>This is because the model did not run long enough. Therefore, to make
+the simulation more stable, we need to use more advanced options in the
+model’s configuration.</p>
+<p>Let me introduce you to your new best friend. Its name is
+<code>control.ergm</code>, and it allows you to customize the option of
+your simulation even further. The specification below tells the
+simulation to run 10000 MCMC chains and to ignore the first 5000 so that
+we catch only the final part of the simulation that should be more
+stable already. That it the burn-in. It tells the simulation to ignore
+the first chains (what would be on the left-hand side of the trace plot)
+since it might take a while for the simulation to reach a stable
+state.</p>
+<p>I am also specifying a seed inside the model so you can observe the
+same output I see now. Finally, I tell the model to iterate 20 times. If
+in 20 iterations there is no convergence, the model will be killed.</p>
+<p>These parameters must change according to the case and situations,
+but this configuration is a standard one and a very good starting point
+for most models.</p>
+<div class="tutorial-exercise" data-label="flob_mcmc_dia2"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>set.seed(1234)
+fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1), 
+                  control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20))
+
+ergm::mcmc.diagnostics(fit)</code></pre>
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+<p>Now we can look at the trace plots saying that ‘the chains mixed
+well.’</p>
+<p>The density plot of the <code>degree</code> term is not precisely a
+bell curve. However, considering that this is a small sample, it is
+still close enough to a normal distribution.</p>
 <p><code>mcmc.diagnostics</code> checks on two main issues</p>
 <p>1 - A large portion of the sample is drawn from distributions that
 are significantly different from the target</p>
-<p>2 - The size of the simulated sample is too small</p>
+<p>2 - The size of the simulated sample is too small (our previous
+example)</p>
 <p>If either of these two issues is true, you will observe a trace plot
 where the chains are not mixing well (non-fuzzy) and a density plot that
 does not look like a bell curve and or is not centered around zero.</p>
 <p>If you observe this, your model is not working as it should, and you
 are not simulating reality correctly.</p>
 <p>Remember that the first issue needs you to redesign your model
-specification. In contrast, the second issue can be addressed by
-increasing the number of simulated networks and the burn-in. The burn-in
-tells the simulation to ignore the first chains (the left-hand side of
-the trace plot) since it might take a while for the simulation to reach
-a stable state.</p>
+specification.</p>
+<p>In contrast, the second issue can be addressed by increasing the
+number of simulated networks and the burn-in.</p>
 </div>
 <div id="section-model-degeneracy" class="section level3">
 <h3>Model Degeneracy</h3>
@@ -626,7 +659,7 @@ employment of the <code>triangle</code> term. The Magnolia high school
 is another well-known data set that is included in the <code>ergm</code>
 package.</p>
 <p><img src="images/magnolia.jpg" style="width:75.0%" /></p>
-<p>Let’s explore this network</p>
+<p>Shall we explore the Magnolia High network? Of course, we shall!</p>
 <div class="tutorial-exercise" data-label="explore_magnolia"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
@@ -635,6 +668,10 @@ data-lines="0">
 </div>
 <p>What do we have here? 1461 nodes and 974 edges together with 4 nodes
 attributes.</p>
+<p>We are network experts enough to say that it is a fairly large and
+sparse network. Large and sparse networks usually present some
+challenges when modeled with ERGMs. They require more sophisticated
+models and longer computational time.</p>
 <p>Why don’t you try to plot it by yourself to have a better overview of
 this network?</p>
 <p>Together we can move on and run a model that is not going to
@@ -648,109 +685,122 @@ data-lines="0">
 </div>
 <p>Here it is, our lovely error message telling us we are doing
 something wrong! Instead of converging, the algorithm heads off into
-networks that are much much denser than the observed network. This is
-such a clear indicator of a degenerate model specification that the
-algorithm stops after few iterations, to avoid heading off into areas
-that would cause memory issues.</p>
-<p>Since the previous model output is an error, we cannot observe the
-MCMC diagnostics. In order to be able to plot the diagnostics for a
-degenerate model, we need to stop the iterations of the simulations
-before it gets to the degeneration point.</p>
-<p>We do it by adding one more specification to the model. substitute
-<code>MCMLE.maxit = 2</code> with the number of the last iteration that
-was able to run in your computer. If you see only 1 iteration in the
-previous model, set 1 here and run it until it manages to converge. It
-might take you a few attempts, but it should eventually work!</p>
-</div>
-<div
-id="section-work-in-progress-comment-of-gwesp-bad-fit-parallelization"
-class="section level3">
-<h3>work in progress COMMENT of GWESP, BAD FIT, PARALLELIZATION</h3>
-<div class="tutorial-exercise" data-label="non_convergence_diagn"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>fit2 &lt;- ergm::ergm(magnolia ~ edges + gwesp(decay=0.25, fixed=FALSE), 
-                   control = ergm::control.ergm(MCMLE.maxit = 1, 
-                   MCMC.samplesize = 10000,
-                   MCMC.burnin = 10000,
-                   seed = 1234513,
-                   parallel = 2,
-                   parallel.type = &quot;PSOCK&quot;))
-
-ergm::mcmc.diagnostics(fit2)</code></pre>
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
-<p>The plot you are going to see is different from the one I’m observing
-now while writing the tutorial since this is a simulation and we did not
-set a seed. However, can you see the difference between the good fit we
-observed before? The trace plots show that the simulation does not
-evolve around zero and that the MCMC chains are not mixing well at all.
-The density plot does not look like a bell curve, and it is not centered
-at zero. That’s how a bad model looks like!</p>
-<p>In this case, the degeneracy is due to the <code>triangle</code>
-term. If this happens to you specifying other kinds of terms, you need
-to rethink your theory.</p>
+networks that are much much denser than the observed network (especially
+considering that our observed network is sparse!). This is such a clear
+indicator of a degenerate model specification that the algorithm stops
+after few iterations, to avoid heading off into areas that would cause
+memory issues.</p>
+<p>In this case, the degeneracy is due to the <code>triangle</code> term
+that has very well known serious problems and almost never works. If
+this happens to you specifying other kinds of terms, you need to
+<em>rethink your theory</em>.</p>
 <p>Needless to say, don’t choose your terms by chance. There are way too
 many possible terms combinations to make a model fit by chance. When you
 specify a model, it needs to come from a solid theory.</p>
 </div>
-<div id="section-a-bad-fit" class="section level3">
-<h3>A bad fit</h3>
+<div id="section-poor-fit-more-controls" class="section level3">
+<h3>Poor fit &amp; more controls</h3>
 <p>Sometimes it also happens that even if your model does not degenerate
-and converge, providing you with results, you check the
+and converges, providing you with results, you check the
 <code>mcmc.diagnostics</code>, and you see that your model does not fit
 your data very well.</p>
-<p>Let’s take the model we just run with the magnolia data and
-substitute the incriminated term <code>triangle</code> with his
-geometrically weighted equivalent (terms with some math tricks to
-improve convergence).</p>
-<p>This model might take a few minutes. Be patient and read the output
-in the meanwhile so you see what happens with the algorithm! If it does
-not run at all, try to run it in your Rstudio directly. You can load the
-data by using <code>data(faux.magnolia.high, package = "ergm")</code>
-(obviously change the name in the model ^_^!)</p>
-</div>
-<div id="section-remove" class="section level3">
-<h3>REMOVE</h3>
+<p>Let’s run a simple model with the mesa data. It’s the exact
+specification we used in the previous example with the magnolia data,
+but we substitute the incriminated term <code>triangle</code> with
+<code>gwesp</code>.</p>
+<p>When we insert <code>gwesp(decay=0.03, fixed = TRUE)</code>, we tell
+the model to simulate geometrically weighted edgewise shared partners
+instead of triangles. If you don’t remember what an edgewise shared
+partner is, check the notes from class again. For what concerns the
+geometrically weighted, we are correcting for the tendency of these
+simulations to over-connect nodes. More specifically, each chain will
+estimate the decay starting from the same parameter in the observed
+network (fixed = TRUE) and to keep in the simulation only the 3% of the
+esp that the parameter generates (you can increase or decrease this
+number). If the parameter is set to <code>fixed = FALSE</code>, we tell
+the model to use the parameter estimated in the previous chain as the
+starting value of the decay estimation in the following chain.</p>
+<p>There is also another new issue inserted in the control panel below.
+Now we are parallelizing. Your computer has several cores, but unless
+you ask them to help you run this model, only one of them is going to
+volunteer and spontaneously do it for you. With the code
+<code>parallel = 2</code>, we tell the model to use 2 cores instead of
+one to increase the computational power. By also adding
+<code>parallel.type = "PSOCK"</code> we tell the model to use this
+specific type of parallelization. Unless you know what to do, don’t
+change it.</p>
+<p>At this point, it would be good for you to check how many cores your
+computer has (Google how to do it). If it is more than 2 you can change
+the number and insert a number up to your number of cores. If it is less
+than 2 (which is not very likely if you are using a computer),
+substitute 1 in there.</p>
+<p>ALERTS:</p>
+<ul>
+<li><p>THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES
+BEFORE RUNNING.</p></li>
+<li><p>This model might still take a few minutes. So be patient and read
+the output on your Rstudio in the meanwhile, so you see what happens
+with the algorithm!</p></li>
+<li><p>If it does not run at all, try to run it in your Rstudio
+directly. You can load the data by using
+<code>data(faux.mesa.high, package = 'ergm')</code> (obviously change
+the name in the model ^_^!)</p></li>
+</ul>
 <div class="tutorial-exercise" data-label="magnolia_gwesp"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>fit3 &lt;- ergm::ergm(magnolia ~ edges + gwesp(0.25, fixed = T))
+<pre class="text"><code>fit3 &lt;- ergm::ergm(mesa ~ edges + gwesp(decay=0.03, fixed = TRUE), 
+                   control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 2,
+                                              parallel.type = &quot;PSOCK&quot;))
 
 ergm::mcmc.diagnostics(fit3)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>As you can see, this model converges, but the diagnostics might not
 be the best!</p>
-<p>In fact, there was no theory behind this model. It was just
-introduced to show how models should not be done, and it fully achieved
-its goal. We should go back to theory to understand this data! :)</p>
+<p>In fact, there was no theory behind this model, and it has only one
+term. You will hardly find any model working well with such a simplistic
+specification.</p>
+<p>We should always use theory to design our model specifications after
+understanding the data descriptives. That’s the only way to find the
+appropriate recipe to explain the causal processes that generated an
+observed network! :)</p>
 </div>
 </div>
 <div id="section-goodness-of-fit" class="section level2">
 <h2>Goodness of Fit</h2>
-<p>Whether you are running a dyadic independent or a dyadic dependent
-model, you should always check whether the model you specified explains
-the observed network or not. You do that with the goodness of fit
-<code>gof</code> function.</p>
+<p>It makes no sense to use <code>mcmc.diagnostics()</code> on dyadic
+independent models since they do not use MCMC chains. Still, whether you
+are running a dyadic independent or a dyadic dependent model, you should
+always check whether the model you specified explains the observed
+network or not. You do that with the goodness of fit <code>gof</code>
+function, from the <code>ergm</code> package.</p>
 <p><code>gof</code> calculates p-values for geodesic distance, degree,
 and reachability summaries to diagnose the goodness-of-fit of
 exponential family random graph models. This time you want your p-value
-to be as high as possible. The p-value compares your observed data to
-simulated data, and if you did a good job specifying your model, the
-statistics that these two samples produce should be almost the same.</p>
-<p>Let’s fit our model again with a nice MCMC diagnostic and check
-whether it also has a nice goodness of fit.</p>
+to be as high as possible since this p-value compares your observed data
+to simulated data, and if you did a good job specifying your model, the
+statistics that these two samples produce should be almost the same. The
+simulation needs to be as close as possible to reality, right?</p>
+<p>Let’s fit again the flobusiness model we already used in the section
+‘Good Fit’ with a nice MCMC diagnostic and plot it to check whether it
+also has a nice goodness of fit.</p>
 <div class="tutorial-exercise" data-label="flob_gof" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1))
+<pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1),
+                  control = ergm::control.ergm(MCMC.burnin = 5000,
+                                               MCMC.samplesize = 10000,
+                                               seed = 123456,
+                                               MCMLE.maxit = 20))
 fit.gof &lt;- ergm::gof(fit)
-plot(fit.gof)
+snafun::GOF_plot(fit.gof)
+
 # If you also want to see the numeric output, uncomment below and rerun
-# fit.gof
-# 
-# Or plot the gof using
-snafun::GOF.plot(fit)</code></pre>
+fit.gof</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p><code>gof</code>’s output is composed of 4 Parts</p>
@@ -760,52 +810,58 @@ snafun::GOF.plot(fit)</code></pre>
 <li>Goodness-of-fit for minimum geodesic distance</li>
 <li>Goodness-of-fit for model statistics</li>
 </ul>
-<p>We can also print and plot only one of these four points. Let’s have
-a closer look at the degree’s one.</p>
-<div class="tutorial-exercise" data-label="flob_gofDegree"
-data-completion="1" data-diagnostics="1" data-startover="1"
-data-lines="0">
-<pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1))
-gofdegree &lt;- ergm::gof(fit ~ degree)
-gofdegree</code></pre>
-<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
-</div>
 <p>The goodness of fit table for degrees has one row for each degree
 value in the distribution of the observed network. The column
 <code>obs</code> reports how many nodes with that degree are in the
-observed network, while the column min, mean and max report the
-simulated values for each degree value. The last column reports the
-p-value, and, as we said, we want it as close as possible to one.</p>
+observed network, while the columns min, mean and max report the
+simulated values for each degree value. Finally, the last column reports
+the p-value; as we said, we want it as close as possible to one.</p>
 <p>The plot simply visualizes these results using box plots. The blue
 square is the observed value, and the black tick line shows the
 simulated values. We want the black tick line to be as close as possible
-to the blue square and possibly never outside of the min and max
+to the blue square and possibly never outside the min and max
 interval.</p>
-<p>Running <code>gof</code> for degree only also prints out the gof for
-the model statistics. It works exactly the same way, and it shows how
-the statistics of the observed network perform in comparison to the
-simulated one.</p>
 <p>You interpret the other two remaining points analogously.</p>
-<p>How did this model do? While the model statistics are doing really
-well, it’s not the case for degree. For what concerns low degrees, the
-simulation is different from the observed data. However, it gets much
-better for higher degrees. The same happens with edgewise shared
-partners, while the geodesic distance does quite well for every
-value.</p>
-<p>Overall the fit of this model is quite good!</p>
+<p>How did this model do? While the model statistics and the minimum
+geodesic distance are doing well, it’s not the case for the degree. The
+simulation is different from the observed data for what concerns low
+degrees. However, it gets much better for higher degrees. The same
+happens with edgewise shared partners.</p>
 <p>If you carefully observe, also one of the geodesic distance’s values
-is <code>-Inf</code>, but this simply indicates that there are isolates
-in the network. Hence we don’t have to worry about it.</p>
-<p>However, <code>Inf</code> is like an alarm to remind you to be
-careful and constantly check on what you are doing.</p>
+is <code>-Inf</code>, which simply indicates that there are isolates in
+the network. Hence we don’t have to worry about it. However,
+<code>Inf</code> is like an alarm reminding you to be careful and
+constantly check on your actions.</p>
+<p>Overall the fit of this model is not great! It could be improved by
+adding more terms to the model and making sure to think carefully about
+the reasons for which you put them there.</p>
+<p>Finally, remember that we can also check and plot the GOF in only one
+(or more) of these four parameters. So let’s have a closer look at the
+degree’s one.</p>
+<p>Running <code>gof</code> for degree only also prints out the gof for
+the model statistics. It works the same way, and it shows how the
+statistics of the observed network perform in comparison to the
+simulated one.</p>
+<div class="tutorial-exercise" data-label="flob_gofDegree"
+data-completion="1" data-diagnostics="1" data-startover="1"
+data-lines="0">
+<pre class="text"><code>gofdegree &lt;- ergm::gof(fit ~ degree)
+
+snafun::GOF_plot(gofdegree)
+gofdegree</code></pre>
+<script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
+</div>
+<p>Just take into account that your results might be different if you
+analyse them one by one.</p>
 </div>
 <div id="section-more-dyadic-dependent-terms" class="section level2">
 <h2>More dyadic dependent terms</h2>
-<p>So far, we used only few dependent terms. There are many of them, and
-we cannot possibly cover every single one in this tutorial. However, it
-is certainly worth spending some time talking about triads, cycles, and
-triangles since they are at the core of dyadic dependence since it
-checks on the formation of ties due to existing ties.</p>
+<p>So far, we used only few dyadic (inter)dependent terms. There are
+many of them, and we cannot possibly cover every single one in this
+tutorial. However, it is certainly worth spending some time talking
+about triads, cycles, and triangles since they are at the core of dyadic
+dependence since it checks on the formation of ties due to existing
+ties.</p>
 <div id="section-the-triad-census" class="section level3">
 <h3>The Triad Census</h3>
 <p>Do you remember the <a
@@ -823,11 +879,13 @@ data-lines="0">
 </div>
 <p>If you use this term in an ERGM with a direct network, it will check
 on the existence of each of the 16 options and provide you with the
-probability of observing each of them. If you use the undirected one, it
-is going to check only on the configurations that make sense with
-undirected data. Can you tell me how many are those?</p>
-<p>Let’s try out with the Sampson data we already used many times
-before.</p>
+probability of observing each of them. However, if you have an
+undirected network, it will not run since only a few of the 16
+configurations make sense with undirected data.</p>
+<p>Let’s try with the Sampson data we have used many times before.
+Please, note that this is a different Sampson data set than the one used
+in ERGM1. Several waves of data collection were performed. While in
+ERGM1, there is wave 1; this is wave 2. Monks behaviour at time 2.</p>
 <p>Since the Sampson data about monks’ frindships is directed we are
 checking whether these 16 configurations do exist in the network.</p>
 <div class="tutorial-exercise" data-label="Sam_summ_triadcensus"
@@ -842,17 +900,24 @@ data-lines="0">
 <div class="tutorial-exercise" data-label="Sam_triadcensus"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>samM1 &lt;- ergm::ergm(sampson ~ edges + triadcensus)
+<pre class="text"><code>samM1 &lt;- ergm::ergm(sampson ~ edges + 
+                      triadcensus, 
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 2))
 
 summary(samM1)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>The model will either not converge or take a long time to do so. If
-you read the output it is also clear that the model is not happy with
-this specification.</p>
+<p>The model will either not converge or take a long time to do so. I
+set the maximum number of iterations to 2, hence it did not take too
+long, but you are getting weird results. Well, if you read the output it
+is clear that the model is not happy with this specification.</p>
 <p>There is no theoretical reason that would make us think that all
 these effects are happening at the same time for a specific -non random-
-reason in this small network. Hence, the model does not behave well.</p>
+reason in this small network. Hence, the model does make sense and does
+not behave well.</p>
 <p>We might want to try to be more specific and to decrease the level of
 complexity of our educated guess.</p>
 <p>Checking on the model summary above, we see that the configurations
@@ -865,7 +930,11 @@ make sense knowing the Sampson network’s features?</p>
 <div class="tutorial-exercise" data-label="Sam_intransitive"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>samM2 &lt;- ergm::ergm(sampson ~ edges + intransitive)
+<pre class="text"><code>samM2 &lt;- ergm::ergm(sampson ~ edges + intransitive, 
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 5))
 
 summary(samM2)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -888,7 +957,7 @@ be often useful are</p>
 <li><code>balance</code></li>
 </ul>
 <p>Why don’t you try to use them and see what happens with the Sampson
-data?</p>
+data? TIP: not all together at the same time.</p>
 <div class="tutorial-exercise" data-label="Playground"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
@@ -902,23 +971,32 @@ want to check on other numbers of nodes patterns too, on other motifs,
 and whether their edges form cycles. You do that with the
 <code>cycle</code> term.</p>
 <p>For instance, in the code below, we are checking on four nodes cycles
-in the Sampson data. Why don’t you try to think which number might
-easier to observe in the Sampson data and re-run the model? Just try to
-analyze what you know about this network and plot it below if it helps
-you remember it.</p>
+in the Sampson data. First, run the code below. Afterwards, change the
+number of nodes in the cycle. Why don’t you try to think which number
+might easier to observe in the Sampson data and re-run the model? Just
+try to analyze what you know about this network and plot it below if it
+helps you remember it.</p>
 <p>Hint: the correct number to pass to <code>cycle</code> makes that
 term work exactly like <code>mutual</code>!</p>
 <div class="tutorial-exercise" data-label="grade_cycle"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>samM3 &lt;- ergm::ergm(sampson ~ edges + cycle(4))
+<pre class="text"><code>samM3 &lt;- ergm::ergm(sampson ~ edges + cycle(4), 
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 5))
 summary(samM3)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="grade_cycle-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
-<pre class="text"><code>samM3 &lt;- ergm::ergm(sampson ~ edges + cycle(2))
+<pre class="text"><code>samM3 &lt;- ergm::ergm(sampson ~ edges + cycle(2),
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 5))
 summary(samM3)</code></pre>
 </div>
 </div>
@@ -964,16 +1042,16 @@ summary(g.simModel)</code></pre>
 will vary each time since this is a simulation, but they will always be
 quite close to the values we set with
 <code>coef = c(-1.8, 0.03)</code>.</p>
-<p>That’s how the faux mesa and the faux magnolia data was created!
-:)</p>
+<p>That’s how the faux mesa and the faux magnolia data was created! Faux
+means fake :)</p>
 </div>
 <div id="section-get-your-hands-dirty" class="section level2">
 <h2>Get your hands dirty!</h2>
 <p>At this point, we covered together every essential topic that you
-need to know in order to be able to run exponential random graph models.
-Do you still feel a bit shaky at the idea of running these models? Of
-course you do! What you do need now is practice, and no class can make
-up for that!</p>
+need to know in order to be able to run unimodal non-weighted
+exponential random graph models. Do you still feel a bit shaky at the
+idea of running these models? Of course you do! What you do need now is
+practice, and no class can make up for that!</p>
 <p>Hence, this tutorial ends with a guided, practical task to get some
 familiarity with ERGMs.</p>
 <p>For this task, we are going to use the UK faculty data from the
@@ -1038,7 +1116,11 @@ run it?</p>
 data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 
-UKFit.1 &lt;- ergm::ergm(UKFN ~ edges + cycle(2))
+UKFit.1 &lt;- ergm::ergm(UKFN ~ edges + cycle(2), 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 5))
 
 summary(UKFit.1)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -1053,14 +1135,19 @@ take a while.</p>
 data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 
-UKFit.2 &lt;- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )
+UKFit.2 &lt;- ergm::ergm(UKFN ~ edges + cycle(2) + triangle, 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.2)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>Ouch, we used <code>tringles</code>, but do you remember that this
-model has convergence issues? In fact, it did not converge. Why don’t
-you re-run it using the curved term alternative?</p>
+model has convergence issues? In fact, it will not converge (increase
+the number of iterations if you don’t believe me). Why don’t you re-run
+it using the curved term alternative?</p>
 <p>Let’s focus on our third hypothesis. We can do that by checking for
 homophily, considering the group a nodal attribute. We want to check on
 the probability of having homophilic effects in each group. Hence we
@@ -1069,7 +1156,11 @@ should check for differential homophily.</p>
 data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 
-UKFit.3 &lt;- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch(&#39;Group&#39;, diff = TRUE) )
+UKFit.3 &lt;- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch(&#39;Group&#39;, diff = TRUE), 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.3)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -1086,7 +1177,11 @@ data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 UKFit.4 &lt;- ergm::ergm(UKFN ~ edges + 
-                        mutual)
+                        mutual, 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.4)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -1098,7 +1193,11 @@ data-diagnostics="1" data-startover="1" data-lines="0">
 UKFit.4 &lt;- ergm::ergm(UKFN ~ edges + 
                         mutual + 
                         nodematch(&#39;Group&#39;) +
-                        gwesp(0.25, fixed = T) )
+                        gwesp(0.25, fixed = T),
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.4)</code></pre>
 </div>
@@ -1116,12 +1215,12 @@ one and run <code>mcmc.diagnostics</code>.</p>
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
-UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
-ergm::mcmc.diagnostics(UKFit)
-
-ergm::gof(UKFit)
-
-snafun::GOF.plot(UKFit)</code></pre>
+UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual,
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
+ergm::mcmc.diagnostics(UKFit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>What is the MCMC diagnostics telling you? Is your model good? Shall
@@ -1134,9 +1233,9 @@ data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
 
-ergm::gof(UKFit)
+UKgof &lt;- ergm::gof(UKFit)
 
-snafun::GOF.plot(UKFit)</code></pre>
+snafun::GOF_plot(UKgof)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>What is the <code>gof</code> telling you? Is the model good?</p>
@@ -1149,7 +1248,11 @@ results</p>
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
-UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
+UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual,
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -2083,6 +2186,67 @@ learnr:::store_exercise_cache(structure(list(label = "flob_mcmc_dia", global_set
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
+`tutorial-exercise-flob_mcmc_dia2-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-flob_mcmc_dia2-code-editor`)), session)
+output$`tutorial-exercise-flob_mcmc_dia2-output` <- renderUI({
+  `tutorial-exercise-flob_mcmc_dia2-result`()
+})
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::store_exercise_cache(structure(list(label = "flob_mcmc_dia2", global_setup = structure(c("library(learnr)", 
+"library(gradethis)", "library(ergm)", "", "knitr::opts_chunk$set(", 
+"\techo = FALSE,", "\tmessage = FALSE,", "\twarning = FALSE,", 
+"\tcache = FALSE", ")", "", "source(\"../R/helper_code.R\")", 
+"", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
+"  \"learnr\", \"0.10.2\", \"CRAN\",", "  \"gradethis\", \"0.2.8.9000\", \"rstudio/gradethis\",", 
+"  \"igraph\", \"1.3.2\", \"CRAN\",", "  \"knitr\", \"1.39\", \"CRAN\",", 
+"  \"sna\", \"2.7\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
+"  \"texreg\", \"1.38.6\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
+"", "check_pkgs <- function(.pkgs = pkgs) {", "  sna4tutti:::check_packages(.pkgs)", 
+"}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
+"", "", "# R check version (required 4.2.0) -updated June 2022", 
+"check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
+"}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
+    chunks = list(list(label = "load_flob", code = "\nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
+        opts = list(label = "\"load_flob\"", include = "FALSE"), 
+        engine = "r"), list(label = "flob_mcmc_dia2", code = "\nset.seed(1234)\nfit <- ergm::ergm(flobusiness ~ edges + degree(1), \n                  control = ergm::control.ergm(MCMC.burnin = 5000,\n                                              MCMC.samplesize = 10000,\n                                              seed = 123456,\n                                              MCMLE.maxit = 20))\n\nergm::mcmc.diagnostics(fit)\n", 
+        opts = list(label = "\"flob_mcmc_dia2\"", exercise = "TRUE", 
+            exercise.setup = "\"load_flob\""), engine = "r")), 
+    code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
+    test_cases = NULL, options = list(eval = FALSE, echo = TRUE, 
+        results = "markup", tidy = FALSE, tidy.opts = NULL, collapse = FALSE, 
+        prompt = FALSE, comment = NA, highlight = FALSE, size = "normalsize", 
+        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
+        cache.path = "T07_ERGM2_cache/html/", cache.vars = NULL, 
+        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
+        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
+        fig.align = "default", fig.path = "T07_ERGM2_files/figure-html/", 
+        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
+        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
+        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
+        fig.pos = "", out.width = 624, out.height = NULL, out.extra = NULL, 
+        fig.retina = 2, external = TRUE, sanitize = FALSE, interval = 1, 
+        aniopts = "controls,loop", warning = FALSE, error = FALSE, 
+        message = FALSE, render = NULL, ref.label = NULL, child = NULL, 
+        engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
+        max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
+        exercise.error.check.code = "gradethis_error_checker()", 
+        label = "flob_mcmc_dia2", exercise = TRUE, exercise.setup = "load_flob", 
+        code = c("", "set.seed(1234)", "fit <- ergm::ergm(flobusiness ~ edges + degree(1), ", 
+        "                  control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                              MCMC.samplesize = 10000,", 
+        "                                              seed = 123456,", 
+        "                                              MCMLE.maxit = 20))", 
+        "", "ergm::mcmc.diagnostics(fit)", ""), out.width.px = 624, 
+        out.height.px = 384, params.src = "flob_mcmc_dia2, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
 `tutorial-exercise-explore_magnolia-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-explore_magnolia-code-editor`)), session)
 output$`tutorial-exercise-explore_magnolia-output` <- renderUI({
   `tutorial-exercise-explore_magnolia-result`()
@@ -2107,8 +2271,8 @@ learnr:::store_exercise_cache(structure(list(label = "explore_magnolia", global_
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
-    chunks = list(list(label = "load_magnolia", code = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
+    include = FALSE)), setup = "\ndata(faux.magnolia.high, package = \"ergm\")\nmagnolia <- faux.magnolia.high\n", 
+    chunks = list(list(label = "load_magnolia", code = "\ndata(faux.magnolia.high, package = \"ergm\")\nmagnolia <- faux.magnolia.high\n", 
         opts = list(label = "\"load_magnolia\"", include = "FALSE"), 
         engine = "r"), list(label = "explore_magnolia", code = "magnolia", 
         opts = list(label = "\"explore_magnolia\"", exercise = "TRUE", 
@@ -2163,8 +2327,8 @@ learnr:::store_exercise_cache(structure(list(label = "non_convergence", global_s
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
-    chunks = list(list(label = "load_magnolia", code = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
+    include = FALSE)), setup = "\ndata(faux.magnolia.high, package = \"ergm\")\nmagnolia <- faux.magnolia.high\n", 
+    chunks = list(list(label = "load_magnolia", code = "\ndata(faux.magnolia.high, package = \"ergm\")\nmagnolia <- faux.magnolia.high\n", 
         opts = list(label = "\"load_magnolia\"", include = "FALSE"), 
         engine = "r"), list(label = "non_convergence", code = "\n# fit2 <- ergm::ergm(magnolia ~ edges + triangle)\n", 
         opts = list(label = "\"non_convergence\"", exercise = "TRUE", 
@@ -2195,68 +2359,6 @@ learnr:::store_exercise_cache(structure(list(label = "non_convergence", global_s
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-`tutorial-exercise-non_convergence_diagn-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-non_convergence_diagn-code-editor`)), session)
-output$`tutorial-exercise-non_convergence_diagn-output` <- renderUI({
-  `tutorial-exercise-non_convergence_diagn-result`()
-})
-</script>
-
-
-<script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache(structure(list(label = "non_convergence_diagn", global_setup = structure(c("library(learnr)", 
-"library(gradethis)", "library(ergm)", "", "knitr::opts_chunk$set(", 
-"\techo = FALSE,", "\tmessage = FALSE,", "\twarning = FALSE,", 
-"\tcache = FALSE", ")", "", "source(\"../R/helper_code.R\")", 
-"", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
-"  \"learnr\", \"0.10.2\", \"CRAN\",", "  \"gradethis\", \"0.2.8.9000\", \"rstudio/gradethis\",", 
-"  \"igraph\", \"1.3.2\", \"CRAN\",", "  \"knitr\", \"1.39\", \"CRAN\",", 
-"  \"sna\", \"2.7\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
-"  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
-"  \"texreg\", \"1.38.6\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
-"  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
-"", "check_pkgs <- function(.pkgs = pkgs) {", "  sna4tutti:::check_packages(.pkgs)", 
-"}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
-"", "", "# R check version (required 4.2.0) -updated June 2022", 
-"check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
-"}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
-    chunks = list(list(label = "load_magnolia", code = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
-        opts = list(label = "\"load_magnolia\"", include = "FALSE"), 
-        engine = "r"), list(label = "non_convergence_diagn", 
-        code = "\nfit2 <- ergm::ergm(magnolia ~ edges + gwesp(decay=0.25, fixed=FALSE), \n                   control = ergm::control.ergm(MCMLE.maxit = 1, \n                   MCMC.samplesize = 10000,\n                   MCMC.burnin = 10000,\n                   seed = 1234513,\n                   parallel = 2,\n                   parallel.type = \"PSOCK\"))\n\nergm::mcmc.diagnostics(fit2)\n", 
-        opts = list(label = "\"non_convergence_diagn\"", exercise = "TRUE", 
-            exercise.setup = "\"load_magnolia\""), engine = "r")), 
-    code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
-    test_cases = NULL, options = list(eval = FALSE, echo = TRUE, 
-        results = "markup", tidy = FALSE, tidy.opts = NULL, collapse = FALSE, 
-        prompt = FALSE, comment = NA, highlight = FALSE, size = "normalsize", 
-        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
-        cache.path = "T07_ERGM2_cache/html/", cache.vars = NULL, 
-        cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
-        cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
-        fig.align = "default", fig.path = "T07_ERGM2_files/figure-html/", 
-        dev = "png", dev.args = NULL, dpi = 192, fig.ext = "png", 
-        fig.width = 6.5, fig.height = 4, fig.env = "figure", 
-        fig.cap = NULL, fig.scap = NULL, fig.lp = "fig:", fig.subcap = NULL, 
-        fig.pos = "", out.width = 624, out.height = NULL, out.extra = NULL, 
-        fig.retina = 2, external = TRUE, sanitize = FALSE, interval = 1, 
-        aniopts = "controls,loop", warning = FALSE, error = FALSE, 
-        message = FALSE, render = NULL, ref.label = NULL, child = NULL, 
-        engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
-        max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
-        exercise.error.check.code = "gradethis_error_checker()", 
-        label = "non_convergence_diagn", exercise = TRUE, exercise.setup = "load_magnolia", 
-        code = c("", "fit2 <- ergm::ergm(magnolia ~ edges + gwesp(decay=0.25, fixed=FALSE), ", 
-        "                   control = ergm::control.ergm(MCMLE.maxit = 1, ", 
-        "                   MCMC.samplesize = 10000,", "                   MCMC.burnin = 10000,", 
-        "                   seed = 1234513,", "                   parallel = 2,", 
-        "                   parallel.type = \"PSOCK\"))", "", 
-        "ergm::mcmc.diagnostics(fit2)", ""), out.width.px = 624, 
-        out.height.px = 384, params.src = "non_convergence_diagn, exercise = TRUE, exercise.setup = \"load_magnolia\"", 
-        fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
-</script>
- 
-<script type="application/shiny-prerendered" data-context="server">
 `tutorial-exercise-magnolia_gwesp-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-magnolia_gwesp-code-editor`)), session)
 output$`tutorial-exercise-magnolia_gwesp-output` <- renderUI({
   `tutorial-exercise-magnolia_gwesp-result`()
@@ -2281,12 +2383,12 @@ learnr:::store_exercise_cache(structure(list(label = "magnolia_gwesp", global_se
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
-    chunks = list(list(label = "load_magnolia", code = "\ndata(faux.magnolia.high, package = \"ergm\")\n\nmagnolia <- faux.magnolia.high", 
-        opts = list(label = "\"load_magnolia\"", include = "FALSE"), 
-        engine = "r"), list(label = "magnolia_gwesp", code = "\nfit3 <- ergm::ergm(magnolia ~ edges + gwesp(0.25, fixed = T))\n\nergm::mcmc.diagnostics(fit3)\n", 
+    include = FALSE)), setup = "\ndata(faux.mesa.high, package = 'ergm')\nmesa <- faux.mesa.high\n", 
+    chunks = list(list(label = "load_mesa", code = "\ndata(faux.mesa.high, package = 'ergm')\nmesa <- faux.mesa.high\n", 
+        opts = list(label = "\"load_mesa\"", include = "FALSE"), 
+        engine = "r"), list(label = "magnolia_gwesp", code = "\nfit3 <- ergm::ergm(mesa ~ edges + gwesp(decay=0.03, fixed = TRUE), \n                   control = ergm::control.ergm(MCMC.burnin = 5000,\n                                              MCMC.samplesize = 10000,\n                                              seed = 123456,\n                                              MCMLE.maxit = 20,\n                                              parallel = 2,\n                                              parallel.type = \"PSOCK\"))\n\nergm::mcmc.diagnostics(fit3)\n", 
         opts = list(label = "\"magnolia_gwesp\"", exercise = "TRUE", 
-            exercise.setup = "\"load_magnolia\""), engine = "r")), 
+            exercise.setup = "\"load_mesa\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
     test_cases = NULL, options = list(eval = FALSE, echo = TRUE, 
         results = "markup", tidy = FALSE, tidy.opts = NULL, collapse = FALSE, 
@@ -2306,10 +2408,16 @@ learnr:::store_exercise_cache(structure(list(label = "magnolia_gwesp", global_se
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        label = "magnolia_gwesp", exercise = TRUE, exercise.setup = "load_magnolia", 
-        code = c("", "fit3 <- ergm::ergm(magnolia ~ edges + gwesp(0.25, fixed = T))", 
+        label = "magnolia_gwesp", exercise = TRUE, exercise.setup = "load_mesa", 
+        code = c("", "fit3 <- ergm::ergm(mesa ~ edges + gwesp(decay=0.03, fixed = TRUE), ", 
+        "                   control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                              MCMC.samplesize = 10000,", 
+        "                                              seed = 123456,", 
+        "                                              MCMLE.maxit = 20,", 
+        "                                              parallel = 2,", 
+        "                                              parallel.type = \"PSOCK\"))", 
         "", "ergm::mcmc.diagnostics(fit3)", ""), out.width.px = 624, 
-        out.height.px = 384, params.src = "magnolia_gwesp, exercise = TRUE, exercise.setup = \"load_magnolia\"", 
+        out.height.px = 384, params.src = "magnolia_gwesp, exercise = TRUE, exercise.setup = \"load_mesa\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2341,7 +2449,7 @@ learnr:::store_exercise_cache(structure(list(label = "flob_gof", global_setup = 
     include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
     chunks = list(list(label = "load_flob", code = "\nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
         opts = list(label = "\"load_flob\"", include = "FALSE"), 
-        engine = "r"), list(label = "flob_gof", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\nfit.gof <- ergm::gof(fit)\nplot(fit.gof)\n# If you also want to see the numeric output, uncomment below and rerun\n# fit.gof\n# \n# Or plot the gof using\nsnafun::GOF.plot(fit)", 
+        engine = "r"), list(label = "flob_gof", code = "\nfit <- ergm::ergm(flobusiness ~ edges + degree(1),\n                  control = ergm::control.ergm(MCMC.burnin = 5000,\n                                               MCMC.samplesize = 10000,\n                                               seed = 123456,\n                                               MCMLE.maxit = 20))\nfit.gof <- ergm::gof(fit)\nsnafun::GOF_plot(fit.gof)\n\n# If you also want to see the numeric output, uncomment below and rerun\nfit.gof\n\n\n", 
         opts = list(label = "\"flob_gof\"", exercise = "TRUE", 
             exercise.setup = "\"load_flob\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2364,10 +2472,15 @@ learnr:::store_exercise_cache(structure(list(label = "flob_gof", global_setup = 
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "flob_gof", exercise = TRUE, exercise.setup = "load_flob", 
-        code = c("fit <- ergm::ergm(flobusiness ~ edges + degree(1))", 
-        "fit.gof <- ergm::gof(fit)", "plot(fit.gof)", "# If you also want to see the numeric output, uncomment below and rerun", 
-        "# fit.gof", "# ", "# Or plot the gof using", "snafun::GOF.plot(fit)"
-        ), out.width.px = 624, out.height.px = 384, params.src = "flob_gof, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        code = c("", "fit <- ergm::ergm(flobusiness ~ edges + degree(1),", 
+        "                  control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                               MCMC.samplesize = 10000,", 
+        "                                               seed = 123456,", 
+        "                                               MCMLE.maxit = 20))", 
+        "fit.gof <- ergm::gof(fit)", "snafun::GOF_plot(fit.gof)", 
+        "", "# If you also want to see the numeric output, uncomment below and rerun", 
+        "fit.gof", "", "", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "flob_gof, exercise = TRUE, exercise.setup = \"load_flob\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2396,12 +2509,15 @@ learnr:::store_exercise_cache(structure(list(label = "flob_gofDegree", global_se
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n\n\nfit <- ergm::ergm(flobusiness ~ edges + degree(1),\n                  control = ergm::control.ergm(MCMC.burnin = 5000,\n                                               MCMC.samplesize = 10000,\n                                               seed = 123456,\n                                               MCMLE.maxit = 20))\nfit.gof <- ergm::gof(fit)\nsnafun::GOF_plot(fit.gof)\n\n# If you also want to see the numeric output, uncomment below and rerun\nfit.gof\n\n\n", 
     chunks = list(list(label = "load_flob", code = "\nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
         opts = list(label = "\"load_flob\"", include = "FALSE"), 
-        engine = "r"), list(label = "flob_gofDegree", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\ngofdegree <- ergm::gof(fit ~ degree)\ngofdegree\n\n", 
-        opts = list(label = "\"flob_gofDegree\"", exercise = "TRUE", 
-            exercise.setup = "\"load_flob\""), engine = "r")), 
+        engine = "r"), list(label = "flob_gof", code = "\nfit <- ergm::ergm(flobusiness ~ edges + degree(1),\n                  control = ergm::control.ergm(MCMC.burnin = 5000,\n                                               MCMC.samplesize = 10000,\n                                               seed = 123456,\n                                               MCMLE.maxit = 20))\nfit.gof <- ergm::gof(fit)\nsnafun::GOF_plot(fit.gof)\n\n# If you also want to see the numeric output, uncomment below and rerun\nfit.gof\n\n\n", 
+        opts = list(label = "\"flob_gof\"", exercise = "TRUE", 
+            exercise.setup = "\"load_flob\""), engine = "r"), 
+        list(label = "flob_gofDegree", code = "\ngofdegree <- ergm::gof(fit ~ degree)\n\nsnafun::GOF_plot(gofdegree)\ngofdegree\n\n", 
+            opts = list(label = "\"flob_gofDegree\"", exercise = "TRUE", 
+                exercise.setup = "\"flob_gof\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
     test_cases = NULL, options = list(eval = FALSE, echo = TRUE, 
         results = "markup", tidy = FALSE, tidy.opts = NULL, collapse = FALSE, 
@@ -2421,10 +2537,10 @@ learnr:::store_exercise_cache(structure(list(label = "flob_gofDegree", global_se
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        label = "flob_gofDegree", exercise = TRUE, exercise.setup = "load_flob", 
-        code = c("fit <- ergm::ergm(flobusiness ~ edges + degree(1))", 
-        "gofdegree <- ergm::gof(fit ~ degree)", "gofdegree", 
-        "", ""), out.width.px = 624, out.height.px = 384, params.src = "flob_gofDegree, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        label = "flob_gofDegree", exercise = TRUE, exercise.setup = "flob_gof", 
+        code = c("", "gofdegree <- ergm::gof(fit ~ degree)", 
+        "", "snafun::GOF_plot(gofdegree)", "gofdegree", "", ""
+        ), out.width.px = 624, out.height.px = 384, params.src = "flob_gofDegree, exercise = TRUE, exercise.setup = \"flob_gof\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2505,8 +2621,8 @@ learnr:::store_exercise_cache(structure(list(label = "Sam_summ_triadcensus", glo
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
         engine = "r"), list(label = "Sam_summ_triadcensus", code = "\nsummary(sampson ~ edges + triadcensus)\n\n", 
         opts = list(label = "\"Sam_summ_triadcensus\"", exercise = "TRUE", 
@@ -2561,10 +2677,10 @@ learnr:::store_exercise_cache(structure(list(label = "Sam_triadcensus", global_s
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "Sam_triadcensus", code = "\nsamM1 <- ergm::ergm(sampson ~ edges + triadcensus)\n\nsummary(samM1)\n", 
+        engine = "r"), list(label = "Sam_triadcensus", code = "\nsamM1 <- ergm::ergm(sampson ~ edges + \n                      triadcensus, \n                    control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                 MCMC.samplesize = 10000,\n                                                 seed = 123456,\n                                                 MCMLE.maxit = 2))\n\nsummary(samM1)\n", 
         opts = list(label = "\"Sam_triadcensus\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2587,7 +2703,11 @@ learnr:::store_exercise_cache(structure(list(label = "Sam_triadcensus", global_s
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Sam_triadcensus", exercise = TRUE, exercise.setup = "sampson_load", 
-        code = c("", "samM1 <- ergm::ergm(sampson ~ edges + triadcensus)", 
+        code = c("", "samM1 <- ergm::ergm(sampson ~ edges + ", 
+        "                      triadcensus, ", "                    control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                 MCMC.samplesize = 10000,", 
+        "                                                 seed = 123456,", 
+        "                                                 MCMLE.maxit = 2))", 
         "", "summary(samM1)", ""), out.width.px = 624, out.height.px = 384, 
         params.src = "Sam_triadcensus, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
@@ -2618,10 +2738,10 @@ learnr:::store_exercise_cache(structure(list(label = "Sam_intransitive", global_
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "Sam_intransitive", code = "\nsamM2 <- ergm::ergm(sampson ~ edges + intransitive)\n\nsummary(samM2)", 
+        engine = "r"), list(label = "Sam_intransitive", code = "\nsamM2 <- ergm::ergm(sampson ~ edges + intransitive, \n                    control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                 MCMC.samplesize = 10000,\n                                                 seed = 123456,\n                                                 MCMLE.maxit = 5))\n\nsummary(samM2)", 
         opts = list(label = "\"Sam_intransitive\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2644,7 +2764,11 @@ learnr:::store_exercise_cache(structure(list(label = "Sam_intransitive", global_
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Sam_intransitive", exercise = TRUE, exercise.setup = "sampson_load", 
-        code = c("", "samM2 <- ergm::ergm(sampson ~ edges + intransitive)", 
+        code = c("", "samM2 <- ergm::ergm(sampson ~ edges + intransitive, ", 
+        "                    control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                 MCMC.samplesize = 10000,", 
+        "                                                 seed = 123456,", 
+        "                                                 MCMLE.maxit = 5))", 
         "", "summary(samM2)"), out.width.px = 624, out.height.px = 384, 
         params.src = "Sam_intransitive, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
@@ -2675,8 +2799,8 @@ learnr:::store_exercise_cache(structure(list(label = "Playground", global_setup 
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
         engine = "r"), list(label = "Playground", code = "", 
         opts = list(label = "\"Playground\"", exercise = "TRUE", 
@@ -2730,16 +2854,19 @@ learnr:::store_exercise_cache(structure(list(label = "grade_cycle", global_setup
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "grade_cycle", code = "\nsamM3 <- ergm::ergm(sampson ~ edges + cycle(4))\nsummary(samM3)", 
+        engine = "r"), list(label = "grade_cycle", code = "\nsamM3 <- ergm::ergm(sampson ~ edges + cycle(4), \n                    control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                 MCMC.samplesize = 10000,\n                                                 seed = 123456,\n                                                 MCMLE.maxit = 5))\nsummary(samM3)", 
         opts = list(label = "\"grade_cycle\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = structure("gradethis::grade_code(correct = \"Well Done!\")", chunk_opts = list(
         label = "grade_cycle-check")), solution = structure(c("", 
-    "samM3 <- ergm::ergm(sampson ~ edges + cycle(2))", "summary(samM3)", 
-    ""), chunk_opts = list(label = "grade_cycle-solution")), 
+    "samM3 <- ergm::ergm(sampson ~ edges + cycle(2),", "                    control = ergm::control.ergm(MCMC.burnin = 5000,", 
+    "                                                 MCMC.samplesize = 10000,", 
+    "                                                 seed = 123456,", 
+    "                                                 MCMLE.maxit = 5))", 
+    "summary(samM3)", ""), chunk_opts = list(label = "grade_cycle-solution")), 
     test_cases = NULL, options = list(eval = FALSE, echo = TRUE, 
         results = "markup", tidy = FALSE, tidy.opts = NULL, collapse = FALSE, 
         prompt = FALSE, comment = NA, highlight = FALSE, size = "normalsize", 
@@ -2759,7 +2886,11 @@ learnr:::store_exercise_cache(structure(list(label = "grade_cycle", global_setup
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "grade_cycle", exercise = TRUE, exercise.setup = "sampson_load", 
-        code = c("", "samM3 <- ergm::ergm(sampson ~ edges + cycle(4))", 
+        code = c("", "samM3 <- ergm::ergm(sampson ~ edges + cycle(4), ", 
+        "                    control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                 MCMC.samplesize = 10000,", 
+        "                                                 seed = 123456,", 
+        "                                                 MCMLE.maxit = 5))", 
         "summary(samM3)"), out.width.px = 624, out.height.px = 384, 
         params.src = "grade_cycle, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
@@ -2790,8 +2921,8 @@ learnr:::store_exercise_cache(structure(list(label = "SamSim", global_setup = st
 "", "", "# R check version (required 4.2.0) -updated June 2022", 
 "check_R <- function(x) {", "  sna4tutti:::check_r_equal(4, 2.0)", 
 "}", "", "", "errors <- list()"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
         engine = "r"), list(label = "SamSim", code = "\nSamM <- ergm::ergm(sampson ~ edges + mutual)\n\nSamSim <- simulate(SamM, nsim=3,  burnin = 1e+6, verbose = TRUE)\n\nplot(SamSim[[1]])", 
         opts = list(label = "\"SamSim\"", exercise = "TRUE", 
@@ -3080,7 +3211,7 @@ learnr:::store_exercise_cache(structure(list(label = "Model1", global_setup = st
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "Model1", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2))\n\nsummary(UKFit.1)", 
+        engine = "r"), list(label = "Model1", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2), \n                      control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                   MCMC.samplesize = 10000,\n                                                   seed = 123456,\n                                                   MCMLE.maxit = 5))\n\nsummary(UKFit.1)", 
         opts = list(label = "\"Model1\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -3104,8 +3235,11 @@ learnr:::store_exercise_cache(structure(list(label = "Model1", global_setup = st
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Model1", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("", "UKFN <- intergraph::asNetwork(UKF)", "", 
-        "UKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2))", "", 
-        "summary(UKFit.1)"), out.width.px = 624, out.height.px = 384, 
+        "UKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2), ", "                      control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                   MCMC.samplesize = 10000,", 
+        "                                                   seed = 123456,", 
+        "                                                   MCMLE.maxit = 5))", 
+        "", "summary(UKFit.1)"), out.width.px = 624, out.height.px = 384, 
         params.src = "Model1, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -3138,7 +3272,7 @@ learnr:::store_exercise_cache(structure(list(label = "Model2", global_setup = st
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "Model2", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )\n\nsummary(UKFit.2)", 
+        engine = "r"), list(label = "Model2", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle, \n                      control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                   MCMC.samplesize = 10000,\n                                                   seed = 123456,\n                                                   MCMLE.maxit = 1))\n\nsummary(UKFit.2)", 
         opts = list(label = "\"Model2\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -3162,7 +3296,11 @@ learnr:::store_exercise_cache(structure(list(label = "Model2", global_setup = st
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Model2", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("", "UKFN <- intergraph::asNetwork(UKF)", "", 
-        "UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )", 
+        "UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle, ", 
+        "                      control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                   MCMC.samplesize = 10000,", 
+        "                                                   seed = 123456,", 
+        "                                                   MCMLE.maxit = 1))", 
         "", "summary(UKFit.2)"), out.width.px = 624, out.height.px = 384, 
         params.src = "Model2, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
@@ -3196,7 +3334,7 @@ learnr:::store_exercise_cache(structure(list(label = "Model3", global_setup = st
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "Model3", code = "UKFN <- intergraph::asNetwork(UKF)\n\nUKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE) )\n\nsummary(UKFit.3)", 
+        engine = "r"), list(label = "Model3", code = "UKFN <- intergraph::asNetwork(UKF)\n\nUKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE), \n                      control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                   MCMC.samplesize = 10000,\n                                                   seed = 123456,\n                                                   MCMLE.maxit = 1))\n\nsummary(UKFit.3)", 
         opts = list(label = "\"Model3\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -3219,7 +3357,11 @@ learnr:::store_exercise_cache(structure(list(label = "Model3", global_setup = st
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Model3", exercise = TRUE, exercise.setup = "load_UKfaculty", 
-        code = c("UKFN <- intergraph::asNetwork(UKF)", "", "UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE) )", 
+        code = c("UKFN <- intergraph::asNetwork(UKF)", "", "UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE), ", 
+        "                      control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                   MCMC.samplesize = 10000,", 
+        "                                                   seed = 123456,", 
+        "                                                   MCMLE.maxit = 1))", 
         "", "summary(UKFit.3)"), out.width.px = 624, out.height.px = 384, 
         params.src = "Model3, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
@@ -3253,13 +3395,17 @@ learnr:::store_exercise_cache(structure(list(label = "grade_model4", global_setu
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "grade_model4", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit.4 <- ergm::ergm(UKFN ~ edges + \n                        mutual)\n\nsummary(UKFit.4)\n", 
+        engine = "r"), list(label = "grade_model4", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit.4 <- ergm::ergm(UKFN ~ edges + \n                        mutual, \n                      control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                   MCMC.samplesize = 10000,\n                                                   seed = 123456,\n                                                   MCMLE.maxit = 1))\n\nsummary(UKFit.4)\n", 
         opts = list(label = "\"grade_model4\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = structure("gradethis::grade_code(correct = \"Well Done!\")", chunk_opts = list(
         label = "grade_model4-check")), solution = structure(c("UKFN <- intergraph::asNetwork(UKF)", 
     "UKFit.4 <- ergm::ergm(UKFN ~ edges + ", "                        mutual + ", 
-    "                        nodematch('Group') +", "                        gwesp(0.25, fixed = T) )", 
+    "                        nodematch('Group') +", "                        gwesp(0.25, fixed = T),", 
+    "                      control = ergm::control.ergm(MCMC.burnin = 5000,", 
+    "                                                   MCMC.samplesize = 10000,", 
+    "                                                   seed = 123456,", 
+    "                                                   MCMLE.maxit = 1))", 
     "", "summary(UKFit.4)", ""), chunk_opts = list(label = "grade_model4-solution")), 
     test_cases = NULL, options = list(eval = FALSE, echo = TRUE, 
         results = "markup", tidy = FALSE, tidy.opts = NULL, collapse = FALSE, 
@@ -3281,8 +3427,12 @@ learnr:::store_exercise_cache(structure(list(label = "grade_model4", global_setu
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "grade_model4", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit.4 <- ergm::ergm(UKFN ~ edges + ", 
-        "                        mutual)", "", "summary(UKFit.4)", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "grade_model4, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "                        mutual, ", "                      control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                   MCMC.samplesize = 10000,", 
+        "                                                   seed = 123456,", 
+        "                                                   MCMLE.maxit = 1))", 
+        "", "summary(UKFit.4)", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "grade_model4, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -3370,7 +3520,7 @@ learnr:::store_exercise_cache(structure(list(label = "UKFBestModel", global_setu
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModel", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\nergm::mcmc.diagnostics(UKFit)\n\nergm::gof(UKFit)\n\nsnafun::GOF.plot(UKFit)\n", 
+        engine = "r"), list(label = "UKFBestModel", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual,\n                      control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                   MCMC.samplesize = 10000,\n                                                   seed = 123456,\n                                                   MCMLE.maxit = 1))\nergm::mcmc.diagnostics(UKFit)\n\n\n", 
         opts = list(label = "\"UKFBestModel\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -3393,9 +3543,12 @@ learnr:::store_exercise_cache(structure(list(label = "UKFBestModel", global_setu
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFBestModel", exercise = TRUE, exercise.setup = "load_UKfaculty", 
-        code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
-        "ergm::mcmc.diagnostics(UKFit)", "", "ergm::gof(UKFit)", 
-        "", "snafun::GOF.plot(UKFit)", ""), out.width.px = 624, 
+        code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual,", 
+        "                      control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                   MCMC.samplesize = 10000,", 
+        "                                                   seed = 123456,", 
+        "                                                   MCMLE.maxit = 1))", 
+        "ergm::mcmc.diagnostics(UKFit)", "", "", ""), out.width.px = 624, 
         out.height.px = 384, params.src = "UKFBestModel, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -3428,7 +3581,7 @@ learnr:::store_exercise_cache(structure(list(label = "UKFBestModelgof", global_s
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModelgof", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nergm::gof(UKFit)\n\nsnafun::GOF.plot(UKFit)\n", 
+        engine = "r"), list(label = "UKFBestModelgof", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nUKgof <- ergm::gof(UKFit)\n\nsnafun::GOF_plot(UKgof)\n", 
         opts = list(label = "\"UKFBestModelgof\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -3452,7 +3605,7 @@ learnr:::store_exercise_cache(structure(list(label = "UKFBestModelgof", global_s
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFBestModelgof", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
-        "", "ergm::gof(UKFit)", "", "snafun::GOF.plot(UKFit)", 
+        "", "UKgof <- ergm::gof(UKFit)", "", "snafun::GOF_plot(UKgof)", 
         ""), out.width.px = 624, out.height.px = 384, params.src = "UKFBestModelgof, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -3485,7 +3638,7 @@ learnr:::store_exercise_cache(structure(list(label = "UKFBestModelres", global_s
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModelres", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nsummary(UKFit)\n", 
+        engine = "r"), list(label = "UKFBestModelres", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual,\n                      control = ergm::control.ergm(MCMC.burnin = 5000,\n                                                   MCMC.samplesize = 10000,\n                                                   seed = 123456,\n                                                   MCMLE.maxit = 1))\n\nsummary(UKFit)\n", 
         opts = list(label = "\"UKFBestModelres\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -3508,7 +3661,11 @@ learnr:::store_exercise_cache(structure(list(label = "UKFBestModelres", global_s
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFBestModelres", exercise = TRUE, exercise.setup = "load_UKfaculty", 
-        code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
+        code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual,", 
+        "                      control = ergm::control.ergm(MCMC.burnin = 5000,", 
+        "                                                   MCMC.samplesize = 10000,", 
+        "                                                   seed = 123456,", 
+        "                                                   MCMLE.maxit = 1))", 
         "", "summary(UKFit)", ""), out.width.px = 624, out.height.px = 384, 
         params.src = "UKFBestModelres, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))

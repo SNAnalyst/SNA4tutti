@@ -1,7 +1,7 @@
 Package: sna4tutti
 Type: Package
 Title: Social Network Analysis for Everyone
-Version: 0.0.3
+Version: 0.4.0
 Authors@R:
 	c(person(given = "Roger",
 					family = "Leenders",

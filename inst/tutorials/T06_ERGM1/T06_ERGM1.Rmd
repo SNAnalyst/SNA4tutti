@@ -468,9 +468,6 @@ if (isFALSE(network::get.vertex.attribute(sampson, 'like1')[16] == "T")) {
 ```
 
 
-
-
-
 ```{r test_sampson_load4, results = 'markup'}
 
 SampsonIgraphtot <- SNA4DSData::Sampson

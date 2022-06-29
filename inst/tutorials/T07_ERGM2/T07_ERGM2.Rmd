@@ -618,7 +618,7 @@ I am also specifying a seed inside the model so you can observe the same output 
 
 These parameters must change according to the case and situations, but this configuration is a standard one and a very good starting point for most models. 
 
-```{r flob_mcmc_dia, exercise = TRUE, exercise.setup = "load_flob"}
+```{r flob_mcmc_dia2, exercise = TRUE, exercise.setup = "load_flob"}
 
 set.seed(1234)
 fit <- ergm::ergm(flobusiness ~ edges + degree(1), 
@@ -681,17 +681,86 @@ The Magnolia high school is another well-known data set that is included in the 
 ```{r load_magnolia, include = FALSE}
 
 data(faux.magnolia.high, package = "ergm")
-
 magnolia <- faux.magnolia.high
+
 ```
 
-Let's explore this network
+
+
+
+```{r test_load_magnolia1, results = 'markup'}
+
+data(faux.magnolia.high, package = "ergm")
+magnolia <- faux.magnolia.high
+
+if (isFALSE(sum(as.numeric(network::get.vertex.attribute(magnolia, 'vertex.names'))) == 1067991)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+```{r test_load_magnolia2, results = 'markup'}
+
+data(faux.magnolia.high, package = "ergm")
+magnolia <- faux.magnolia.high
+
+if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Grade'))[2] == 210 &
+            table(network::get.vertex.attribute(magnolia, 'Grade'))[3] == 317 &
+            table(network::get.vertex.attribute(magnolia, 'Grade'))[6] == 193)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+```{r test_load_magnolia3, results = 'markup'}
+
+data(faux.magnolia.high, package = "ergm")
+magnolia <- faux.magnolia.high
+
+if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Race'))[1] == 48  &
+            table(network::get.vertex.attribute(magnolia, 'Race'))[2] == 261 &
+            table(network::get.vertex.attribute(magnolia, 'Race'))[3] == 68  &
+            table(network::get.vertex.attribute(magnolia, 'Race'))[4] == 24  &
+            table(network::get.vertex.attribute(magnolia, 'Race'))[5] == 7   &
+            table(network::get.vertex.attribute(magnolia, 'Race'))[6] == 1053)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+
+```{r test_load_magnolia4, results = 'markup'}
+
+data(faux.magnolia.high, package = "ergm")
+magnolia <- faux.magnolia.high
+
+if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Sex'))[1] == 768 &
+            table(network::get.vertex.attribute(magnolia, 'Sex'))[2] == 693)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+Shall we explore the Magnolia High network? Of course, we shall!
 
 ```{r explore_magnolia, exercise = TRUE, exercise.setup = "load_magnolia"}
 magnolia
 ```
 
 What do we have here? 1461 nodes and 974 edges together with 4 nodes attributes.
+
+We are network experts enough to say that it is a fairly large and sparse network. Large and sparse networks usually present some challenges when modeled with ERGMs. They require more sophisticated models and longer computational time. 
 
 Why don't you try to plot it by yourself to have a better overview of this network?
 
@@ -705,46 +774,46 @@ Remove the comment and run it so you can make it crash!
 ```
 
 Here it is, our lovely error message telling us we are doing something wrong!
-Instead of converging, the algorithm heads off into networks that are much much denser than the observed network. This is such a clear indicator of a degenerate model specification that the algorithm stops after few iterations, to avoid heading off into areas that would cause memory issues.
+Instead of converging, the algorithm heads off into networks that are much much denser than the observed network (especially considering that our observed network is sparse!). This is such a clear indicator of a degenerate model specification that the algorithm stops after few iterations, to avoid heading off into areas that would cause memory issues.
 
-Since the previous model output is an error, we cannot observe the MCMC diagnostics. In order to be able to plot the diagnostics for a degenerate model, we need to stop the iterations of the simulations before it gets to the degeneration point.
 
-We do it by adding one more specification to the model. substitute `MCMLE.maxit = 2` with the number of the last iteration that was able to run in your computer. If you see only 1 iteration in the previous model, set 1 here and run it until it manages to converge. It might take you a few attempts, but it should eventually work!
-
-### work in progress COMMENT of GWESP, BAD FIT, PARALLELIZATION
-```{r non_convergence_diagn, exercise = TRUE, exercise.setup = "load_magnolia"}
-
-fit2 <- ergm::ergm(magnolia ~ edges + gwesp(decay=0.25, fixed=FALSE), 
-                   control = ergm::control.ergm(MCMLE.maxit = 1, 
-                   MCMC.samplesize = 10000,
-                   MCMC.burnin = 10000,
-                   seed = 1234513,
-                   parallel = 2,
-                   parallel.type = "PSOCK"))
-
-ergm::mcmc.diagnostics(fit2)
-
-```
-
-The plot you are going to see is different from the one I'm observing now while writing the tutorial since this is a simulation and we did not set a seed. However, can you see the difference between the good fit we observed before? The trace plots show that the simulation does not evolve around zero and that the MCMC chains are not mixing well at all. The density plot does not look like a bell curve, and it is not centered at zero. That's how a bad model looks like!
-
-In this case, the degeneracy is due to the `triangle` term. If this happens to you specifying other kinds of terms, you need to rethink your theory. 
+In this case, the degeneracy is due to the `triangle` term that has very well known serious problems and almost never works. If this happens to you specifying other kinds of terms, you need to _rethink your theory_. 
 
 Needless to say, don't choose your terms by chance. There are way too many possible terms combinations to make a model fit by chance. When you specify a model, it needs to come from a solid theory. 
 
 
-### A bad fit 
 
-Sometimes it also happens that even if your model does not degenerate and converge, providing you with results, you check the `mcmc.diagnostics`, and you see that your model does not fit your data very well. 
+### Poor fit & more controls
 
-Let's take the model we just run with the magnolia data and substitute the incriminated term `triangle` with his geometrically weighted equivalent (terms with some math tricks to improve convergence).
 
-This model might take a few minutes. Be patient and read the output in the meanwhile so you see what happens with the algorithm! If it does not run at all, try to run it in your Rstudio directly. You can load the data by using `data(faux.magnolia.high, package = "ergm")` (obviously change the name in the model ^_^!) 
+Sometimes it also happens that even if your model does not degenerate and converges, providing you with results, you check the `mcmc.diagnostics`, and you see that your model does not fit your data very well. 
 
-### REMOVE
-```{r magnolia_gwesp, exercise = TRUE, exercise.setup = "load_magnolia"}
+Let's run a simple model with the mesa data. It's the exact specification we used in the previous example with the magnolia data, but we substitute the incriminated term `triangle` with `gwesp`.
 
-fit3 <- ergm::ergm(magnolia ~ edges + gwesp(0.25, fixed = T))
+When we insert `gwesp(decay=0.03, fixed = TRUE)`, we tell the model to simulate geometrically weighted edgewise shared partners instead of triangles. If you don't remember what an edgewise shared partner is, check the notes from class again. For what concerns the geometrically weighted, we are correcting for the tendency of these simulations to over-connect nodes. More specifically, each chain will estimate the decay starting from the same parameter in the observed network (fixed = TRUE) and to keep in the simulation only the 3% of the esp that the parameter generates (you can increase or decrease this number). If the parameter is set to `fixed = FALSE`, we tell the model to use the parameter estimated in the previous chain as the starting value of the decay estimation in the following chain.
+
+There is also another new issue inserted in the control panel below. Now we are parallelizing. Your computer has several cores, but unless you ask them to help you run this model, only one of them is going to volunteer and spontaneously do it for you. With the code `parallel = 2`, we tell the model to use 2 cores instead of one to increase the computational power. By also adding `parallel.type = "PSOCK"` we tell the model to use this specific type of parallelization. Unless you know what to do, don't change it. 
+
+At this point, it would be good for you to check how many cores your computer has (Google how to do it). If it is more than 2 you can change the number and insert a number up to your number of cores. If it is less than 2 (which is not very likely if you are using a computer), substitute 1 in there. 
+
+
+ALERTS: 
+
+* THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
+
+* This model might still take a few minutes. So be patient and read the output on your Rstudio in the meanwhile, so you see what happens with the algorithm! 
+
+*  If it does not run at all, try to run it in your Rstudio directly. You can load the data by using `data(faux.mesa.high, package = 'ergm')` (obviously change the name in the model ^_^!) 
+
+```{r magnolia_gwesp, exercise = TRUE, exercise.setup = "load_mesa"}
+
+fit3 <- ergm::ergm(mesa ~ edges + gwesp(decay=0.03, fixed = TRUE), 
+                   control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 2,
+                                              parallel.type = "PSOCK"))
 
 ergm::mcmc.diagnostics(fit3)
 
@@ -752,28 +821,36 @@ ergm::mcmc.diagnostics(fit3)
 
 As you can see, this model converges, but the diagnostics might not be the best!
 
-In fact, there was no theory behind this model. It was just introduced to show how models should not be done, and it fully achieved its goal. We should go back to theory to understand this data! :) 
+In fact, there was no theory behind this model, and it has only one term. You will hardly find any model working well with such a simplistic specification. 
+
+We should always use theory to design our model specifications after understanding the data descriptives. That's the only way to find the appropriate recipe to explain the causal processes that generated an observed network! :)  
 
 
 ## Goodness of Fit
 
-Whether you are running a dyadic independent or a dyadic dependent model, you should always check whether the model you specified explains the observed network or not. You do that with the goodness of fit `gof` function.
+It makes no sense to use `mcmc.diagnostics()` on dyadic independent models since they do not use MCMC chains. Still, whether you are running a dyadic independent or a dyadic dependent model, you should always check whether the model you specified explains the observed network or not. You do that with the goodness of fit `gof` function, from the `ergm` package.
 
-`gof` calculates p-values for geodesic distance, degree, and reachability summaries to diagnose the goodness-of-fit of exponential family random graph models. This time you want your p-value to be as high as possible. The p-value compares your observed data to simulated data, and if you did a good job specifying your model, the statistics that these two samples produce should be almost the same. 
+`gof` calculates p-values for geodesic distance, degree, and reachability summaries to diagnose the goodness-of-fit of exponential family random graph models. This time you want your p-value to be as high as possible since this p-value compares your observed data to simulated data, and if you did a good job specifying your model, the statistics that these two samples produce should be almost the same. The simulation needs to be as close as possible to reality, right?
 
 
-Let's fit our model again with a nice MCMC diagnostic and check whether it also has a nice goodness of fit.
+Let's fit again the flobusiness model we already used in the section 'Good Fit' with a nice MCMC diagnostic and plot it to check whether it also has a nice goodness of fit.
 
 
 ```{r flob_gof, exercise = TRUE, exercise.setup = "load_flob"}
-fit <- ergm::ergm(flobusiness ~ edges + degree(1))
+
+fit <- ergm::ergm(flobusiness ~ edges + degree(1),
+                  control = ergm::control.ergm(MCMC.burnin = 5000,
+                                               MCMC.samplesize = 10000,
+                                               seed = 123456,
+                                               MCMLE.maxit = 20))
 fit.gof <- ergm::gof(fit)
-plot(fit.gof)
+snafun::GOF_plot(fit.gof)
+
 # If you also want to see the numeric output, uncomment below and rerun
-# fit.gof
-# 
-# Or plot the gof using
-snafun::GOF.plot(fit)
+fit.gof
+
+
+
 ```
 
 
@@ -784,36 +861,37 @@ snafun::GOF.plot(fit)
 * Goodness-of-fit for minimum geodesic distance 
 * Goodness-of-fit for model statistics 
 
-We can also print and plot only one of these four points. Let's have a closer look at the degree's one.
 
-```{r flob_gofDegree, exercise = TRUE, exercise.setup = "load_flob"}
-fit <- ergm::ergm(flobusiness ~ edges + degree(1))
+The goodness of fit table for degrees has one row for each degree value in the distribution of the observed network. The column `obs` reports how many nodes with that degree are in the observed network, while the columns min, mean and max report the simulated values for each degree value. Finally, the last column reports the p-value; as we said, we want it as close as possible to one. 
+
+The plot simply visualizes these results using box plots. The blue square is the observed value, and the black tick line shows the simulated values. We want the black tick line to be as close as possible to the blue square and possibly never outside the min and max interval. 
+
+You interpret the other two remaining points analogously. 
+
+How did this model do? While the model statistics and the minimum geodesic distance are doing well, it's not the case for the degree. The simulation is different from the observed data for what concerns low degrees. However, it gets much better for higher degrees. The same happens with edgewise shared partners.
+
+If you carefully observe, also one of the geodesic distance's values is `-Inf`, which simply indicates that there are isolates in the network. Hence we don't have to worry about it. However, `Inf` is like an alarm reminding you to be careful and constantly check on your actions.
+
+
+Overall the fit of this model is not great! It could be improved by adding more terms to the model and making sure to think carefully about the reasons for which you put them there. 
+
+Finally, remember that we can also check and plot the GOF in only one (or more) of these four parameters. So let's have a closer look at the degree's one.
+
+Running `gof` for degree only also prints out the gof for the model statistics. It works the same way, and it shows how the statistics of the observed network perform in comparison to the simulated one. 
+
+```{r flob_gofDegree, exercise = TRUE, exercise.setup = "flob_gof"}
+
 gofdegree <- ergm::gof(fit ~ degree)
+
+snafun::GOF_plot(gofdegree)
 gofdegree
 
 
 ```
-
-
-The goodness of fit table for degrees has one row for each degree value in the distribution of the observed network. The column `obs` reports how many nodes with that degree are in the observed network, while the column min, mean and max report the simulated values for each degree value. The last column reports the p-value, and, as we said, we want it as close as possible to one. 
-
-The plot simply visualizes these results using box plots. The blue square is the observed value, and the black tick line shows the simulated values. We want the black tick line to be as close as possible to the blue square and possibly never outside of the min and max interval. 
-
-Running `gof` for degree only also prints out the gof for the model statistics. It works exactly the same way, and it shows how the statistics of the observed network perform in comparison to the simulated one. 
-
-You interpret the other two remaining points analogously. 
-
-How did this model do? While the model statistics are doing really well, it's not the case for degree. For what concerns low degrees, the simulation is different from the observed data. However, it gets much better for higher degrees. The same happens with edgewise shared partners, while the geodesic distance does quite well for every value. 
-
-Overall the fit of this model is quite good! 
-
-If you carefully observe, also one of the geodesic distance's values is `-Inf`, but this simply indicates that there are isolates in the network. Hence we don't have to worry about it. 
-
-However, `Inf` is like an alarm to remind you to be careful and constantly check on what you are doing.
-
+Just take into account that your results might be different if you analyse them one by one.
 
 ## More dyadic dependent terms
-So far, we used only few dependent terms. There are many of them, and we cannot possibly cover every single one in this tutorial. However, it is certainly worth spending some time talking about triads, cycles, and triangles since they are at the core of dyadic dependence since it checks on the formation of ties due to existing ties.
+So far, we used only few dyadic (inter)dependent terms. There are many of them, and we cannot possibly cover every single one in this tutorial. However, it is certainly worth spending some time talking about triads, cycles, and triangles since they are at the core of dyadic dependence since it checks on the formation of ties due to existing ties.
 
 ### The Triad Census
 
@@ -825,16 +903,79 @@ Let's take a look at the term `triadcensus`
 ergm::search.ergmTerms(name = 'triadcensus')
 ```
 
-If you use this term in an ERGM with a direct network, it will check on the existence of each of the 16 options and provide you with the probability of observing each of them. If you use the undirected one, it is going to check only on the configurations that make sense with undirected data. Can you tell me how many are those?
+If you use this term in an ERGM with a direct network, it will check on the existence of each of the 16 options and provide you with the probability of observing each of them. However, if you have an undirected network, it will not run since only a few of the 16 configurations make sense with undirected data. 
 
-Let's try out with the Sampson data we already used many times before.
+Let's try with the Sampson data we have used many times before. Please, note that this is a different Sampson data set than the one used in ERGM1. Several waves of data collection were performed. While in ERGM1, there is wave 1; this is wave 2. Monks behaviour at time 2. 
+
 
 ```{r sampson_load, include = FALSE}
 SampsonIgraphtot <- SNA4DSData::Sampson
-
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
-
 sampson <- intergraph::asNetwork(SampsonLike2Ig)
+
+```
+
+
+```{r test_sampson_load1, results = 'markup'}
+
+SampsonIgraphtot <- SNA4DSData::Sampson
+SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
+sampson <- intergraph::asNetwork(SampsonLike2Ig)
+
+
+if (isFALSE(table((network::get.vertex.attribute(sampson, 'vertex.names')) == 
+                  c("AMBROSE_9", "VICTOR_8", "LOUIS_11", "ALBERT_16", "BERTH_6", "SIMP_18",
+                    "WINF_12", "BONAVEN_5", "GREG_2", "PETER_4", "ROMUL_10", "HUGH_14",
+                    "AMAND_13", "MARK_7", "BONI_15", "JOHN_1", "BASIL_3", "ELIAS_17" )) == 18)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+```{r test_sampson_load2, results = 'markup'}
+
+SampsonIgraphtot <- SNA4DSData::Sampson
+SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
+sampson <- intergraph::asNetwork(SampsonLike2Ig)
+
+if (isFALSE(network::get.vertex.attribute(sampson, 'id')[2] == "0x2112a4aae00")) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+```{r test_sampson_load3, results = 'markup'}
+
+SampsonIgraphtot <- SNA4DSData::Sampson
+SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
+sampson <- intergraph::asNetwork(SampsonLike2Ig)
+
+if (isFALSE(network::get.vertex.attribute(sampson, 'like2')[16] == "T")) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+```{r test_sampson_load4, results = 'markup'}
+
+SampsonIgraphtot <- SNA4DSData::Sampson
+SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
+sampson <- intergraph::asNetwork(SampsonLike2Ig)
+
+if (isFALSE(sum(network::get.edge.attribute(sampson, 'weight')) == 111)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
 ```
 
 
@@ -854,15 +995,20 @@ Let's run the model and see what happens.
 
 ```{r Sam_triadcensus, exercise = TRUE, exercise.setup = "sampson_load"}
 
-samM1 <- ergm::ergm(sampson ~ edges + triadcensus)
+samM1 <- ergm::ergm(sampson ~ edges + 
+                      triadcensus, 
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 2))
 
 summary(samM1)
 
 ```
 
-The model will either not converge or take a long time to do so. If you read the output it is also clear that the model is not happy with this specification.
+The model will either not converge or take a long time to do so. I set the maximum number of iterations to 2, hence it did not take too long, but you are getting weird results. Well, if you read the output it is clear that the model is not happy with this specification.
 
-There is no theoretical reason that would make us think that all these effects are happening at the same time for a specific -non random- reason in this small network. Hence, the model does not behave well. 
+There is no theoretical reason that would make us think that all these effects are happening at the same time for a specific -non random- reason in this small network. Hence, the model does make sense and does not behave well. 
 
 We might want to try to be more specific and to decrease the level of complexity of our educated guess.
 
@@ -872,7 +1018,11 @@ Checking on the model summary above, we see that the configurations that are hig
 
 ```{r Sam_intransitive, exercise = TRUE, exercise.setup = "sampson_load"}
 
-samM2 <- ergm::ergm(sampson ~ edges + intransitive)
+samM2 <- ergm::ergm(sampson ~ edges + intransitive, 
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 5))
 
 summary(samM2)
 ```
@@ -890,7 +1040,7 @@ When you want to analyze three nodes patterns, other terms that might be often u
 * `transitive`
 * `balance`
 
-Why don't you try to use them and see what happens with the Sampson data?
+Why don't you try to use them and see what happens with the Sampson data? TIP: not all together at the same time. 
 
 ```{r Playground, exercise = TRUE, exercise.setup = "sampson_load"}
 
@@ -900,19 +1050,27 @@ Why don't you try to use them and see what happens with the Sampson data?
 ### Cycles
 You do not only care about patterns with three nodes, but you might want to check on other numbers of nodes patterns too, on other motifs, and whether their edges form cycles. You do that with the `cycle` term.
 
-For instance, in the code below, we are checking on four nodes cycles in the Sampson data. Why don't you try to think which number might easier to observe in the Sampson data and re-run the model? Just try to analyze what you know about this network and plot it below if it helps you remember it. 
+For instance, in the code below, we are checking on four nodes cycles in the Sampson data. First, run the code below. Afterwards, change the number of nodes in the cycle. Why don't you try to think which number might easier to observe in the Sampson data and re-run the model? Just try to analyze what you know about this network and plot it below if it helps you remember it. 
 
 Hint: the correct number to pass to `cycle` makes that term work exactly like `mutual`!
 
 ```{r grade_cycle, exercise = TRUE, exercise.setup = "sampson_load"}
 
-samM3 <- ergm::ergm(sampson ~ edges + cycle(4))
+samM3 <- ergm::ergm(sampson ~ edges + cycle(4), 
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 5))
 summary(samM3)
 ```
 
 ```{r grade_cycle-solution}
 
-samM3 <- ergm::ergm(sampson ~ edges + cycle(2))
+samM3 <- ergm::ergm(sampson ~ edges + cycle(2),
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                 MCMC.samplesize = 10000,
+                                                 seed = 123456,
+                                                 MCMLE.maxit = 5))
 summary(samM3)
 
 ```
@@ -961,12 +1119,12 @@ summary(g.simModel)
 
 The results of `g.sim[[1]]` and `g.simModel`, will vary each time since this is a simulation, but they will always be quite close to the values we set with `coef = c(-1.8, 0.03)`.
 
-That's how the faux mesa and the faux magnolia data was created! :)
+That's how the faux mesa and the faux magnolia data was created! Faux means fake :)
 
 
 ## Get your hands dirty!
 
-At this point, we covered together every essential topic that you need to know in order to be able to run exponential random graph models. Do you still feel a bit shaky at the idea of running these models? 
+At this point, we covered together every essential topic that you need to know in order to be able to run unimodal non-weighted exponential random graph models. Do you still feel a bit shaky at the idea of running these models? 
 Of course you do! What you do need now is practice, and no class can make up for that! 
 
 Hence, this tutorial ends with a guided, practical task to get some familiarity with ERGMs. 
@@ -981,6 +1139,49 @@ data(UKfaculty, package = "igraphdata")
 UKF <- UKfaculty
 ```
 
+
+```{r test_load_UKfaculty1, results = 'markup'}
+
+data(UKfaculty, package = "igraphdata")
+UKF <- UKfaculty
+
+if (isFALSE(igraph::get.graph.attribute(UKF, 'Type') == "TSPE" &
+            igraph::get.graph.attribute(UKF, 'Date') == "Mon Mar 19 21:56:02 2007" &
+            igraph::get.graph.attribute(UKF, 'Citation') == "Nepusz T., Petroczi A., Negyessy L., Bazso F.: Fuzzy communities and the concept of bridgeness in complex networks. Physical Review E, 77:016107, 2008." &
+            igraph::get.graph.attribute(UKF, 'Author') == "Nepusz T., Petroczi A., Negyessy L., Bazso F.")) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+```{r test_load_UKfaculty2, results = 'markup'}
+
+data(UKfaculty, package = "igraphdata")
+UKF <- UKfaculty
+
+if (isFALSE(sum(igraph::get.vertex.attribute(UKF, 'Group')) == 152)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+```{r test_load_UKfaculty3, results = 'markup'}
+
+data(UKfaculty, package = "igraphdata")
+UKF <- UKfaculty
+
+if (isFALSE(sum(igraph::get.edge.attribute(UKF, 'weight')) == 3730)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
 
 
 ```{r exploreUKF, exercise = TRUE, exercise.setup = "load_UKfaculty"}
@@ -1042,26 +1243,34 @@ If we want to check whether relationships are reciprocated, we can use the term 
 
 UKFN <- intergraph::asNetwork(UKF)
 
-UKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2))
+UKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2), 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 5))
 
 summary(UKFit.1)
 ```
 
 And we were right! It seems that something is interesting here. Do you want to try to run it again using `mutual` instead?
 
-Let's add one or more terms to test whether there are groups of friends in the network. How many friends do we expect to find? Let's try with `triangles` and take into account that this model might take a while.
+Let's add one or more terms to test whether there are groups of friends in the network. How many friends do we expect to find? Let's try with `triangles` and take into account that this model might take a while... or forever :S
 
 
 ```{r Model2, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 
 UKFN <- intergraph::asNetwork(UKF)
 
-UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )
+UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle, 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.2)
 ```
 
-Ouch, we used `tringles`, but do you remember that this model has convergence issues? In fact, it did not converge. Why don't you re-run it using the curved term alternative?
+Ouch, we used `tringles`, but do you remember that this term has convergence issues? In fact, it will not converge (increase the number of iterations if you don't believe me). Why don't you re-run it using the curved term alternative?
 
 Let's focus on our third hypothesis. We can do that by checking for homophily, considering the group a nodal attribute. We want to check on the probability of having homophilic effects in each group. Hence we should check for differential homophily. 
 
@@ -1070,7 +1279,11 @@ Let's focus on our third hypothesis. We can do that by checking for homophily, c
 ```{r Model3, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- intergraph::asNetwork(UKF)
 
-UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE) )
+UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE), 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.3)
 ```
@@ -1086,7 +1299,11 @@ Ok, Let's wrap up what we found out and what we know so far. Remember to insert 
 ```{r grade_model4, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- intergraph::asNetwork(UKF)
 UKFit.4 <- ergm::ergm(UKFN ~ edges + 
-                        mutual)
+                        mutual, 
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.4)
 
@@ -1098,7 +1315,11 @@ UKFN <- intergraph::asNetwork(UKF)
 UKFit.4 <- ergm::ergm(UKFN ~ edges + 
                         mutual + 
                         nodematch('Group') +
-                        gwesp(0.25, fixed = T) )
+                        gwesp(0.25, fixed = T),
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit.4)
 
@@ -1125,12 +1346,14 @@ Ok, have you decided on your favorite configuration? Yes? Let's move on to check
 
 ```{r UKFBestModel, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- intergraph::asNetwork(UKF)
-UKFit <- ergm::ergm(UKFN ~ edges + mutual)
+UKFit <- ergm::ergm(UKFN ~ edges + mutual,
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 ergm::mcmc.diagnostics(UKFit)
 
-ergm::gof(UKFit)
 
-snafun::GOF.plot(UKFit)
 
 ```
 
@@ -1145,9 +1368,9 @@ If, and only if, your MCMC diagnostic is good enough, you can move on to the goo
 UKFN <- intergraph::asNetwork(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual)
 
-ergm::gof(UKFit)
+UKgof <- ergm::gof(UKFit)
 
-snafun::GOF.plot(UKFit)
+snafun::GOF_plot(UKgof)
 
 ```
 
@@ -1160,7 +1383,11 @@ Again, copy and paste your best model here below and comment on the results
 
 ```{r UKFBestModelres, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- intergraph::asNetwork(UKF)
-UKFit <- ergm::ergm(UKFN ~ edges + mutual)
+UKFit <- ergm::ergm(UKFN ~ edges + mutual,
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                                   MCMC.samplesize = 10000,
+                                                   seed = 123456,
+                                                   MCMLE.maxit = 1))
 
 summary(UKFit)
 
