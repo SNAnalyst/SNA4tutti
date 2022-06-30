@@ -797,7 +797,7 @@ There is also another new issue inserted in the control panel below. Now we are 
 At this point, it would be good for you to check how many cores your computer has (Google how to do it). If it is more than 2 you can change the number and insert a number up to your number of cores. If it is less than 2 (which is not very likely if you are using a computer), substitute 1 in there. 
 
 
-ALERTS: 
+_ALERTS:_
 
 * THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
 

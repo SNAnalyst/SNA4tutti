@@ -17,6 +17,7 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(gradethis)
+library(ergm)
 
 knitr::opts_chunk$set(
 	echo = FALSE,
@@ -29,15 +30,15 @@ source("../R/helper_code.R")
 
 # Check whether required packages are installed
 pkgs <- matrix(c(
-  "learnr", "0.10.0", "CRAN",
-  "gradethis", "0.2.3.9001", "rstudio/gradethis",
-  "igraph", "1.2.6", "CRAN",
-  "knitr", "1.34", "CRAN",
-  "sna", "2.6", "CRAN",
-  "SNA4DSData", "0.9.904", "SNAnalyst/SNA4DSData",
+  "learnr", "0.10.2", "CRAN",
+  "gradethis", "0.2.8.9000", "rstudio/gradethis",
+  "igraph", "1.3.2", "CRAN",
+  "knitr", "1.39", "CRAN",
+  "sna", "2.7", "CRAN",
+  "SNA4DSData", "0.9.91", "SNAnalyst/SNA4DSData",
   "ergm", "4.1.2", "CRAN",
   "network","1.17.1" , "CRAN",
-  "texreg", "1.37.5" , "CRAN",
+  "texreg", "1.38.6" , "CRAN",
   "GERGM", "0.13.0" , "matthewjdenny/GERGM"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
@@ -55,6 +56,9 @@ check_RStudio <- sna4tutti:::check_rstudio
 check_R <- function(x) {
   sna4tutti:::check_r_equal(4,2.0)
 }
+
+errors <- list()
+
 ```
 
 
@@ -191,6 +195,21 @@ kidsnet <- network::network(mdata, directed = FALSE, bipartite = TRUE)
 
 ```
 
+
+```{r test_load_IncMat1, results = 'markup'}
+
+mdata <- matrix(c(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1), 10, 4)
+vertex.names <- c(LETTERS[1:10], 1:4)
+kidsnet <- network::network(mdata, directed = FALSE, bipartite = TRUE)
+
+if (isFALSE(sum(network::get.vertex.attribute(kidsnet, 'vertex.names')) == 105)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
 Let's take a look at our incidence matrix 
 
 ```{r bip01, exercise = TRUE, exercise.setup = "load_IncMat"}
@@ -223,9 +242,38 @@ kidsnet
 ```
 
 
+```{r test_load_IncMat2, results = 'markup'}
+
+mdata <- matrix(c(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1), 10, 4)
+vertex.names <- c(LETTERS[1:10], 1:4)
+kidsnet <- network::network(mdata, directed = FALSE, bipartite = TRUE)
+
+Age <- c(6, 7, 7, 7, 9, 9, 10, 9, 12, 12, NA, NA, NA, NA)
+Gender <- as.character(c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, NA, NA, NA, NA))
+
+network::set.vertex.attribute(kidsnet, "vertex.names",  vertex.names)
+network::set.vertex.attribute(kidsnet, "Age",  Age)
+network::set.vertex.attribute(kidsnet, "Gender",  Gender)
+
+if (isFALSE(network::get.vertex.attribute(kidsnet, 'vertex.names')[1] == "A" &
+            network::get.vertex.attribute(kidsnet, 'vertex.names')[4] == "D" &
+            network::get.vertex.attribute(kidsnet, 'Age')[3] == 7 &
+            network::get.vertex.attribute(kidsnet, 'Age')[7] == 10 &
+            network::get.vertex.attribute(kidsnet, 'Gender')[1] == 0 &
+            network::get.vertex.attribute(kidsnet, 'Gender')[8] == 1)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- append(errors, error)
+}
+
+```
+
+
+
+
 At this point, you might really think we are done. Are we? In fact, we are not. We need to pass an extra attribute to the network so that it is crystal clear that we are dealing with a bipartite. 
 
-Here a fun fact for you. The `ergm` developers included a typo in the package. So we are going to code an attribute named "bipratite". The typo attribute needs to have the same dimension as the first partition. So in our case, it will be 10.
+Here a fun fact for you. The `ergm` developers included a typo in the package. So we are going to code an attribute named _"bipratite"_. The typo attribute needs to have the same dimension as the first partition. So in our case, it will be 10.
  
 
 
@@ -249,6 +297,9 @@ From now on, when we fit a model, we rely on the 7 step flow approach introduced
 5. Goodness of fit
 6. Interpreting results
 7. Write up about your research telling how this journey went
+
+![](images/7stepsFlow.png){width=100%}
+
 
 #### Step One
 
@@ -371,16 +422,24 @@ summary(m3)
 
 Finally, we can run a complete model!
 
+_ALERT:_
+
+THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
+
+If you have more than two cores, you can increase the number below and make it faster. 
+
 
 ```{r bip09finMod, exercise = TRUE, exercise.setup = "bip04readynet"}
 
-m5 <-ergm::ergm(kidsnet ~ edges + b1cov("Age") + b1nodematch("Gender") + b1star(2), 
+m4 <-ergm::ergm(kidsnet ~ edges + b1cov("Age") + b1nodematch("Gender") + b1star(2), 
                 constraints = ~ bd(minout = 0, maxout=14),
                 control = ergm::control.ergm(MCMC.burnin = 5000,
                                              MCMC.samplesize = 10000,
                                              seed = 1234,
-                                             MCMLE.maxit = 20))
-summary(m5)
+                                             MCMLE.maxit = 20,
+                                             parallel = 2,
+                                             parallel.type = "PSOCK"))
+summary(m4)
 
 ```
 
@@ -393,7 +452,7 @@ Is this model good?
 
 ```{r bip10, exercise = TRUE, exercise.setup = "bip09finMod"}
 
-ergm::mcmc.diagnostics(m5)
+ergm::mcmc.diagnostics(m4)
 
 
 ```
@@ -408,7 +467,7 @@ Let's assume that it is good enough for now...
 
 ```{r bip11, exercise = TRUE, exercise.setup = "bip09finMod"}
 
-ergm::gof(m5)
+ergm::gof(m4)
 
 ```
 
@@ -416,14 +475,14 @@ Is the goodness of fit good? If and only if you think that the model is good eno
 
 #### Step 6
 
-The model we run (m5) seems nice enough to read results according to steps 4 and 5. Ok, let's read the results!
+The model we run (m4) seems nice enough to read results according to steps 4 and 5. Ok, let's read the results!
 
 Let's look at coefficients and odd ratios first.
 
 ```{r bip12, exercise = TRUE, exercise.setup = "bip09finMod"}
 
 
-snafun::Ef_int(m5, type = "odds")
+snafun::Ef_int(m4, type = "odds")
 
 ```
 
@@ -435,7 +494,7 @@ Let's look at probabilities.
 
 ```{r bip13, exercise = TRUE, exercise.setup = "bip09finMod"}
 
-snafun::Ef_int(m5, type = "prob")
+snafun::Ef_int(m4, type = "prob")
 
 ```
 
@@ -476,7 +535,6 @@ We have 17 countries exchanging money with each other (international trade) in 2
 
 ```{r weightloadData, echo = FALSE}
 
-
 data("lending_2005", package = "GERGM")
 data("covariate_data_2005", package = "GERGM")
 data("net_exports_2005", package = "GERGM")
@@ -487,7 +545,7 @@ This is how this weighted network looks like
 
 ```{r weight01, exercise = TRUE, exercise.setup = "weightloadData"}
 
-GERGM::plot_network(lending_2005, seed = 123, 
+snafun::plot_weighted_graph(lending_2005, seed = 123, 
                     white_background = TRUE, 
                     show_legend = FALSE) 
 
@@ -582,18 +640,26 @@ NOTE3: This model might be too heavy to run in your tutorial, depending on your 
 As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
 
+_ALERT:_
+
+THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
+
+If you have more than two cores, you can increase the number below and make it faster.
+
 ```{r weight06, exercise = TRUE, exercise.setup = "weightloadData"}
 formula0 <- lending_2005 ~ edges + mutual
 
 
 m0 <- GERGM::gergm(formula0,
                    covariate_data = covariate_data_2005,
-                   number_of_networks_to_simulate = 40000,
+                   number_of_networks_to_simulate = 10000,
                    thin = 1/100,
                    proposal_variance = 0.05,
-                   MCMC_burnin = 10000,
+                   MCMC_burnin = 5000,
                    seed = 456,
-                   convergence_tolerance = 0.5)
+                   convergence_tolerance = 0.5, 
+                   parallel = TRUE,
+                   cores =2)
 ```
 
 
@@ -608,18 +674,26 @@ NOTE: This model might be too heavy to run in your tutorial, depending on your c
 
 As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
+_ALERT:_
+
+THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
+
+If you have more than _three_ cores, you can increase the number below and make it faster.
+
 ```{r weight07, exercise = TRUE, exercise.setup = "weightloadData"}
 formula1 <- lending_2005 ~ edges + sender("log_GDP")
 
 
 m1 <- GERGM::gergm(formula1,
                    covariate_data = covariate_data_2005,
-                   number_of_networks_to_simulate = 40000,
+                   number_of_networks_to_simulate = 5000,
                    thin = 1/100,
                    proposal_variance = 0.05,
-                   MCMC_burnin = 10000,
+                   MCMC_burnin = 1000,
                    seed = 456,
-                   convergence_tolerance = 0.5)
+                   convergence_tolerance = 0.5,
+                   parallel = TRUE,
+                   cores = 3)
 ```
 
 
@@ -636,20 +710,26 @@ NOTE: This model might be too heavy to run in your tutorial, depending on your c
 
 As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
+_ALERT:_
 
+THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
+
+If you have more than two cores, you can increase the number below and make it faster.
 
 ```{r weight08, exercise = TRUE, exercise.setup = "weightloadData"}
-formula4 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender("log_GDP") + 
+formula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender("log_GDP") + 
   receiver("log_GDP")
 
-m4 <- GERGM::gergm(formula4,
-                     covariate_data = covariate_data_2005,
-                     number_of_networks_to_simulate = 40000,
-                     thin = 1/100,
-                     proposal_variance = 0.05,
-                     MCMC_burnin = 10000,
-                     seed = 456,
-                     convergence_tolerance = 0.5)
+m2 <- GERGM::gergm(formula2,
+                   covariate_data = covariate_data_2005,
+                   number_of_networks_to_simulate = 5000,
+                   thin = 1/100,
+                   proposal_variance = 0.05,
+                   MCMC_burnin = 1000,
+                   seed = 456,
+                   convergence_tolerance = 0.5,
+                   parallel = TRUE,
+                   cores = 2)
 ```
 
 #### Step four (MCMC diagnostics)
@@ -659,7 +739,7 @@ Even if the `GERGM` models automatically print info about the quality of the mod
 Here we can observe the MCMC diagnostics.
 
 ```{r weight09, exercise = TRUE, exercise.setup = "weight08"}
-GERGM::Trace_Plot(m4)
+GERGM::Trace_Plot(m2)
 ```
 
 
@@ -679,7 +759,7 @@ Same story for the goodness of fit. Even if the models produce it automatically,
 
 ```{r weight10, exercise = TRUE, exercise.setup = "weight08"}
 
-GERGM::GOF(m4)
+GERGM::GOF(m2)
 ```
 
 ```{r testquiz1, echo = FALSE}
@@ -699,10 +779,10 @@ The package already provides an inbuilt estimates plot. Red means significant ot
 
 ```{r weight11, exercise = TRUE, exercise.setup = "weight08"}
 
-GERGM::Estimate_Plot(m4)
+GERGM::Estimate_Plot(m2)
 
-(EstSE <- rbind(t(attributes(m4)$theta.coef),
-               t(attributes(m4)$lambda.coef)))
+(EstSE <- rbind(t(attributes(m2)$theta.coef),
+               t(attributes(m2)$lambda.coef)))
 
 ```
 
@@ -718,3 +798,23 @@ Our magical mystery tour is coming to an end. Now you can fly back home like a r
 Be ready to jump into a time machine with temporal ERGM (TERGM) next week!
 
 ![](images/Rocket-Dog.jpg){width=75%}
+
+
+
+
+```{r check_results, echo = FALSE, results = 'markup'}
+cat("\n\n\n\n\n\n")
+
+if (length(errors) > 0) {
+  cat("There were issues with the following chunk(s):\n\n")
+  print(unlist(errors))
+  cat("\n\n")
+  cat("Please contact Claudia and Roger with this info!\n")
+}
+
+```
+
+
+
+```{r check_results_external, echo=FALSE, child = if (length(errors) > 0) "check_results.Rmd"}
+```
