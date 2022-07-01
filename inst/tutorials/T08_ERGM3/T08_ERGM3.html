@@ -194,6 +194,25 @@ data-lines="0">
 <p>All packed up! Let’s roll!!</p>
 </div>
 </div>
+<div id="section-the-7-step-research-flow" class="section level2">
+<h2>The 7-step Research Flow</h2>
+<p>From now on, when we fit a model we put it in the context of carrying
+out real research. To do so, we rely on the 7-step flow approach
+introduced in the ERGM2 Lab:</p>
+<ol style="list-style-type: decimal">
+<li>Literature research/ Questions &amp; Hypotheses (based on the
+literature) [- data collection]</li>
+<li>Data Exploration + terms selection</li>
+<li>Running models (baseline, exploratory models, final model)</li>
+<li>MCMC diagnostics of the model selected as the best</li>
+<li>Goodness of fit</li>
+<li>Interpreting results</li>
+<li>Write up about your research telling how this journey went</li>
+</ol>
+<p>Take a look at the image below. It guides you step by step on how to
+use the flow!</p>
+<p><img src="images/7stepsFlow.png" style="width:100.0%" /></p>
+</div>
 <div id="section-bipartite-ergms" class="section level2">
 <h2>Bipartite ERGMs</h2>
 <p>Bipartite ERGMs require a bipartite network. DUH!</p>
@@ -210,7 +229,7 @@ class="section level3">
 <h3>Setting up a network as bipartite</h3>
 <p>Both unimodal and bipartite networks can be expressed as node lists,
 but while unimodal networks can also be represented by adjacency
-matrices, bipartite networks require incidence matrices.</p>
+matrices, bipartite networks require <em>incidence matrices</em>.</p>
 <p>While adjacency matrices are squared, with the same items in rows and
 columns, incidence matrices have the first set of elements in rows and
 the second set in columns. Hence if we have a bipartite network of 10
@@ -227,7 +246,7 @@ data-diagnostics="1" data-startover="1" data-lines="0">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>Our first set of nodes (rows) is constituted by 10 kids, while our
-second set is constituted by 4 playdates the kids go to.</p>
+second set is constituted by 4 playdates the kids go to (columns).</p>
 <p>Let’s turn it into a <code>network</code> object. We need to specify
 that it is a bipartite and undirected network.</p>
 <div class="tutorial-exercise" data-label="bip02" data-completion="1"
@@ -268,21 +287,9 @@ kidsnet</code></pre>
 </div>
 <p>Now we are done and ready to crunch some numbers!</p>
 </div>
-<div id="section-fitting-a-bipartite-ergm" class="section level3">
-<h3>Fitting a bipartite ERGM</h3>
-<p>From now on, when we fit a model, we rely on the 7 step flow approach
-introduced in the ERGM2 Lab:</p>
-<ol style="list-style-type: decimal">
-<li>Literature research/ Questions &amp; Hypotheses (based on the
-literature) [- data collection]</li>
-<li>Data Exploration + terms selection</li>
-<li>Running models (baseline, exploratory models, final model)</li>
-<li>MCMC diagnostics of the model selected as the best</li>
-<li>Goodness of fit</li>
-<li>Interpreting results</li>
-<li>Write up about your research telling how this journey went</li>
-</ol>
-<p><img src="images/7stepsFlow.png" style="width:100.0%" /></p>
+<div id="section-fitting-bipartite-ergms" class="section level3">
+<h3>Fitting bipartite ERGMs</h3>
+<p>Let’s fit Bipartite ERGMs using the 7-step flows!</p>
 <div id="section-step-one" class="section level4">
 <h4>Step One</h4>
 <p>As world experts in children behavior and play-date-ology (just
@@ -292,7 +299,8 @@ hypotheses</p>
 <li>Older kids go to more playdates</li>
 <li>There is homophily by gender (girls play with girls, boys play with
 boys)</li>
-<li>Some play dates have more attendees than others</li>
+<li>Some play dates have more attendees than others (some sort of
+popularity effect)</li>
 </ol>
 </div>
 <div id="section-step-two" class="section level4">
@@ -504,9 +512,9 @@ trade) in 2005.</p>
 <p>This is how this weighted network looks like</p>
 <div class="tutorial-exercise" data-label="weight01" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>snafun::plot_weighted_graph(lending_2005, seed = 123, 
-                    white_background = TRUE, 
-                    show_legend = FALSE) </code></pre>
+<pre class="text"><code># snafun::plot_weighted_graph(lending_2005, seed = 123, 
+#                     white_background = TRUE, 
+#                     show_legend = FALSE) </code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>Do you see the function for plotting? It is very different from what
@@ -1882,10 +1890,10 @@ learnr:::store_exercise_cache(structure(list(label = "weight01", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
-        engine = "r"), list(label = "weight01", code = "\nsnafun::plot_weighted_graph(lending_2005, seed = 123, \n                    white_background = TRUE, \n                    show_legend = FALSE) \n", 
+        engine = "r"), list(label = "weight01", code = "\n# snafun::plot_weighted_graph(lending_2005, seed = 123, \n#                     white_background = TRUE, \n#                     show_legend = FALSE) \n", 
         opts = list(label = "\"weight01\"", exercise = "TRUE", 
             exercise.setup = "\"weightloadData\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -1908,8 +1916,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight01", global_setup = 
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, stage = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, stage = stage, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "weight01", exercise = TRUE, exercise.setup = "weightloadData", 
-        code = c("", "snafun::plot_weighted_graph(lending_2005, seed = 123, ", 
-        "                    white_background = TRUE, ", "                    show_legend = FALSE) ", 
+        code = c("", "# snafun::plot_weighted_graph(lending_2005, seed = 123, ", 
+        "#                     white_background = TRUE, ", "#                     show_legend = FALSE) ", 
         ""), out.width.px = 624, out.height.px = 384, params.src = "weight01, exercise = TRUE, exercise.setup = \"weightloadData\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -1938,8 +1946,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight02", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight02", code = "\nlending_2005\n", 
         opts = list(label = "\"weight02\"", exercise = "TRUE", 
@@ -1993,8 +2001,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight03", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight03", code = "covariate_data_2005", 
         opts = list(label = "\"weight03\"", exercise = "TRUE", 
@@ -2048,8 +2056,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight04", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight04", code = "\nhead(covariate_data_2005)\n\n", 
         opts = list(label = "\"weight04\"", exercise = "TRUE", 
@@ -2103,8 +2111,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight05", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight05", code = "class(covariate_data_2005$log_GDP)", 
         opts = list(label = "\"weight05\"", exercise = "TRUE", 
@@ -2158,8 +2166,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight06", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight06", code = "formula0 <- lending_2005 ~ edges + mutual\n\n\nm0 <- GERGM::gergm(formula0,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 10000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 5000,\n                   seed = 456,\n                   convergence_tolerance = 0.5, \n                   parallel = TRUE,\n                   cores =2)", 
         opts = list(label = "\"weight06\"", exercise = "TRUE", 
@@ -2219,8 +2227,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight07", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight07", code = "formula1 <- lending_2005 ~ edges + sender(\"log_GDP\")\n\n\nm1 <- GERGM::gergm(formula1,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 3)", 
         opts = list(label = "\"weight07\"", exercise = "TRUE", 
@@ -2280,8 +2288,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight08", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight08", code = "formula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
         opts = list(label = "\"weight08\"", exercise = "TRUE", 
@@ -2342,8 +2350,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight09", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n\nformula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n\nformula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight08", code = "formula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
         opts = list(label = "\"weight08\"", exercise = "TRUE", 
@@ -2378,17 +2386,17 @@ learnr:::store_exercise_cache(structure(list(label = "weight09", global_setup = 
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "testquiz", question = structure("Does the trace plot look good to you? ", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_e8ab103", 
+"character")), answers = list(structure(list(id = "lnr_ans_f342e8f", 
     option = "Yes, the spikes are reaching the bottom and the top of the plot,", 
     value = "Yes, the spikes are reaching the bottom and the top of the plot,", 
     label = structure("Yes, the spikes are reaching the bottom and the top of the plot,", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_ccd0961", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a835609", 
     option = "A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly ", 
     value = "A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly ", 
     label = structure("A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly ", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_7a59c1d", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_1d5f409", 
     option = "No, the chain is not mixing well, and the plot is not centered on the black line", 
     value = "No, the chain is not mixing well, and the plot is not centered on the black line", 
     label = structure("No, the chain is not mixing well, and the plot is not centered on the black line", html = TRUE, class = c("html", 
@@ -2401,7 +2409,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "testquiz-answer", question = "testquiz"), loading = structure("<strong>Loading:<\u002fstrong> \nDoes the trace plot look good to you? \n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = FALSE, 
-    seed = 1999013917.06914, options = list()), class = c("learnr_radio", 
+    seed = 1389898204.35278, options = list()), class = c("learnr_radio", 
 "tutorial_question")), session = session)
 </script>
 
@@ -2429,8 +2437,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight10", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n\nformula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n\nformula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight08", code = "formula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
         opts = list(label = "\"weight08\"", exercise = "TRUE", 
@@ -2465,17 +2473,17 @@ learnr:::store_exercise_cache(structure(list(label = "weight10", global_setup = 
 
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "testquiz1", question = structure("Does this fitlook good?? ", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_9665ee2", 
+"character")), answers = list(structure(list(id = "lnr_ans_128caf3", 
     option = "Yes, since the observed mean match with the simulated ones", 
     value = "Yes, since the observed mean match with the simulated ones", 
     label = structure("Yes, since the observed mean match with the simulated ones", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_864010d", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b6d2f79", 
     option = "A bit, since the observed mean match with the simulated ones most of the time but not always", 
     value = "A bit, since the observed mean match with the simulated ones most of the time but not always", 
     label = structure("A bit, since the observed mean match with the simulated ones most of the time but not always", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_aeee855", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_92d9c3b", 
     option = "No, since the observed mean never match with the simulated ones", 
     value = "No, since the observed mean never match with the simulated ones", 
     label = structure("No, since the observed mean never match with the simulated ones", html = TRUE, class = c("html", 
@@ -2488,7 +2496,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "testquiz1-answer", question = "testquiz1"), loading = structure("<strong>Loading:<\u002fstrong> \nDoes this fitlook good?? \n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = FALSE, 
-    seed = 612821678.214633, options = list()), class = c("learnr_radio", 
+    seed = 791563658.631399, options = list()), class = c("learnr_radio", 
 "tutorial_question")), session = session)
 </script>
  
@@ -2516,8 +2524,8 @@ learnr:::store_exercise_cache(structure(list(label = "weight11", global_setup = 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- sna4tutti:::check_rstudio", 
 "", "", "# R check version (required 4.2.0)", "check_R <- function(x) {", 
 "  sna4tutti:::check_r_equal(4,2.0)", "}", "", "errors <- list()", 
-""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n\nformula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
-    chunks = list(list(label = "weightloadData", code = "\n\n\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
+""), chunk_opts = list(label = "setup", include = FALSE)), setup = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n\nformula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
+    chunks = list(list(label = "weightloadData", code = "\ndata(\"lending_2005\", package = \"GERGM\")\ndata(\"covariate_data_2005\", package = \"GERGM\")\ndata(\"net_exports_2005\", package = \"GERGM\")\n", 
         opts = list(label = "\"weightloadData\"", echo = "FALSE"), 
         engine = "r"), list(label = "weight08", code = "formula2 <- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(\"log_GDP\") + \n  receiver(\"log_GDP\")\n\nm2 <- GERGM::gergm(formula2,\n                   covariate_data = covariate_data_2005,\n                   number_of_networks_to_simulate = 5000,\n                   thin = 1/100,\n                   proposal_variance = 0.05,\n                   MCMC_burnin = 1000,\n                   seed = 456,\n                   convergence_tolerance = 0.5,\n                   parallel = TRUE,\n                   cores = 2)", 
         opts = list(label = "\"weight08\"", exercise = "TRUE", 
@@ -2558,7 +2566,7 @@ learnr:::store_exercise_cache(structure(list(label = "weight11", global_setup = 
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","cachem","checkmate","cli","coda","compiler","crayon","curl","datasets","DEoptimR","digest","ellipsis","ergm","evaluate","fansi","fastmap","glue","gradethis","graphics","grDevices","grid","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","lattice","learnr","lifecycle","lpSolveAPI","magrittr","markdown","MASS","Matrix","memoise","methods","mime","network","parallel","pillar","pkgconfig","promises","purrr","R6","Rcpp","rlang","rle","rmarkdown","robustbase","rprojroot","rstudioapi","sass","shiny","sna4tutti","statnet.common","stats","stringi","stringr","tibble","tools","trust","utf8","utils","vctrs","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4.1","4.2.0","0.3.1","1.0.6","2.1.0","3.3.0","0.19-4","4.2.0","1.5.1","4.3.2","4.2.0","1.0-11","0.6.29","0.3.2","4.1.2","0.15","1.0.3","1.1.0","1.6.2","0.2.8.9000","4.2.0","4.2.0","4.2.0","0.5.2","1.5.4","1.6.5","0.1.4","1.8.0","1.39","1.3.0","0.20-45","0.10.2","1.0.1","5.5.2.0-17.7","2.0.3","1.1","7.3-56","1.4-1","2.0.1","4.2.0","0.12","1.17.1","4.2.0","1.7.0","2.0.3","1.2.0.1","0.3.4","2.5.1","1.0.8.3","1.0.2","0.9.2","2.14","0.95-0","2.0.3","0.13","0.4.1","1.7.1","0.0.1","4.5.0","4.2.0","1.7.6","1.4.0","3.1.6","4.2.0","0.1-8","1.2.2","4.2.0","0.4.1","2.5.0","0.31","1.8-4","2.3.5"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","cachem","checkmate","cli","coda","compiler","crayon","curl","datasets","DEoptimR","digest","ellipsis","ergm","evaluate","fansi","fastmap","glue","gradethis","graphics","grDevices","grid","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","lattice","learnr","lifecycle","lpSolveAPI","magrittr","markdown","MASS","Matrix","memoise","methods","mime","network","parallel","pillar","pkgconfig","promises","purrr","R6","Rcpp","rlang","rle","rmarkdown","robustbase","rprojroot","rstudioapi","sass","shiny","sna4tutti","statnet.common","stats","stringi","stringr","tibble","tools","trust","utf8","utils","vctrs","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4.1","4.2.0","0.3.1","1.0.6","2.1.0","3.3.0","0.19-4","4.2.0","1.5.1","4.3.2","4.2.0","1.0-11","0.6.29","0.3.2","4.1.2","0.15","1.0.3","1.1.0","1.6.2","0.2.8.9000","4.2.0","4.2.0","4.2.0","0.5.2","1.5.4","1.6.5","0.1.4","1.8.0","1.39","1.3.0","0.20-45","0.10.2","1.0.1","5.5.2.0-17.7","2.0.3","1.1","7.3-56","1.4-1","2.0.1","4.2.0","0.12","1.17.1","4.2.0","1.7.0","2.0.3","1.2.0.1","0.3.4","2.5.1","1.0.8.3","1.0.2","0.9.2","2.14","0.95-0","2.0.3","0.13","0.4.1","1.7.1","0.4.0","4.5.0","4.2.0","1.7.6","1.4.0","3.1.6","4.2.0","0.1-8","1.2.2","4.2.0","0.4.1","2.5.0","0.31","1.8-4","2.3.5"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>

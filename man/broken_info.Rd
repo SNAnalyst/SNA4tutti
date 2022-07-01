@@ -4,7 +4,10 @@
 \alias{broken_info}
 \title{Within tutorial sna4tutti unit test error report function}
 \usage{
-broken_info(broken_list = list())
+broken_info(broken_list = l)
+}
+\arguments{
+\item{broken_list}{internal parameter to fetch the name of the code box with broken code}
 }
 \value{
 nothing relevant, this function is useful for its side effect.
@@ -17,4 +20,6 @@ reports the name of the broken code box
 \dontrun{
 broken_info()
 }
+
+
 }

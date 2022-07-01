@@ -1,6 +1,6 @@
 Package: sna4tutti
 Type: Package
-Title: Social Network Analysis for Everyone
+Title: Social Network Analysis for Data Science
 Version: 0.4.0
 Authors@R:
 	c(person(given = "Roger",
@@ -12,13 +12,14 @@ Authors@R:
 					role = c("aut"),
 					email = "SNA4DS@jads.nl"))
 Maintainer: Roger Leenders <r.t.a.j.leenders@jads.nl>
-Description: Contains the tutorials for the JADS course "Social Network Analysis for Data Science" (2022-2023). The package contains a vignette that shows the most important functions you need to know for this course.
+Description: Contains the tutorials for the JADS course "Social Network Analysis for Data Science" (2021-2022). Update the package frequently, to have access to the most up-to-date tutorials. The tutorials will be added throughout the semester. The package contains a vignette that shows the most important functions you need to know for this course.
 Depends: 
-	R (>= 4.1.0)
+	R (>= 4.2.0)
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/SNAnalyst/sna4tutti
-BugReports: https://github.com/SNAnalyst/SNA4DS/issues
+BugReports: https://github.com/SNAnalyst/sna4tutti/issues
+RoxygenNote: 7.2.0
 Imports:
   btergm,
   ergm,
@@ -49,8 +50,5 @@ Suggests:
 	fs,
 	rlang,
 	rprojroot,
-        shinytest,
-	tinytest,
 	usethis
 License: AGPL (>= 3) + file LICENSE
-RoxygenNote: 7.1.2

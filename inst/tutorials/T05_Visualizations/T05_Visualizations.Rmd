@@ -274,10 +274,10 @@ This last plot does not meet any of the goal we stated above.
 
 
 ```{r testquiz, echo = FALSE}
-quiz(question("What is the main problem with the plots of igraphNet and networkNet?",
-              answer("nodes are too small"),
-              answer("the colors are not color blind friendly"),
-              answer("the plot does not inform us on what the network represents", correct = TRUE),
+learnr::quiz(learnr::question("What is the main problem with the plots of igraphNet and networkNet?",
+              learnr::answer("nodes are too small"),
+              learnr::answer("the colors are not color blind friendly"),
+              learnr::answer("the plot does not inform us on what the network represents", correct = TRUE),
               correct = "Yes! Well done!",
               random_answer_order = TRUE,
               allow_retry = TRUE))
@@ -530,11 +530,11 @@ With this visualization, we can already see whether the year and the gender matt
 What do you think?
 
 ```{r quiz_viz1, echo = FALSE}
-quiz(question("How do you interpret this visualization?",
-    answer("The year matters for friednship formation but the gender does not"),
-    answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
-    answer("The year does not matter for friendship formation but the gender does"),
-    answer("Both the year and the gender equally matter in predicting friendship"),
+learnr::quiz(learnr::question("How do you interpret this visualization?",
+    learnr::answer("The year matters for friednship formation but the gender does not"),
+    learnr::answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
+    learnr::answer("The year does not matter for friendship formation but the gender does"),
+    learnr::answer("Both the year and the gender equally matter in predicting friendship"),
     correct = "Yes! Well done!",
     random_answer_order = TRUE,
     allow_retry = TRUE
@@ -545,11 +545,11 @@ quiz(question("How do you interpret this visualization?",
 
 ```{r test_quizviz1, results = 'markup'}
 
-q1 <- learnr::quiz(question("How do you interpret this visualization?",
-    answer("The year matters for friednship formation but the gender does not"),
-    answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
-    answer("The year does not matter for friendship formation but the gender does"),
-    answer("Both the year and the gender equally matter in predicting friendship"),
+q1 <- learnr::quiz(learnr::question("How do you interpret this visualization?",
+    learnr::answer("The year matters for friednship formation but the gender does not"),
+    learnr::answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
+    learnr::answer("The year does not matter for friendship formation but the gender does"),
+    learnr::answer("Both the year and the gender equally matter in predicting friendship"),
     correct = "Yes! Well done!",
     random_answer_order = TRUE,
     allow_retry = TRUE
@@ -568,11 +568,11 @@ if (q1$questions[[1]]$question != "How do you interpret this visualization?") {
 
 ```{r test_quizviz2, results = 'markup'}
 # test correct answer
-q1in <- question("How do you interpret this visualization?",
-    answer("The year matters for friednship formation but the gender does not"),
-    answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
-    answer("The year does not matter for friendship formation but the gender does"),
-    answer("Both the year and the gender equally matter in predicting friendship"),
+q1in <- learnr::question("How do you interpret this visualization?",
+    learnr::answer("The year matters for friednship formation but the gender does not"),
+    learnr::answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
+    learnr::answer("The year does not matter for friendship formation but the gender does"),
+    learnr::answer("Both the year and the gender equally matter in predicting friendship"),
     correct = "Yes! Well done!",
     random_answer_order = TRUE,
     allow_retry = TRUE

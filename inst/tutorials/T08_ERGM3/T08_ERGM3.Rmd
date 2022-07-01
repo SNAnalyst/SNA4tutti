@@ -158,6 +158,23 @@ check_pkgs()
 
 All packed up! Let's roll!!
 
+## The 7-step Research Flow
+
+From now on, when we fit a model, we put it in the context of carrying out actual research. To do so, we rely on the 7-step flow approach introduced in the ERGM2 Lab: 
+
+1. Literature research/ Questions & Hypotheses (based on the literature) [- data collection]
+2. Data Exploration + terms selection
+3. Running models (baseline, exploratory models, final model)
+4. MCMC diagnostics of the model selected as the best
+5. Goodness of fit
+6. Interpreting results
+7. Write up about your research telling how this journey went
+
+Take a look at the image below. It guides you step by step on how to use the flow!
+
+![](images/7stepsFlow.png){width=100%}
+
+
 ## Bipartite ERGMs
 
 Bipartite ERGMs require a bipartite network. DUH!
@@ -173,7 +190,7 @@ Let's see how to do it step by step.
 
 ### Setting up a network as bipartite
 
-Both unimodal and bipartite networks can be expressed as node lists, but while unimodal networks can also be represented by adjacency matrices, bipartite networks require incidence matrices.
+Both unimodal and bipartite networks can be expressed as node lists, but while unimodal networks can also be represented by adjacency matrices, bipartite networks require _incidence matrices_.
 
 While adjacency matrices are squared, with the same items in rows and columns, incidence matrices have the first set of elements in rows and the second set in columns. Hence if we have a bipartite network of 10 friends going to Cinema Club four times in total, we will get an incidence matrix of 10 by 4 elements. 
 
@@ -216,7 +233,7 @@ Let's take a look at our incidence matrix
 mdata
 ```
 
-Our first set of nodes (rows) is constituted by 10 kids, while our second set is constituted by 4 playdates the kids go to. 
+Our first set of nodes (rows) is constituted by 10 kids, while our second set is constituted by 4 playdates the kids go to (columns). 
 
 Let's turn it into a `network` object. We need to specify that it is a bipartite and undirected network.
 
@@ -286,20 +303,10 @@ kidsnet
 
 Now we are done and ready to crunch some numbers!
 
-### Fitting a bipartite ERGM 
 
-From now on, when we fit a model, we rely on the 7 step flow approach introduced in the ERGM2 Lab: 
+### Fitting bipartite ERGMs 
 
-1. Literature research/ Questions & Hypotheses (based on the literature) [- data collection]
-2. Data Exploration + terms selection
-3. Running models (baseline, exploratory models, final model)
-4. MCMC diagnostics of the model selected as the best
-5. Goodness of fit
-6. Interpreting results
-7. Write up about your research telling how this journey went
-
-![](images/7stepsFlow.png){width=100%}
-
+Let's fit Bipartite ERGMs using the 7-step flows!
 
 #### Step One
 
@@ -307,7 +314,7 @@ As world experts in children behavior and play-date-ology (just kidding!), we ar
 
 1. Older kids go to more playdates
 2. There is homophily by gender (girls play with girls, boys play with boys)
-3. Some play dates have more attendees than others
+3. Some play dates have more attendees than others (some sort of popularity effect)
 
 #### Step two
 
@@ -326,6 +333,10 @@ class(network::get.vertex.attribute(kidsnet, "Gender"))
 
 
 ```
+
+Do you see those NAs at the end of the vectors? The reason why there are there is because the attributes make sense only for kids and not for play dates, but `network` stores information in this way. Be careful to understand the data architecture of bipartite graphs in `network`; otherwise, you might get into errors that require painful debugging sessions!
+
+
 
 Then, we get acquainted with some network structural features, such as degree
 
@@ -545,9 +556,9 @@ This is how this weighted network looks like
 
 ```{r weight01, exercise = TRUE, exercise.setup = "weightloadData"}
 
-snafun::plot_weighted_graph(lending_2005, seed = 123, 
-                    white_background = TRUE, 
-                    show_legend = FALSE) 
+# snafun::plot_weighted_graph(lending_2005, seed = 123, 
+#                     white_background = TRUE, 
+#                     show_legend = FALSE) 
 
 ```
 

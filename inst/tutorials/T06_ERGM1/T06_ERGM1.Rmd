@@ -164,7 +164,7 @@ As we discussed in class, the ERGM model was not born overnight. There are a ser
 
 Let's use the Florentine families' marriage network. You should be already familiar with this one, so I won't spend more time discussing it. Instead, let's go to Florence in the Reinassance era! 
 
-![](images/cavalcata-dei-re-magi-si-trova-sulla-parete-sinistra-della-cappella-dei-magi-in-palazzo-medici-riccardi-a-firenze-ed-e-opera-di-benozzo-gozzoli_3ff44f8f_1.jpg){width=75%}
+![](images/cavalcata.jpg){width=75%}
 
 
 ```{r florentine_load, include = FALSE}
