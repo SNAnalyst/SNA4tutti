@@ -183,10 +183,10 @@ florentine <- SNA4DSData::florentine
 flo_mar <- florentine$flomarriage
 florentine <- intergraph::asNetwork(flo_mar)
 
-if (isFALSE(table((network::get.vertex.attribute(florentine, 'vertex.names')) == c("Acciaiuoli", "Albizzi", "Barbadori", "Bischeri", "Castellani", "Ginori", "Guadagni", "Lamberteschi", "Medici", "Pazzi", "Peruzzi",       "Pucci", "Ridolfi", "Salviati", "Strozzi", "Tornabuoni")) == 16)) {
+if (base::isFALSE(base::table((network::get.vertex.attribute(florentine, 'vertex.names')) == c("Acciaiuoli", "Albizzi", "Barbadori", "Bischeri", "Castellani", "Ginori", "Guadagni", "Lamberteschi", "Medici", "Pazzi", "Peruzzi",       "Pucci", "Ridolfi", "Salviati", "Strozzi", "Tornabuoni")) == 16)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -197,10 +197,10 @@ florentine <- SNA4DSData::florentine
 flo_mar <- florentine$flomarriage
 florentine <- intergraph::asNetwork(flo_mar)
 
-if (isFALSE(network::get.vertex.attribute(florentine, 'NumberPriorates')[2] == 65)) {
+if (base::isFALSE(network::get.vertex.attribute(florentine, 'NumberPriorates')[2] == 65)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -212,10 +212,10 @@ florentine <- SNA4DSData::florentine
 flo_mar <- florentine$flomarriage
 florentine <- intergraph::asNetwork(flo_mar)
 
-if (isFALSE(network::get.vertex.attribute(florentine, 'NumberTies')[16] == 7)) {
+if (base::isFALSE(network::get.vertex.attribute(florentine, 'NumberTies')[16] == 7)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -228,10 +228,10 @@ florentine <- SNA4DSData::florentine
 flo_mar <- florentine$flomarriage
 florentine <- intergraph::asNetwork(flo_mar)
 
-if (isFALSE(network::get.vertex.attribute(florentine, 'Wealth')[9] == 103)) {
+if (base::isFALSE(network::get.vertex.attribute(florentine, 'Wealth')[9] == 103)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -243,10 +243,10 @@ florentine <- SNA4DSData::florentine
 flo_mar <- florentine$flomarriage
 florentine <- intergraph::asNetwork(flo_mar)
 
-if (isFALSE(length(network::get.edge.attribute(florentine, 'weight')) == 20)) {
+if (base::isFALSE(length(network::get.edge.attribute(florentine, 'weight')) == 20)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -423,13 +423,13 @@ SampsonLike1Ig <-SampsonIgraphtot$Sampson_like1
 
 sampson <- intergraph::asNetwork(SampsonLike1Ig)
 
-if (isFALSE(table((network::get.vertex.attribute(sampson, 'vertex.names')) == 
+if (base::isFALSE(base::table((network::get.vertex.attribute(sampson, 'vertex.names')) == 
                   c("AMBROSE_9", "VICTOR_8", "LOUIS_11", "ALBERT_16", "BERTH_6", "SIMP_18",
                     "WINF_12", "BONAVEN_5", "GREG_2", "PETER_4", "ROMUL_10", "HUGH_14",
                     "AMAND_13", "MARK_7", "BONI_15", "JOHN_1", "BASIL_3", "ELIAS_17" )) == 18)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -442,10 +442,10 @@ SampsonLike1Ig <-SampsonIgraphtot$Sampson_like1
 
 sampson <- intergraph::asNetwork(SampsonLike1Ig)
 
-if (isFALSE(network::get.vertex.attribute(sampson, 'id')[2] == "0x2112a4aae00")) {
+if (base::isFALSE(network::get.vertex.attribute(sampson, 'id')[2] == "0x2112a4aae00")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -459,10 +459,10 @@ SampsonLike1Ig <-SampsonIgraphtot$Sampson_like1
 
 sampson <- intergraph::asNetwork(SampsonLike1Ig)
 
-if (isFALSE(network::get.vertex.attribute(sampson, 'like1')[16] == "T")) {
+if (base::isFALSE(network::get.vertex.attribute(sampson, 'like1')[16] == "T")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -476,10 +476,10 @@ SampsonLike1Ig <-SampsonIgraphtot$Sampson_like1
 
 sampson <- intergraph::asNetwork(SampsonLike1Ig)
 
-if (isFALSE(sum(network::get.edge.attribute(sampson, 'weight')) == 110)) {
+if (base::isFALSE(base::sum(network::get.edge.attribute(sampson, 'weight')) == 110)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```

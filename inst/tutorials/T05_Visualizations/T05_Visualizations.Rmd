@@ -206,10 +206,10 @@ x <- 1:10
 y1 <- x*x
 y2  <- 2*y1
 
-if (as.character(table(y2 == c(2, 8, 18, 32, 50, 72, 98, 128, 162, 200))) != "10") {
+if (base::isFALSE(base::as.character(table(y2 == c(2, 8, 18, 32, 50, 72, 98, 128, 162, 200))) == "10")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -275,12 +275,12 @@ This last plot does not meet any of the goal we stated above.
 
 ```{r testquiz, echo = FALSE}
 learnr::quiz(learnr::question("What is the main problem with the plots of igraphNet and networkNet?",
-              learnr::answer("nodes are too small"),
-              learnr::answer("the colors are not color blind friendly"),
-              learnr::answer("the plot does not inform us on what the network represents", correct = TRUE),
-              correct = "Yes! Well done!",
-              random_answer_order = TRUE,
-              allow_retry = TRUE))
+                              learnr::answer("nodes are too small"),
+                              learnr::answer("the colors are not color blind friendly"),
+                              learnr::answer("the plot does not inform us on what the network represents", correct = TRUE),
+                              correct = "Yes! Well done!",
+                              random_answer_order = TRUE,
+                              allow_retry = TRUE))
 ```
 
 ```{r test_testquiz, results = 'markup'}
@@ -293,10 +293,10 @@ q1 <- learnr::quiz(learnr::question("What is the main problem with the plots of 
                     random_answer_order = TRUE,
                     allow_retry = TRUE))
 
-if (q1$questions[[1]]$question != "What is the main problem with the plots of igraphNet and networkNet?") {
+if (base::isFALSE(q1$questions[[1]]$question == "What is the main problem with the plots of igraphNet and networkNet?")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 
@@ -315,7 +315,7 @@ q1in <- learnr::question("What is the main problem with the plots of igraphNet a
 if (isFALSE(q1in$answers[[3]]$correct)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
   
 }
 
@@ -350,7 +350,7 @@ net <- SNA4DSData::DSstudents
 if (isFALSE(table(igraph::V(net)$name == c(paste0("S", 1:81))) == 81)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -362,7 +362,7 @@ net <- SNA4DSData::DSstudents
 if (isFALSE(as.vector(table(igraph::V(net)$year)[2]) == 19)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -375,7 +375,7 @@ net <- SNA4DSData::DSstudents
 if (isFALSE(as.vector(table(igraph::V(net)$Hang.Out))[4] == 18)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -386,10 +386,10 @@ if (isFALSE(as.vector(table(igraph::V(net)$Hang.Out))[4] == 18)) {
 
 net <- SNA4DSData::DSstudents
 
-if (isFALSE(as.vector(table(igraph::V(net)$gender))[2] == 51)) {
+if (base::isFALSE(as.vector(table(igraph::V(net)$gender))[2] == 51)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -399,10 +399,10 @@ if (isFALSE(as.vector(table(igraph::V(net)$gender))[2] == 51)) {
 
 net <- SNA4DSData::DSstudents
 
-if (isFALSE(as.vector(table(igraph::E(net)$frequency))[2] == 37)) {
+if (base::isFALSE(base::as.vector(base::table(igraph::E(net)$frequency))[2] == 37)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -411,10 +411,10 @@ if (isFALSE(as.vector(table(igraph::E(net)$frequency))[2] == 37)) {
 
 net <- SNA4DSData::DSstudents
 
-if (isFALSE(as.vector(table(igraph::E(net)$closeness))[5] == 1)) {
+if (base::isFALSE(base::as.vector(base::table(igraph::E(net)$closeness))[5] == 1)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -556,10 +556,10 @@ q1 <- learnr::quiz(learnr::question("How do you interpret this visualization?",
   )
 )
 
-if (q1$questions[[1]]$question != "How do you interpret this visualization?") {
+if (base::isFALSE(q1$questions[[1]]$question == "How do you interpret this visualization?")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 
@@ -581,7 +581,7 @@ q1in <- learnr::question("How do you interpret this visualization?",
 if (isFALSE(q1in$answers[[2]]$correct)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
   
 }
 

@@ -219,10 +219,10 @@ mdata <- matrix(c(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
 vertex.names <- c(LETTERS[1:10], 1:4)
 kidsnet <- network::network(mdata, directed = FALSE, bipartite = TRUE)
 
-if (isFALSE(sum(network::get.vertex.attribute(kidsnet, 'vertex.names')) == 105)) {
+if (base::isFALSE(sum(network::get.vertex.attribute(kidsnet, 'vertex.names')) == 105)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -272,7 +272,7 @@ network::set.vertex.attribute(kidsnet, "vertex.names",  vertex.names)
 network::set.vertex.attribute(kidsnet, "Age",  Age)
 network::set.vertex.attribute(kidsnet, "Gender",  Gender)
 
-if (isFALSE(network::get.vertex.attribute(kidsnet, 'vertex.names')[1] == "A" &
+if (base::isFALSE(network::get.vertex.attribute(kidsnet, 'vertex.names')[1] == "A" &
             network::get.vertex.attribute(kidsnet, 'vertex.names')[4] == "D" &
             network::get.vertex.attribute(kidsnet, 'Age')[3] == 7 &
             network::get.vertex.attribute(kidsnet, 'Age')[7] == 10 &
@@ -280,7 +280,7 @@ if (isFALSE(network::get.vertex.attribute(kidsnet, 'vertex.names')[1] == "A" &
             network::get.vertex.attribute(kidsnet, 'Gender')[8] == 1)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -371,7 +371,7 @@ summary(kidsnet ~ b2star(2:10))
 
 ```
 
-
+Have you realized that you can specify the effects both focusing on one partition or the other? Make sure you pay close attention to this!
 
 Hence, we can now specify our terms, 
 
@@ -379,7 +379,9 @@ H1. `b1cov("Age")`
 H2. `b1nodematch("Gender")`
 H3. some stars or degree terms
 
-Rember that the bipartite terms are different from the unimodal one. 
+Remember that the bipartite terms are different from the unimodal one. The main difference is that you can specify them for one partition or the other, according to your research questions and hypotheses. 
+
+Do you want to explain kids behavior or play dates occurrence? 
 
 You can explore them using the function:
 
@@ -408,9 +410,9 @@ summary(m2)
 
 Now we can run dyadic dependent exploratory models. Since the dyadic dependent involves a simulation, they are computationally more intense. To reduce the computational time and make the model work better, we can try to do two things. 
 
-First, we should constraint the model. For instance, in the example below, I'm asking the simulation to exclude networks with nodes having degrees lower than (isolate) 0 and larger than 14 (max N nodes) since they would be unrealistic in the current situation that we are exploring.
+First, we should constraint the model. For instance, in the example below, I'm asking the simulation to exclude networks with nodes having degrees lower than 1 (isolate) and larger than 14 (max N nodes) since they would be unrealistic in the current situation that we are exploring.
 
-Second, we can control the model specifying how the simulation should run.
+Second, we can control the model specifying how the simulation should run (but we know how to this already!).
 
 Let's get to it.
 
@@ -552,6 +554,65 @@ data("net_exports_2005", package = "GERGM")
 
 ```
 
+
+```{r test_weightloadData1, results = 'markup'}
+
+data("lending_2005", package = "GERGM")
+
+if (base::isFALSE(base::round(lending_2005[2, 2],3) == 0 &
+            base::round(lending_2005[3, 17],3) == 9.096 &
+            base::round(lending_2005[4, 2],3) == 7.141 &
+            base::round(lending_2005[5, 17],3) == 7.879 &
+            base::round(lending_2005[6, 2],3) == 9.985 &
+            base::round(lending_2005[7, 17],3) == 12.569 &
+            base::round(lending_2005[8, 2],3) == 4.676)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+}
+
+```
+
+
+```{r test_weightloadData2, results = 'markup'}
+
+
+data("covariate_data_2005", package = "GERGM")
+
+
+if (base::isFALSE(base::round(sum(covariate_data_2005[2,1:2],3)) == 693338595730 &
+            base::round(sum(covariate_data_2005[3,1:2],3)) == 892106837602 &
+            base::round(covariate_data_2005[5, 2],3) == 28.45 &
+            base::round(covariate_data_2005[6, 2],3) == 28.421 &
+            base::round(covariate_data_2005[7, 2],3) == 28.681 &
+            base::round(covariate_data_2005[8, 2],3) == 27.45)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+}
+
+```
+
+```{r test_weightloadData3, results = 'markup'}
+
+
+data("net_exports_2005", package = "GERGM")
+
+if (base::isFALSE(base::round(sum(net_exports_2005[2,2:17],3)) == 3 &
+            base::round(sum(net_exports_2005[3,2:17],3)) == 3 &
+            base::round(sum(net_exports_2005[4,2:17],3)) == 3 &
+            base::round(sum(net_exports_2005[5,2:17],3)) == 4 &
+            base::round(sum(net_exports_2005[6,2:17],3)) == 3 &
+            base::round(sum(net_exports_2005[7,2:17],3)) == 4 &
+            base::round(sum(net_exports_2005[8,2:17],3)) == 3)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+}
+
+```
+
+
 This is how this weighted network looks like
 
 ```{r weight01, exercise = TRUE, exercise.setup = "weightloadData"}
@@ -571,7 +632,7 @@ Since the `GERGM` package has its own environment, it does not rely either on `i
 You need to pass row data (weighted adjacency matrices and data frames) to this model. 
 
 
-Let's inspect the weighted matrix.
+Let's inspect the weighted adjacency matrix.
 
 ```{r weight02, exercise = TRUE, exercise.setup = "weightloadData"}
 
@@ -590,7 +651,7 @@ covariate_data_2005
 
 ### Running a weighted ERGM
 
-Ok, let's display this research using our seven-steps flow. 
+Ok, let's move on with this research using our seven-steps flow. 
 
 #### Step one (Theory/Questions/Hypotheses)
 
@@ -639,7 +700,7 @@ Let's start with the baseline. If we don't specify any option in `edges`, it wil
 
 Note1: In the `GERGM` environment, you specify the formula of the ERGM before running the model. 
 
-Note2: In the `GERGM` environment, a baseline model with `edges` only does not work. Hence try directly with the other variables.
+Note2: In the `GERGM` environment, a baseline model with `edges` only does not work. Hence, try directly with the other variables.
 
 NOTE3: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
 
@@ -674,16 +735,13 @@ m0 <- GERGM::gergm(formula0,
 ```
 
 
-Why don't you run other exploratory models here by trying some other terms? I give you the final one below, but first try to play a little :)
+Why don't you run other exploratory models here by trying some other terms? I give you the final one below, but first try to play a little (keep the number of cores in the parallelization in  mind!) :)
 
-NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
-
-`data("lending_2005", package = "GERGM")`
-
-`data("covariate_data_2005", package = "GERGM")`
+_NOTE:_
+I inserted a burn-in of 1000 and simulated 10000 networks. I used this set up to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
 
 
-As you can see in the specification, this data set is located in the `GERGM` package itself. 
+Let's move on with another model!
 
 _ALERT:_
 
@@ -708,18 +766,14 @@ m1 <- GERGM::gergm(formula1,
 ```
 
 
+_NOTE:_
+I inserted a burn-in of 1000 and simulated 5000 networks. I used this set up to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
+
 
 
 Ok, let's get to our final model. 
 
-NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
 
-`data("lending_2005", package = "GERGM")`
-
-`data("covariate_data_2005", package = "GERGM")`
-
-
-As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
 _ALERT:_
 
@@ -743,11 +797,19 @@ m2 <- GERGM::gergm(formula2,
                    cores = 2)
 ```
 
+
+_NOTE:_
+I inserted a burn-in of 1000 and simulated 5000 networks. I used this set up to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
+
+
+Is this model good enough? Let's analyse the diagnostics!
+
+
 #### Step four (MCMC diagnostics)
 
 Even if the `GERGM` models automatically print info about the quality of the model, it is possible to reprint them separately too. 
 
-Here we can observe the MCMC diagnostics.
+Here we can reprint and observe the MCMC diagnostics.
 
 ```{r weight09, exercise = TRUE, exercise.setup = "weight08"}
 GERGM::Trace_Plot(m2)
@@ -757,12 +819,58 @@ GERGM::Trace_Plot(m2)
 Since this model is different from the regular ERGM, the trace plot doesn't need to be centered at 0. Instead, there is a black line telling you where the trace plot should be centered. Does this look good to you? 
 
 ```{r testquiz, echo = FALSE}
-question("Does the trace plot look good to you? ",
-    answer("Yes, the spikes are reaching the bottom and the top of the plot,"),
-    answer("A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly "),
-    answer("No, the chain is not mixing well, and the plot is not centered on the black line", correct = TRUE)
-  )
+learnr::quiz(learnr::question("Does the trace plot look good to you?",
+                              learnr::answer("Yes, the spikes are reaching the bottom and the top of the plot,"),
+                              learnr::answer("A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly "),
+                              learnr::answer("No, the chain is not mixing well, and the plot is not centered on the black line", correct = TRUE), 
+                              correct = "Yes! Well done!",
+                              random_answer_order = TRUE,
+                              allow_retry = TRUE))
+
 ```
+
+
+
+```{r test_testquiz1, results = 'markup'}
+
+q1 <- learnr::quiz(learnr::question("Does the trace plot look good to you?",
+                              learnr::answer("Yes, the spikes are reaching the bottom and the top of the plot,"),
+                              learnr::answer("A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly "),
+                              learnr::answer("No, the chain is not mixing well, and the plot is not centered on the black line", correct = TRUE), 
+                              correct = "Yes! Well done!",
+                              random_answer_order = TRUE,
+                              allow_retry = TRUE))
+
+
+if (base::isFALSE(q1$questions[[1]]$question == "Does the trace plot look good to you?")) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+}
+
+
+```
+
+
+```{r test_testquiz2, results = 'markup'}
+# test correct answer
+q1in <- learnr::question("Does the trace plot look good to you?",
+                              learnr::answer("Yes, the spikes are reaching the bottom and the top of the plot,"),
+                              learnr::answer("A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly "),
+                              learnr::answer("No, the chain is not mixing well, and the plot is not centered on the black line", correct = TRUE))
+
+
+if (base::isFALSE(q1in$answers[[3]]$correct)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+  
+}
+
+```
+
+Since our MCMC diagnostics are not good enough, let's move on to the GOF, just to learn how to look at it!
+
 
 #### Step five (Goodness of Fit)
 
@@ -774,19 +882,68 @@ GERGM::GOF(m2)
 ```
 
 ```{r testquiz1, echo = FALSE}
-question("Does this fitlook good?? ",
-    answer("Yes, since the observed mean match with the simulated ones"),
-    answer("A bit, since the observed mean match with the simulated ones most of the time but not always", correct = TRUE),
-    answer("No, since the observed mean never match with the simulated ones")
-  )
+learnr::quiz(learnr::question("Does this fit look good?? ",
+                      learnr::answer("Yes, since the observed mean match with the simulated ones"),
+                      learnr::answer("A bit, since the observed mean match with the simulated ones most of the time but not always", correct = TRUE),
+                      learnr::answer("No, since the observed mean never match with the simulated ones"), 
+                      correct = "Yes! Good!!",
+                      random_answer_order = TRUE,
+                      allow_retry = TRUE)
+)
 ```
+
+
+```{r test_testquiz11, results = 'markup'}
+
+q1 <- learnr::quiz(learnr::question("Does this fit look good??",
+                      learnr::answer("Yes, since the observed mean match with the simulated ones"),
+                      learnr::answer("A bit, since the observed mean match with the simulated ones most of the time but not always", correct = TRUE),
+                      learnr::answer("No, since the observed mean never match with the simulated ones"), 
+                      correct = "Yes! Good!!",
+                      random_answer_order = TRUE,
+                      allow_retry = TRUE))
+
+
+if (base::isFALSE(q1$questions[[1]]$question == "Does this fit look good??")) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+}
+
+
+```
+
+
+```{r test_testquiz12, results = 'markup'}
+# test correct answer
+q1in <- learnr::question("Does this fit look good??",
+                      learnr::answer("Yes, since the observed mean match with the simulated ones"),
+                      learnr::answer("A bit, since the observed mean match with the simulated ones most of the time but not always", correct = TRUE),
+                      learnr::answer("No, since the observed mean never match with the simulated ones"))
+
+
+if (base::isFALSE(q1in$answers[[2]]$correct)) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+  
+}
+
+```
+
+The MCMC diagnostics and GOF in this model are not the best. It might be due to the small size of the simulation. Hence, if this happens to you, try to increase the burn-in and the number of chains before trashing the entire model. However, this cannot be done within the tutorial. Play around with these models in your Rstudio environment. Here is the code to load the data, again :)
+
+`data("lending_2005", package = "GERGM")`
+
+`data("covariate_data_2005", package = "GERGM")`
+
 
 
 #### Step Six 
 
 How about the results? Well, this model is pretty bad, but let's learn how to explore them anyway, pretending that it is ok!
 
-The package already provides an inbuilt estimates plot. Red means significant other colors, the opposite. But a table with coefficient could be nice too, right? Here we go.
+The package already provides an inbuilt estimates plot. Red means significant, while the other colors mean the opposite. But a table with coefficient could be nice too, right? Here we go.
 
 ```{r weight11, exercise = TRUE, exercise.setup = "weight08"}
 

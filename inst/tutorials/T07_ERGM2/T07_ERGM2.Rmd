@@ -205,10 +205,10 @@ mesa <- faux.mesa.high
 data(faux.mesa.high, package = 'ergm')
 mesa <- faux.mesa.high
 
-if (isFALSE(sum(network::get.vertex.attribute(mesa, 'Grade')) == 1790 )) {
+if (base::isFALSE(base::sum(network::get.vertex.attribute(mesa, 'Grade')) == 1790 )) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -218,10 +218,10 @@ if (isFALSE(sum(network::get.vertex.attribute(mesa, 'Grade')) == 1790 )) {
 data(faux.mesa.high, package = 'ergm')
 mesa <- faux.mesa.high
 
-if (isFALSE(table(network::get.vertex.attribute(mesa, 'Race'))[2] == 109 & table(network::get.vertex.attribute(mesa, 'Race'))[3] == 68 )) {
+if (base::isFALSE(base::table(network::get.vertex.attribute(mesa, 'Race'))[2] == 109 & base::table(network::get.vertex.attribute(mesa, 'Race'))[3] == 68 )) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 
@@ -233,11 +233,11 @@ if (isFALSE(table(network::get.vertex.attribute(mesa, 'Race'))[2] == 109 & table
 data(faux.mesa.high, package = 'ergm')
 mesa <- faux.mesa.high
 
-if (isFALSE(table(network::get.vertex.attribute(mesa, 'Sex'))[1] == 99 & 
-            table(network::get.vertex.attribute(mesa, 'Sex'))[2] == 106)) {
+if (base::isFALSE(base::table(network::get.vertex.attribute(mesa, 'Sex'))[1] == 99 & 
+            base::table(network::get.vertex.attribute(mesa, 'Sex'))[2] == 106)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -471,10 +471,10 @@ florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
 flobusiness <- intergraph::asNetwork(flo_bus)
 
-if (isFALSE(table((network::get.vertex.attribute(flobusiness, 'vertex.names')) == c("Acciaiuoli", "Albizzi", "Barbadori", "Bischeri", "Castellani", "Ginori", "Guadagni", "Lamberteschi", "Medici", "Pazzi", "Peruzzi",       "Pucci", "Ridolfi", "Salviati", "Strozzi", "Tornabuoni")) == 16)) {
+if (base::isFALSE(base::table((network::get.vertex.attribute(flobusiness, 'vertex.names')) == c("Acciaiuoli", "Albizzi", "Barbadori", "Bischeri", "Castellani", "Ginori", "Guadagni", "Lamberteschi", "Medici", "Pazzi", "Peruzzi",       "Pucci", "Ridolfi", "Salviati", "Strozzi", "Tornabuoni")) == 16)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -485,10 +485,10 @@ florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
 flobusiness <- intergraph::asNetwork(flo_bus)
 
-if (isFALSE(network::get.vertex.attribute(flobusiness, 'NumberPriorates')[2] == 65)) {
+if (base::isFALSE(network::get.vertex.attribute(flobusiness, 'NumberPriorates')[2] == 65)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -500,10 +500,10 @@ florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
 flobusiness <- intergraph::asNetwork(flo_bus)
 
-if (isFALSE(sum(network::get.vertex.attribute(flobusiness, 'NumberTies')) == 222)) {
+if (base::isFALSE(base::sum(network::get.vertex.attribute(flobusiness, 'NumberTies')) == 222)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -516,10 +516,10 @@ florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
 flobusiness <- intergraph::asNetwork(flo_bus)
 
-if (isFALSE(network::get.vertex.attribute(flobusiness, 'Wealth')[9] == 103)) {
+if (base::isFALSE(network::get.vertex.attribute(flobusiness, 'Wealth')[9] == 103)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -693,10 +693,10 @@ magnolia <- faux.magnolia.high
 data(faux.magnolia.high, package = "ergm")
 magnolia <- faux.magnolia.high
 
-if (isFALSE(sum(as.numeric(network::get.vertex.attribute(magnolia, 'vertex.names'))) == 1067991)) {
+if (base::isFALSE(base::sum(base::as.numeric(network::get.vertex.attribute(magnolia, 'vertex.names'))) == 1067991)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -706,12 +706,12 @@ if (isFALSE(sum(as.numeric(network::get.vertex.attribute(magnolia, 'vertex.names
 data(faux.magnolia.high, package = "ergm")
 magnolia <- faux.magnolia.high
 
-if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Grade'))[2] == 210 &
-            table(network::get.vertex.attribute(magnolia, 'Grade'))[3] == 317 &
-            table(network::get.vertex.attribute(magnolia, 'Grade'))[6] == 193)) {
+if (base::isFALSE(base::table(network::get.vertex.attribute(magnolia, 'Grade'))[2] == 210 &
+            base::table(network::get.vertex.attribute(magnolia, 'Grade'))[3] == 317 &
+            base::table(network::get.vertex.attribute(magnolia, 'Grade'))[6] == 193)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -722,15 +722,15 @@ if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Grade'))[2] == 210 &
 data(faux.magnolia.high, package = "ergm")
 magnolia <- faux.magnolia.high
 
-if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Race'))[1] == 48  &
-            table(network::get.vertex.attribute(magnolia, 'Race'))[2] == 261 &
-            table(network::get.vertex.attribute(magnolia, 'Race'))[3] == 68  &
-            table(network::get.vertex.attribute(magnolia, 'Race'))[4] == 24  &
-            table(network::get.vertex.attribute(magnolia, 'Race'))[5] == 7   &
-            table(network::get.vertex.attribute(magnolia, 'Race'))[6] == 1053)) {
+if (base::isFALSE(base::table(network::get.vertex.attribute(magnolia, 'Race'))[1] == 48  &
+            base::table(network::get.vertex.attribute(magnolia, 'Race'))[2] == 261 &
+            base::table(network::get.vertex.attribute(magnolia, 'Race'))[3] == 68  &
+            base::table(network::get.vertex.attribute(magnolia, 'Race'))[4] == 24  &
+            base::table(network::get.vertex.attribute(magnolia, 'Race'))[5] == 7   &
+            base::table(network::get.vertex.attribute(magnolia, 'Race'))[6] == 1053)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -742,11 +742,11 @@ if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Race'))[1] == 48  &
 data(faux.magnolia.high, package = "ergm")
 magnolia <- faux.magnolia.high
 
-if (isFALSE(table(network::get.vertex.attribute(magnolia, 'Sex'))[1] == 768 &
-            table(network::get.vertex.attribute(magnolia, 'Sex'))[2] == 693)) {
+if (base::isFALSE(base::table(network::get.vertex.attribute(magnolia, 'Sex'))[1] == 768 &
+            base::table(network::get.vertex.attribute(magnolia, 'Sex'))[2] == 693)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -923,13 +923,13 @@ SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
 sampson <- intergraph::asNetwork(SampsonLike2Ig)
 
 
-if (isFALSE(table((network::get.vertex.attribute(sampson, 'vertex.names')) == 
+if (base::isFALSE(base::table((network::get.vertex.attribute(sampson, 'vertex.names')) == 
                   c("AMBROSE_9", "VICTOR_8", "LOUIS_11", "ALBERT_16", "BERTH_6", "SIMP_18",
                     "WINF_12", "BONAVEN_5", "GREG_2", "PETER_4", "ROMUL_10", "HUGH_14",
                     "AMAND_13", "MARK_7", "BONI_15", "JOHN_1", "BASIL_3", "ELIAS_17" )) == 18)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -940,10 +940,10 @@ SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
 sampson <- intergraph::asNetwork(SampsonLike2Ig)
 
-if (isFALSE(network::get.vertex.attribute(sampson, 'id')[2] == "0x2112a4aae00")) {
+if (base::isFALSE(network::get.vertex.attribute(sampson, 'id')[2] == "0x2112a4aae00")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -955,7 +955,7 @@ SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
 sampson <- intergraph::asNetwork(SampsonLike2Ig)
 
-if (isFALSE(network::get.vertex.attribute(sampson, 'like2')[16] == "T")) {
+if (base::isFALSE(network::get.vertex.attribute(sampson, 'like2')[16] == "T")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
   errors <- append(errors, error)
@@ -970,10 +970,10 @@ SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
 sampson <- intergraph::asNetwork(SampsonLike2Ig)
 
-if (isFALSE(sum(network::get.edge.attribute(sampson, 'weight')) == 111)) {
+if (base::isFALSE(base::sum(network::get.edge.attribute(sampson, 'weight')) == 111)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -1145,13 +1145,13 @@ UKF <- UKfaculty
 data(UKfaculty, package = "igraphdata")
 UKF <- UKfaculty
 
-if (isFALSE(igraph::get.graph.attribute(UKF, 'Type') == "TSPE" &
+if (base::isFALSE(igraph::get.graph.attribute(UKF, 'Type') == "TSPE" &
             igraph::get.graph.attribute(UKF, 'Date') == "Mon Mar 19 21:56:02 2007" &
             igraph::get.graph.attribute(UKF, 'Citation') == "Nepusz T., Petroczi A., Negyessy L., Bazso F.: Fuzzy communities and the concept of bridgeness in complex networks. Physical Review E, 77:016107, 2008." &
             igraph::get.graph.attribute(UKF, 'Author') == "Nepusz T., Petroczi A., Negyessy L., Bazso F.")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -1161,10 +1161,10 @@ if (isFALSE(igraph::get.graph.attribute(UKF, 'Type') == "TSPE" &
 data(UKfaculty, package = "igraphdata")
 UKF <- UKfaculty
 
-if (isFALSE(sum(igraph::get.vertex.attribute(UKF, 'Group')) == 152)) {
+if (base::isFALSE(base::sum(igraph::get.vertex.attribute(UKF, 'Group')) == 152)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -1175,10 +1175,10 @@ if (isFALSE(sum(igraph::get.vertex.attribute(UKF, 'Group')) == 152)) {
 data(UKfaculty, package = "igraphdata")
 UKF <- UKfaculty
 
-if (isFALSE(sum(igraph::get.edge.attribute(UKF, 'weight')) == 3730)) {
+if (base::isFALSE(base::sum(igraph::get.edge.attribute(UKF, 'weight')) == 3730)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```

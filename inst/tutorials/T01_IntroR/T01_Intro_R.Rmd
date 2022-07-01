@@ -312,10 +312,10 @@ a <- 3
 b <- 5
 
 
-if (isFALSE((a != b) & ((a + b) == 8))) {
+if (base::isFALSE((a != b) & ((a + b) == 8))) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -711,10 +711,10 @@ levels(grades)<- c("not spicy", "a bit spicy", "mildly spicy", "very spicy", "Wa
 
 
 
-if (isFALSE(table(c("not spicy", "a bit spicy", "mildly spicy", "very spicy", "Waw! Fire!") == levels(grades)) == 5)) {
+if (base::isFALSE(base::table(c("not spicy", "a bit spicy", "mildly spicy", "very spicy", "Waw! Fire!") == base::levels(grades)) == 5)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -967,10 +967,10 @@ df1 <- data.frame(rbind(a, b))
 colnames(df1) <- c('col1', 'col2', 'col3', 'col4', 'col5', 'col6', 'col7', 'col8', 'col9', 'col10')
 
 
-if (isFALSE((ncol(df) == 2) & (ncol(df1) == 10))) {
+if (base::isFALSE((base::ncol(df) == 2) & (base::ncol(df1) == 10))) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
@@ -1026,10 +1026,10 @@ b <- LETTERS[1:10]
 
 m <- as.matrix(cbind(a, b))
 
-if (isFALSE(dim(m)[1] == 10)) {
+if (base::isFALSE(base::dim(m)[1] == 10)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
-  errors <- append(errors, error)
+  errors <- base::append(errors, error)
 }
 
 ```
