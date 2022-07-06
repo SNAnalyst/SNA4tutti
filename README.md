@@ -6,7 +6,7 @@ tutti
 /ˈtʊti/
 
 
-MUSIC:
+**MUSIC:**
 adverb
 
 (especially as a direction) with all voices or instruments together.
