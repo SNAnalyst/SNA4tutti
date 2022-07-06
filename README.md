@@ -7,19 +7,20 @@ tutti
 
 
 **MUSIC:**
-adverb
 
-(especially as a direction) with all voices or instruments together.
-"each strain is first performed tutti, then played by the instruments only"
+* adverb
 
-adjective
+    (especially as a direction) with all voices or instruments together.
+    "each strain is first performed tutti, then played by the instruments only"
 
-performed with all voices or instruments together.
-"the work as a whole is a contrast between solo and tutti sections"
+* adjective
 
-noun
+    performed with all voices or instruments together.
+    "the work as a whole is a contrast between solo and tutti sections"
 
-a passage to be performed with all voices or instruments together.
+* noun
+
+    a passage to be performed with all voices or instruments together.
 
 
 ITALIAN:
