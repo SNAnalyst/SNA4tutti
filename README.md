@@ -23,19 +23,21 @@ tutti
     a passage to be performed with all voices or instruments together.
 
 
-ITALIAN:
+**ITALIAN:**
+
 Translation of tutti – Italian–English dictionary
 
-adjective
+* adjective
 
-all [adjective, pronoun] every one (of a group) when taken together in a single place
+    all [adjective, pronoun] every one (of a group) when taken together in a single place
  
-pronoun
+* pronoun
 
-all [adjective, pronoun] every one (of a group) when taken together
-everybody, everyone [pronoun] every person
-one and all all (of a group)
+    all [adjective, pronoun] every one (of a group) when taken together
+    everybody, everyone [pronoun] every person
+    one and all all (of a group)
 
-SNA4DS
+**SNA4DS**
 
-all [adjective, pronoun] all of the cool tutorials for the SNA4DS course 
+all [adjective, pronoun]
+all of the cool tutorials for the SNA4DS course 
