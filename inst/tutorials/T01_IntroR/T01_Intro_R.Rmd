@@ -37,9 +37,9 @@ source("../R/helper_code.R")
 check_RStudio <- sna4tutti:::check_rstudio
 
 
-# R check version (required 4.2.0) -updated June 2022
+# R check version (required 4.2.1) -updated August 2022
 check_R <- function(x) {
-  sna4tutti:::check_r_equal(4, 2.0)
+  sna4tutti:::check_r_equal(4, 2.1)
 }
 
 
@@ -109,7 +109,7 @@ So, let's get started!
 
 ## Checking installation
 
-You need to have installed `r rproj()` version 4.2.0 (or higher) and this tutorial
+You need to have installed `r rproj()` version 4.2.1 (or higher) and this tutorial
 is going to check it for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -501,7 +501,7 @@ typeof(var2)
 You can also change the type of your variables
 
 ```{r try_something7, exercise=TRUE, echo = TRUE}
-c <- c(0,1,1,0)
+c <- c(0, 1, 1, 0)
 typeof(c)
 c1 <- as.character(c)
 typeof(c1)
@@ -1611,7 +1611,7 @@ subsetting operations at the same time. For those cases we have the
 
 ```{r try_something351, exercise = TRUE, echo = TRUE}
 
-mtsub <- subset(mtcars, mpg <= 20, select = c("mpg", "gear", "wt"))
+(mtsub <- subset(mtcars, mpg <= 20, select = c("mpg", "gear", "wt")))
 
 
 ```

@@ -44,9 +44,9 @@ check_pkgs <- function(.pkgs = pkgs) {
 check_RStudio <- sna4tutti:::check_rstudio
 
 
-# R check version (required 4.2.0) -updated June 2022
+# R check version (required 4.2.1) -updated August 2022
 check_R <- function(x) {
-  sna4tutti:::check_r_equal(4, 2.0)
+  sna4tutti:::check_r_equal(4, 2.1)
 }
 
 
@@ -119,7 +119,7 @@ As in formula 1, we first quickly make sure you have all the equipment ready for
 
 ### R Version 
 
-You need to have installed R version 4.1.1 and this tutorial is going to check it
+You need to have installed R version 4.2.1 and this tutorial is going to check it
 for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}

@@ -51,9 +51,9 @@ check_pkgs <- function(.pkgs = pkgs) {
 check_RStudio <- sna4tutti:::check_rstudio
 
 
-# R check version (required 4.2.0) -updated June 2022
+# R check version (required 4.2.1) -updated August 2022
 check_R <- function(x) {
-  sna4tutti:::check_r_equal(4, 2.0)
+  sna4tutti:::check_r_equal(4, 2.1)
 }
 
 
@@ -134,7 +134,7 @@ Before we start to bake the new tier, we need to make sure we have the ingredien
 
 ### R Version 
 
-You need to have installed R version 4.2.0 and this tutorial is going to check it
+You need to have installed R version 4.2.1 and this tutorial is going to check it
 for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -812,7 +812,7 @@ fit3 <- ergm::ergm(mesa ~ edges + gwesp(decay=0.03, fixed = TRUE),
                                               MCMC.samplesize = 10000,
                                               seed = 123456,
                                               MCMLE.maxit = 20,
-                                              parallel = 2,
+                                              parallel = 3,
                                               parallel.type = "PSOCK"))
 
 ergm::mcmc.diagnostics(fit3)
@@ -844,10 +844,10 @@ fit <- ergm::ergm(flobusiness ~ edges + degree(1),
                                                seed = 123456,
                                                MCMLE.maxit = 20))
 fit.gof <- ergm::gof(fit)
-snafun::GOF_plot(fit.gof)
+snafun::stat_plot_gof(fit.gof)
 
 # If you also want to see the numeric output, uncomment below and rerun
-fit.gof
+# fit.gof
 
 
 
@@ -883,7 +883,7 @@ Running `gof` for degree only also prints out the gof for the model statistics. 
 
 gofdegree <- ergm::gof(fit ~ degree)
 
-snafun::GOF_plot(gofdegree)
+snafun::stat_plot_gof(gofdegree)
 gofdegree
 
 
@@ -998,9 +998,11 @@ Let's run the model and see what happens.
 samM1 <- ergm::ergm(sampson ~ edges + 
                       triadcensus, 
                     control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                 MCMC.samplesize = 10000,
-                                                 seed = 123456,
-                                                 MCMLE.maxit = 2))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 2,
+                                              parallel.type = "PSOCK"))
 
 summary(samM1)
 
@@ -1027,7 +1029,7 @@ samM2 <- ergm::ergm(sampson ~ edges + intransitive,
 summary(samM2)
 ```
 
-This time our results seem to be more interesting. Obviously, we cannot be sure since we did not check the MCMC diagnostics and the goodness of fit. If the model fit is good, what do these results mean for the Sampson network? 
+This time our results seem to be more interesting. Either ways, you'll get an error message. Obviously, we cannot be sure since we did not check the MCMC diagnostics and the goodness of fit. If the model fit is good, what do these results mean for the Sampson network? 
 
 We could say that it is unlikely that if two monks are friends with a third one, are not friends among each other. They live in the same place all together. It is likely that friendship triangles close. 
 
@@ -1211,12 +1213,12 @@ plot(UKfaculty,
 
 Ok, from the plot we can see that these British academics are coming from four different groups, let's say University departments, and some of them are friends with each other across groups since they usually dine at the university canteen. 
 
-We want to know more, don't we? Let's take a look at the centrality chart!
+We want to know more, don't we? Let's take a look at the centrality plots!
 
 
 ```{r UKFcentrality, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 
-snafun::centralityChart(UKF)
+snafun::plot_centralities(UKF)
 ```
 
 How do you interpret this result? 
@@ -1291,7 +1293,7 @@ summary(UKFit.3)
 It seems we were right in a certain way, but group four has an odd result! We should have checked the model descriptive statics before! Shame on us! ;)
 Why don't you do it now? 
 
-Ok, Let's wrap up what we found out and what we know so far. Remember to insert a curved term replacing `triangles` to improve to improve convergence!
+Ok, Let's wrap up what we found out and what we know so far. Remember to insert a curved term replacing `triangles` to improve convergence!
 
 [insert two more terms in the model]
 
@@ -1370,7 +1372,7 @@ UKFit <- ergm::ergm(UKFN ~ edges + mutual)
 
 UKgof <- ergm::gof(UKFit)
 
-snafun::GOF_plot(UKgof)
+snafun::stat_plot_gof(UKgof)
 
 ```
 
