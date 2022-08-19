@@ -19,32 +19,24 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/SNAnalyst/sna4tutti
 BugReports: https://github.com/SNAnalyst/sna4tutti/issues
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Imports:
-  btergm,
   ergm,
-	fontawesome,
   glue,
   gradethis,
 	igraph,
 	igraphdata,
-	influenceR,
-	intergraph,
-  knitr,
-	ndtv,
+	knitr,
 	network,
-	networkDynamic,
 	remotes,
-  rmarkdown,
 	rstudioapi,
-	sna,
-	stringr,
 	tsna
 Remotes:
 	github::rstudio-education/gradethis,
 	github::SNAnalyst/SNA4DSData,
-  github::matthewjdenny/GERGM,
-  github::rstudio/learnr
+	github::SNAnalyst/snafun,
+	github::matthewjdenny/GERGM,
+	github::rstudio/learnr
 Suggests:
 	desc,
 	fs,
