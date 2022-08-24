@@ -993,7 +993,10 @@ We wish you all the best and hope you will enjoy using your network
 analysis power to do cool research, with data, that matters! Let's
 goooooooooooo!
 
-![](images/pexels-kelly-l-2519374_med.jpg "The road ahead!"){width="469"}
+
+<br><br>
+
+![](images/pexels-kelly-l-2519374_med.jpg "The road ahead!"){width=100%}
 
 
 
