@@ -44,12 +44,7 @@ pkgs <- matrix(c(
 
 
 check_pkgs <- function(.pkgs = pkgs) {
-  out <- try(sna4tutti:::check_packages(.pkgs))
-  if (inherits(out, "try-error")) {
-    if (grepl("argument is of length zero", out)) {
-      cat("\n\n>>>Please update 'snaverse' including all of its dependencies<<<\n\n")
-    }
-  }
+  sna4tutti:::check_packages(.pkgs)
 }
 
 # RStudio
@@ -2692,7 +2687,7 @@ polygon(dens, col = "steelblue")
 Wow, you have done A LOT! Yes, this probably took you a few hours a go through, 
 but you are on your way to R-Ninjaness!
 
-![](images/depositphotos_64130295-stock-illustration-ninja-mascot.jpg)
+![](images/depositphotos_64130295.jpg)
 
 We want to close off this tutorial with some best practices. 
 

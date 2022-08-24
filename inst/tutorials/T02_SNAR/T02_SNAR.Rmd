@@ -37,6 +37,7 @@ pkgs <- matrix(c(
   "igraph", "1.3.2", "CRAN",
   "knitr", "1.39", "CRAN",
   "sna", "2.7", "CRAN",
+  "snafun", "0.2022.8", "SNAnalyst/snafun",
   "SNA4DSData", "0.9.91", "SNAnalyst/SNA4DSData",
   "network", "1.17.1", "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
@@ -44,12 +45,7 @@ pkgs <- matrix(c(
   setNames(c("pkg", "version", "where"))
 
 check_pkgs <- function(.pkgs = pkgs) {
-  out <- try(sna4tutti:::check_packages(.pkgs))
-  if (inherits(out, "try-error")) {
-    if (grepl("argument is of length zero", out)) {
-      cat("\n\n>>>Please update 'snaverse' including all of its dependencies<<<\n\n")
-    }
-  }
+  sna4tutti:::check_packages(.pkgs)
 }
 
 # RStudio
@@ -212,7 +208,7 @@ if (snafun::count_vertices(flobus) != 16) {
 ```{r flobus_exc,  include = TRUE, exercise = TRUE}
 data(florentine, package = "snafun")
 flobus <- florentine$flobusiness
-igraph::plot.igraph(flobus)
+snafun::plot(flobus)
 ```
 
 This is a network of 16 families who do business with each other. There are 15
@@ -558,12 +554,6 @@ such as their *Location*, their *Paid.Staff* and their names (*vertex.names*).
 We also have an attribute *Frequency* for the edges. Again, the help file gives
 info on what these attrbutes mean.
 
-You can also look at a summary of the data:
-
-```{r emon_load_exc4,  include = TRUE, exercise = TRUE,  exercise.setup = "emon_load"}
-summary(cheyenne)
-```
-
 This is what a `network` object looks like. Let's look at the same data in a
 `igraph` format. How? USE THAT AWESOME PACKAGE YOU LEARNED ABOUT ABOVE!
 
@@ -756,7 +746,7 @@ We'll do this with the network we already saw: the `flobus` network. Recall that
 this is what it looks like:
 
 ```{r flobus_plot, echo = FALSE, eval = TRUE}
-igraph::plot.igraph(flobus)
+snafun::plot(flobus)
 ```
 
 #### Adjacency matrix
@@ -1016,6 +1006,7 @@ Although it says `add_vertex_attribute`, you can also use this function to set
 an existing attribute to some value. Check it out and extract the vertex names
 from `texas2`.
 
+
 ```{r names_t2, exercise = TRUE, exercise.setup = "emon_load", exercise.lines = 2}
 
 ```
@@ -1025,6 +1016,21 @@ snafun::extract_vertex_names(texas2)
 ```
 
 Wonderful, you are getting the hang of it!
+
+
+Actually, there is a shorter way of doing this, because `snafun` actually 
+has a specific function to add vertex names:
+
+```r
+texas2 <- snafun::add_vertex_names(x = texas, value = new_names)
+```
+
+We recommend that you use this function for vertex names (and the regular 
+`snafun::add_vertex_attributes` to set any other vertex attribute), because 
+the `igraph` and `network` objects store vertex names differently.
+Our specialized function does it correctly for both graph classes, so you don't 
+have to remember how they differ exactly. Much easier, and much safer too.
+
 
 ### Distance
 
@@ -1042,7 +1048,7 @@ Let's make a quick plot. It is going to be ugly, but no worries: you'll learn
 how to make nice plots in a few weeks.
 
 ```{r texas2_plot, exercise = TRUE, exercise.setup = "emon_load"}
-plot(texas2)
+snafun::plot(texas2)
 ```
 
 Let's say you want to know how many steps it takes from one organization to

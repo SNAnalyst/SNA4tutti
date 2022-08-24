@@ -42,11 +42,8 @@
 #' pkgs <- matrix(c(
 #' "gradethis", "0.2.3.9001", "rstudio/gradethis",
 #' "igraph", "1.2.6", "CRAN",
-#' "influenceR", "0.1.0", "CRAN",
-#' "intergraph", "2.0-2", "CRAN",
-#' "network", "1.17.1", "CRAN",
-#' "networkD3", "0.4", "CRAN",
-#' "sna", "2.6", "CRAN",
+#' "snaverse2", "0.0.1.9000", "SNAnalyst/snaverse2",
+#' "snaverse1", "0.0.1.9000", "SNAnalyst/snaverse1",
 #' "SNA4DSData", "0.9.9000", "SNAnalyst/SNA4DSData"
 #' ), byrow = TRUE, ncol = 3) |> 
 #'   as.data.frame() |> 
@@ -54,7 +51,7 @@
 #'   
 #' check_packages(pkgs)
 #' }
-check_packages <- function (reqs) {
+check_packages <- function(reqs) {
   ok <- 0
   all_installed <- utils::installed.packages()
   cat("...checking individual packages now...\n")
@@ -92,6 +89,7 @@ check_packages <- function (reqs) {
       }
     }
   }
+  
   pkg_missing <- NULL
   pkg_low <- NULL
   if (ok == nrow(reqs)) {
@@ -128,10 +126,12 @@ check_packages <- function (reqs) {
         paste0("The following packages are missing: ",
                names_missing)
       ), "Install these using:")
+    
+    
     reqs_missing <- reqs[pkg_missing,]
     reqs_missing_cran <- reqs_missing[reqs_missing[, "where"] ==
                                         "CRAN", "pkg", drop = TRUE]
-    if (nrow(reqs_missing_cran) > 0) {
+    if (length(reqs_missing_cran) > 0 && nrow(reqs_missing_cran) > 0) { 
       verdict <-
         c(
           verdict,
@@ -139,14 +139,18 @@ check_packages <- function (reqs) {
                      package = reqs_missing_cran)
         )
     }
-    reqs_missing_github <- reqs_missing[reqs_missing[, "where"] !=
-                                          "CRAN",]
-    if (nrow(reqs_missing_github) > 0) {
+    reqs_missing_github <- reqs_missing[reqs_missing[, "where"] != "CRAN",]
+    if (length(reqs_missing_github) > 0 && nrow(reqs_missing_github) > 0) {
       verdict <-
         c(c(
           verdict,
-          glue::glue("     remotes::install_github('{location}')",
-                     location = reqs_missing_github[, "where", drop = TRUE])
+          # glue::glue("     remotes::install_github('{location}')",
+          #            location = reqs_missing_github[, "where", drop = TRUE])
+          paste0(
+            "     remotes::install_github('", 
+            reqs_missing_github[, 'where', drop = TRUE],
+            "')"
+            )
         ),
         "", "")
     }

@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 03 - Network Measures"
+title: "T03 - Network Measures"
 description: "Week 3: Tutorial III -- Network Measures"
 output: 
   learnr::tutorial:
@@ -15,7 +15,7 @@ runtime: shiny_prerendered
 ```{r setup, include = FALSE}
 library(learnr)
 library(gradethis)
-# library(magrittr)
+
 tutorial_options(exercise.checker = gradethis::grade_learnr)
 knitr::opts_chunk$set(
 	echo = FALSE,
@@ -33,20 +33,16 @@ pkgs <- matrix(c(
   "igraph", "1.3.2", "CRAN",
   "igraphdata", "1.0.0", "CRAN",
   "sna", "2.7", "CRAN",
+  "snafun", "0.2022.8", "SNAnalyst/snafun",
   "SNA4DSData", "0.9.91", "SNAnalyst/SNA4DSData",
-  "network", "1.17.1", "CRAN"
+  "network", "1.17.2", "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
 
 
 check_pkgs <- function(.pkgs = pkgs) {
-  out <- try(sna4tutti:::check_packages(.pkgs))
-  if (inherits(out, "try-error")) {
-    if (grepl("argument is of length zero", out)) {
-      cat("\n\n>>>Please update 'snaverse' including all of its dependencies<<<\n\n")
-    }
-  }
+  sna4tutti:::check_packages(.pkgs)
 }
 
 # RStudio
@@ -221,9 +217,10 @@ You need to have a few packages installed.
 Click the `Run Code` to check. 
 It will check whether you have the required packages installed and will 
 attempt to install any missing packages in case there are any (or it will 
-advise you to upgrade `snafun`). This can take a few minutes.
+advise you to upgrade `snafun`). 
 
-If you end up with 
+--> This can take a few minutes.
+ 
 
 ```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
 check_pkgs()
@@ -265,7 +262,7 @@ enwiki <- SNA4DSData::enwiki
 
 ```{r grade_summary1, exercise = TRUE}
 data('enwiki', package = "SNA4DSData")
-igraph::print.igraph(enwiki)
+snafun::print(enwiki)
 
 ```
 
@@ -366,7 +363,7 @@ edges <- matrix(
 )
 
 fig25 <- snafun::to_igraph(edges)
-igraph::plot.igraph(fig25)
+snafun::plot(fig25)
 
 snafun::g_diameter(fig25)
 ```
@@ -823,14 +820,14 @@ colored as such.
 
 
 ```{r load_discuss, include = FALSE}
-discuss <- SNA4DS:::discuss
+discuss <- sna4tutti:::discuss
 discuss <- igraph::as.undirected(discuss)
 ```
 
 ```{r explore, include = TRUE, exercise = TRUE, exercise.setup = "load_discuss"}
-igraph::print.igraph(discuss)
+snafun::print(discuss)
 
-plot(discuss)
+snafun::plot(discuss)
 ```
 
 Now, try the Girvan-Newman algorithm and see if you find some good communities.
@@ -844,7 +841,7 @@ igraph::modularity(girvan)
 # check which community each vertex belongs to
 igraph::membership(girvan)
 
-plot(girvan, discuss)
+snafun::plot(girvan, discuss)
 ```
 
 How many communities did you find? Do they make sense?
@@ -877,7 +874,7 @@ igraph::modularity(louvain)
 # check which community each vertex belongs to
 igraph::membership(louvain)
 
-plot(louvain, discuss)
+snafun::plot(louvain, discuss)
 ```
 
 Any better? Do you see the differences in which nodes are assigned together?<br>
@@ -947,7 +944,7 @@ igraph::modularity(walktrap)
 # check which community each vertex belongs to
 igraph::membership(walktrap)
 
-plot(walktrap, discuss)
+snafun::plot(walktrap, discuss)
 ```
 
 This is a different kind of approach to finding subgroups. A more intuitive one. 
@@ -1077,7 +1074,7 @@ from the previous plot we did.
 
 ```{r bp_plot2, exercise = TRUE, exercise.setup = "load_bp"}
 judge_net <- igraph::bipartite_projection(judge, which = TRUE)
-igraph::plot.igraph(judge_net, vertex.label = NA,
+snafun::plot(judge_net, vertex.label = NA,
                     vertex.sizes = 1, layout = igraph::layout.fruchterman.reingold)
 ```
 
@@ -1229,10 +1226,10 @@ color <- rep("green", snafun::count_vertices(judge_net))
 stressful_judges <- which(stress > 0)
 color[stressful_judges] <- "red"
 
-igraph::plot.igraph(judge_net, vertex.color = color, vertex.size = sqrt(stress))
+snafun::plot(judge_net, vertex.color = color, vertex.size = sqrt(stress))
 
 # or, somewhat clearer in terms of what is going on
-igraph::plot.igraph(judge_net, vertex.color = color, vertex.size = sqrt(stress),
+snafun::plot(judge_net, vertex.color = color, vertex.size = sqrt(stress),
                     layout = igraph::layout.reingold.tilford(judge_net))
 ```
 
@@ -1318,7 +1315,7 @@ Let's consider a small 8-vertex network, we call it `internet`. It looks as foll
 
 ```{r, out.width = 1000, echo = FALSE}
 par(mar = c(.5, .5, .5, .5))
-igraph::plot.igraph(internet, vertex.label = igraph::V(internet)$code, layout = coor, 
+snafun::plot(internet, vertex.label = igraph::V(internet)$code, layout = coor, 
                     edge.arrow.size = 0.4, margin = .1)
 ```
 
@@ -1353,7 +1350,7 @@ If you calculated it correctly, you should have arrived at this results after 1
 iteration of re-allocation of PageRank scores.
 
 ```{r load_stap, include = FALSE}
-stap <- SNA4DS:::stap
+stap <- sna4tutti:::stap
 ```
 
 ```{r stap1_loaded, exercise = FALSE, echo = FALSE, exercise.setup = "load_stap"}
@@ -1430,7 +1427,7 @@ print(internet2)
 
 ```{r, echo = FALSE, eval=TRUE}
 par(mar = c(.5, .5, .5, .5))
-igraph::plot.igraph(internet2, vertex.label = igraph::V(internet2)$code, layout = coor, edge.arrow.size = 0.4, margin = .1)
+snafun::plot(internet2, vertex.label = igraph::V(internet2)$code, layout = coor, edge.arrow.size = 0.4, margin = .1)
 ```
 
 
@@ -1561,4 +1558,10 @@ See you in class and I am looking forward to continuing our journey together!
 ![](images/car-6603726_640.jpg)
 
 
+
+
+<br><br><br>
+
+```{r check_results_external, echo=FALSE, child = if (length(errors) > 0) "check_results.Rmd"}
+```
 

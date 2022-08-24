@@ -47,13 +47,15 @@ check_pkgs <- function(.pkgs = pkgs) {
   sna4tutti:::check_packages(.pkgs)
 }
 
-# RStudio, at least 4.1717
-check_RStudio <- sna4tutti:::check_rstudio
+# RStudio
+check_RStudio <- function() {
+  sna4tutti::check_rstudio_equal_or_larger(version = "2022.7.1.554", verdict = TRUE)
+}
 
 
-# R check version (required 4.2.0) -updated June 2022
-check_R <- function(x) {
-  sna4tutti:::check_r_equal(4, 2.0)
+# R check version (required 4.2.1) -updated Aug 2022
+check_R <- function() {
+  sna4tutti::check_r_equal_or_larger(version = "4.2.1", verdict = TRUE)
 }
 
 
@@ -790,19 +792,9 @@ Enough for today! Now you can go out an enjoy non-simulated reality without comp
 
 ![](images/The_Matrix.jpg){width=75%}
 
-```{r check_results, echo = FALSE, results = 'markup'}
-cat("\n\n\n\n\n\n")
-
-if (length(errors) > 0) {
-  cat("There were issues with the following chunk(s):\n\n")
-  print(unlist(errors))
-  cat("\n\n")
-  cat("Please contact Claudia and Roger with this info!\n")
-}
-
-```
 
 
+<br><br><br>
 
 ```{r check_results_external, echo=FALSE, child = if (length(errors) > 0) "check_results.Rmd"}
 ```
