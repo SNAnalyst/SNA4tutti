@@ -31,17 +31,32 @@ source("../R/helper_code.R")
 
 # Check whether required packages are installed
 
-# no packages needed for tutorial one since everything is in R base
+# Check whether required packages are installed
+pkgs <- matrix(c(
+  "learnr", "0.10.2", "CRAN",
+  "gradethis", "0.2.8.9000", "rstudio/gradethis",
+  "igraph", "1.3.2", "CRAN",
+  "sna", "2.7", "CRAN",
+  "network", "1.17.1", "CRAN"
+), byrow = TRUE, ncol = 3) |> 
+  as.data.frame() |> 
+  setNames(c("pkg", "version", "where"))
 
-# RStudio, at least 2022.2.2.485
-check_RStudio <- sna4tutti:::check_rstudio
 
-
-# R check version (required 4.2.1) -updated August 2022
-check_R <- function(x) {
-  sna4tutti:::check_r_equal(4, 2.1)
+check_pkgs <- function(.pkgs = pkgs) {
+  sna4tutti:::check_packages(.pkgs)
 }
 
+# RStudio
+check_RStudio <- function() {
+  sna4tutti::check_rstudio_equal_or_larger(version = "2022.7.1.554", verdict = TRUE)
+}
+
+
+# R check version (required 4.2.1) -updated Aug 2022
+check_R <- function() {
+  sna4tutti::check_r_equal_or_larger(version = "4.2.1", verdict = TRUE)
+}
 
 errors <- list()
 ```
@@ -109,6 +124,8 @@ So, let's get started!
 
 ## Checking installation
 
+### R installation
+
 You need to have installed `r rproj()` version 4.2.1 (or higher) and this tutorial
 is going to check it for you. Please hit the `Run Code` button.
 
@@ -118,12 +135,28 @@ check_R()
 
 ### R Studio Version
 
-You need to have installed RStudio version 2022.02.3+492 or above. Let's
+You need to have installed RStudio version 2022.7.1.554 or above. Let's
 check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
 check_RStudio()
 ```
+
+
+### Packages
+
+You need to have a few packages installed. 
+Click the `Run Code` to check. 
+It will check whether you have the required packages installed and will 
+attempt to install any missing packages in case there are any (or it will 
+advise you to upgrade `sna4tutti`).
+
+```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
+
+check_pkgs()
+
+```
+
 
 Ok, check up completed! Did you pass the checks? Yes? Great! Let's get
 started for real! If not, please close the tutorial, update/download and
@@ -152,6 +185,7 @@ Let's take a look
 -   log logarithm
 
 Why don't you try an operation of your choice? For instance 20 %/% 3?
+<br>[the result will appear underneath the code box]
 
 ```{r try_something, exercise=TRUE}
 
@@ -238,17 +272,21 @@ Pythonist, you are use to this
 
 C = 2 + 2
 
-In R, it runs too, but it is better not to do that
+In R, it runs too, but it is better not to do that.
 
 This is the way you should specify a variable in R
 
-C \<- 2 + 2
+```r
+C <- 2 + 2
+```
 
 If you want `r rproj()` to print it while you specify it, you use round brackets
 
-(C \<- 2 + 2)
-
+```r
+(C <- 2 + 2)
+```
 Wanna give it a go? Try these three options
+
 
 ```{r try_something1, exercise=TRUE, echo = TRUE}
 
@@ -262,24 +300,32 @@ foundation of very advanced programming operations!
 
 You can write
 
+```r
 (a == b) == TRUE
+```
 
 but it is not very nice.
 
+```r
 isTRUE(a == b)
+```
 
-It is much better
+This is much better.
 
-the same in this case
+Similarly, in this case
 
-(c \< d) == FALSE
+```r
+(c < d) == FALSE
+```
 
 doesn't it look nicer?
 
-isFALSE(c \< d)
+```r
+isFALSE(c < d)
+```
 
-check what are a and be below. Can you check whether
 
+check what are a and b below. Can you check whether
 it is TRUE that a is equal to b? it is FALSE that a + b is different
 than 8?
 
@@ -313,7 +359,7 @@ b <- 5
 
 
 if (base::isFALSE((a != b) & ((a + b) == 8))) {
-  sna4tutti::broken_info()
+  broken_info()
   error <- knitr::opts_current$get(name = "label")
   errors <- base::append(errors, error)
 }
@@ -351,10 +397,11 @@ In `r rproj()` indentation is important to keep your code readable, but it is no
 crucial. It will be running even if you write it in the most terrible
 way. `r rproj()` uses curly braces and that's what matters the most.
 
-.center[Just please DON'T!]
+***Just please DON'T!***
 
 R studio will automatically indent your code if you select it and click
-CRTL I. Try to write some messed up code and to indent it afterward.
+CRTL I. Try to write some messed up code and to indent it afterward. (NOTE: 
+this only works inside RStudio, not inside this tutorial environment).
 
 ```{r try_something3, exercise=TRUE, echo = TRUE}
 
@@ -374,6 +421,14 @@ Please, fix this for me...
 c<-(2+3+4)/4
 
 ```
+
+```{r try_something311-solution}
+
+c <- (2 + 3 + 4)/4
+
+```
+
+
 
 ## R Objects
 
@@ -712,7 +767,7 @@ levels(grades)<- c("not spicy", "a bit spicy", "mildly spicy", "very spicy", "Wa
 
 
 if (base::isFALSE(base::table(c("not spicy", "a bit spicy", "mildly spicy", "very spicy", "Waw! Fire!") == base::levels(grades)) == 5)) {
-  sna4tutti::broken_info()
+  broken_info()
   error <- knitr::opts_current$get(name = "label")
   errors <- base::append(errors, error)
 }
@@ -858,6 +913,13 @@ not work.
 
 ```
 
+```{r try_something19-solution}
+v <- 1:5
+v
+```
+
+
+
 ### Data Frame
 
 A data frame is what comes closest to our perception of a traditional
@@ -968,7 +1030,7 @@ colnames(df1) <- c('col1', 'col2', 'col3', 'col4', 'col5', 'col6', 'col7', 'col8
 
 
 if (base::isFALSE((base::ncol(df) == 2) & (base::ncol(df1) == 10))) {
-  sna4tutti::broken_info()
+  broken_info()
   error <- knitr::opts_current$get(name = "label")
   errors <- base::append(errors, error)
 }
@@ -1027,7 +1089,7 @@ b <- LETTERS[1:10]
 m <- as.matrix(cbind(a, b))
 
 if (base::isFALSE(base::dim(m)[1] == 10)) {
-  sna4tutti::broken_info()
+  broken_info()
   error <- knitr::opts_current$get(name = "label")
   errors <- base::append(errors, error)
 }
@@ -1675,7 +1737,7 @@ table(mtcars$gear)
 Done! There are only five cars that are cool enough for me \^\_\^.
 
 ```{r remov, echo = FALSE, include = FALSE}
-rm(mtcars)
+# rm(mtcars)
 ```
 
 Anyway, this square brackets recoding can easily get to the nightmare
@@ -1693,7 +1755,7 @@ mtcars$gear <- ifelse(mtcars$gear == 5, "cool", "not_cool")
 table(mtcars$gear)
 ```
 
-How much better is this?? Let's understand what happened.
+How much better is this code?? Let's understand what happened.
 
 `ifelse()` has three conditions:
 
@@ -1736,8 +1798,9 @@ The very last version of *R* included a helpful tool called the pipe.
 The pipe, represented by this symbol `|>`, allows you to pipe a value
 into a call expression or a function expression.
 
-A pipe expression passes, or pipes, the result of the left-hand side
-expression to the right-hand side expression. This is a bit
+A pipe expression passes, or "pipes", the result of the left-hand side
+expression to the very first part of tje right-hand side expression. 
+This is a bit
 revolutionary for the *R* way of thinking, and it allows you to perform
 certain kinds of manipulation in a very quick way.
 
@@ -1749,7 +1812,9 @@ iris |>
    subset(Species == "setosa")
 ```
 
-That was quick, right?
+That was quick, right? What happens is that *R* inserts *iris* as the very 
+first argument of the `subset` call. In other words, your pipe actually 
+runs `subset(iris, Species == "setosa")`.
 
 But you might want to apply a function to the entire data set; let's say
 you need to see the structure
@@ -1759,12 +1824,13 @@ iris |>
    str()
 ```
 
-For a short expression like this, it does not make much difference than
-`str(iris)`. Still, in other situations, it might be handy. If you
-compare these two different ways of applying a function to a data set,
-you can understand why the pipe is a revolutionary way of thinking for
-the *R* system. Honestly? doesn't it remind you of that other slithering
-programming languages we mentioned before? :)
+For a short expression like this, you might as well have typed
+`str(iris)` directly. The pipe is quite handy when you have a series 
+of subsequent actions to perform, so: first do this, then with that result do 
+this and with that result do the following and then plot a histogram. 
+This is nice and creates a very readable *pipeline* of steps that is easy to 
+follow and understand. You will see the pipe in the SNA4DS course in several 
+places throughout the semester and in many many places on the world-wide interwebs.
 
 ## R-base VS packages
 
@@ -1800,7 +1866,10 @@ sources than CRAN.
 
 In order to update CRAN packages, there is the convenient function
 
-\`update.packages("package_name")"
+```r
+update.packages("package_name")
+```
+
 
 ### Using Packages
 
@@ -1875,12 +1944,14 @@ They always have
 
 For example:
 
-\`function.name \<- function(arg1, arg2, arg3, ...) {
+```r
+function.name <- function(arg1, arg2, arg3, ...) {
 
-newVar \<- (sqrt(arg1) + sqrt(arg2)) / arg3 \# do Some Useful Stuff
-newVar \# return value
+newVar <- (sqrt(arg1) + sqrt(arg2))  arg3 # do Some Useful Stuff
+newVar # return value
 
-}\`
+}
+```
 
 In *R* a function ALWAYS uses {curly braces} :)
 
@@ -1981,13 +2052,11 @@ does something for you *while* a condition is TRUE. How nice of it?
 
 This is the logic
 
-while (test_expression)
-
-{
-
-statement
-
+```r
+while (test_expression) {
+  statement
 }
+```
 
 The while loop will stop doing whatever it is doing when the condition
 expires. For instance, you eat a yogurt jar while it is good. When it
@@ -2001,10 +2070,8 @@ Let's try with a simple example.
 i <- 1
 
 while (i < 10) {
-  
-cat(i)
-i = i+1
-
+  cat(i)
+  i = i + 1
 }
 
 ```
@@ -2022,13 +2089,11 @@ Lovely, isn't it?
 
 The logic is
 
-for (this number of times that I'm telling you here)
-
-{
-
-Enter the data structure and do this for me!
-
+```r
+for (this number of times that I'm telling you here) {
+  Enter the data structure and do this for me!
 }
+```
 
 Let's say that you want to print the sentence *The year is ...* for as
 many years as you need, that's how you do it!
@@ -2069,15 +2134,13 @@ animal? For example:
 
 The structure of a nested loop is
 
+```r
 for(...) {
-
     for(...) {
-
-statement
-
+      statement
     }
-
 }
+```
 
 It's a little difficult, but I KNOW THAT YOU CAN DO IT!!! Call your
 indexes *kid* and *animal*. As *kid* in *Kids* and *animal* in
@@ -2215,9 +2278,9 @@ matrix. You can do this vertically or horizontally, using different R
 instructions. Many for loops can be made implicit by using
 vectorization, and this operation makes the computation more efficient.
 
-The apply family is large! This is an overview:
+The apply family is large! This is an overview of the ones you'll encounter the most:
 
--   `apply()` for matrices and data frames
+-   `apply()`  for matrices and data frames
 -   `lapply()` for lists...output as list
 -   `sapply()` for lists...output simplified
 -   `tapply()` for vectors
@@ -2614,6 +2677,295 @@ plot(dens, frame = FALSE, col = "steelblue",
 polygon(dens, col = "steelblue")
 ```
 
+
+
+
+## Two Best R Practices
+
+Wow, you have done A LOT! Yes, this probably took you a few hours a go through, 
+but you are on your way to R-Ninjaness!
+
+![](images/depositphotos_64130295.jpg)
+
+We want to close off this tutorial with some best practices. 
+
+You already learned that it is best to indent your code appropriately, 
+that you should use the `<-` assignment operator instead 
+of `=`, 
+and some other ways to make your code nicely useable.
+
+Before we start working on some networks, I want to repeat one of the best practices
+from the previous tutorial and add an additional one.
+These two best practices are **especially important for network analysis**. 
+
+Trust us, we learnt the hard way...
+
+Therefore, we are going to ***strictly adhere to these two best practices 
+throughout the course***.
+
+
+### Best Practice I: Don't load R packages
+
+In many code examples in books and on the internet, you see that a library/package is
+loaded/attached (for the purpose of this course, we will use these terms
+interchangeably) using `library(package_name)`. This makes the functions inside
+that package directly accessible to the user. 
+That may seem like a useful thing.<br>
+But, actually, it is almost always a **really really really bad idea**. There are
+many reasons for this, but these are the most important ones:
+
+1. If a function moves from one package to another (and this actually happens
+quite frequently), your code won't work anymore and, more importantly, you don't
+really know why. This makes debugging really hard.
+2. The habit of using `library(package_name)` may cause you to use it in
+your own interactive work as well. 
+Once you save a script based on your interactive code, 
+chances are it won't work well in the future, because it depends on specific
+packages being loaded that may not be loaded when run your script again. 
+As a result, debugging becomes a nightmare. Trust us, we have way too
+much experience with this scenario ourselves...
+3. When you load anything into R, it gets attached to R's "search path." 
+Generally
+speaking, when you attach _package1_, R places on the top of the search path.
+This makes all of the functions of _package1_ fully available to you. 
+Then, when you attach _package2_ later, that will then move to the front
+and _package1_ will become second in the path. 
+That is all fine, until you
+load packages that have functions with the same name.
+
+Let's see this in action.
+
+
+```{r load_friendship, echo = FALSE, eval = TRUE}
+friendship <- structure(list(mel = list(list(inl = 1L, outl = 5L, atl = list(
+    na = FALSE)), list(inl = 1L, outl = 10L, atl = list(na = FALSE)), 
+    list(inl = 2L, outl = 4L, atl = list(na = FALSE)), list(inl = 2L, 
+        outl = 8L, atl = list(na = FALSE)), list(inl = 2L, outl = 9L, 
+        atl = list(na = FALSE)), list(inl = 3L, outl = 5L, atl = list(
+        na = FALSE)), list(inl = 4L, outl = 3L, atl = list(na = FALSE)), 
+    list(inl = 4L, outl = 5L, atl = list(na = FALSE)), list(inl = 4L, 
+        outl = 8L, atl = list(na = FALSE)), list(inl = 5L, outl = 4L, 
+        atl = list(na = FALSE)), list(inl = 5L, outl = 10L, atl = list(
+        na = FALSE)), list(inl = 6L, outl = 9L, atl = list(na = FALSE)), 
+    list(inl = 7L, outl = 1L, atl = list(na = FALSE)), list(inl = 8L, 
+        outl = 2L, atl = list(na = FALSE)), list(inl = 9L, outl = 1L, 
+        atl = list(na = FALSE)), list(inl = 9L, outl = 2L, atl = list(
+        na = FALSE)), list(inl = 9L, outl = 8L, atl = list(na = FALSE)), 
+    list(inl = 10L, outl = 4L, atl = list(na = FALSE))), gal = list(
+    n = 10, mnext = 19L, directed = TRUE, hyper = FALSE, loops = FALSE, 
+    multiple = FALSE, bipartite = FALSE), val = list(list(na = FALSE, 
+    vertex.names = "john", name = "john"), list(na = FALSE, vertex.names = "peter", 
+    name = "peter"), list(na = FALSE, vertex.names = "baheer", 
+    name = "baheer"), list(na = FALSE, vertex.names = "elise", 
+    name = "elise"), list(na = FALSE, vertex.names = "felix", 
+    name = "felix"), list(na = FALSE, vertex.names = "mohammad", 
+    name = "mohammad"), list(na = FALSE, vertex.names = "mikel", 
+    name = "mikel"), list(na = FALSE, vertex.names = "joan", 
+    name = "joan"), list(na = FALSE, vertex.names = "gerrit", 
+    name = "gerrit"), list(na = FALSE, vertex.names = "gideon", 
+    name = "gideon")), iel = list(2:1, 5:3, 6L, 9:7, 11:10, 12L, 
+    13L, 14L, 15:17, 18L), oel = list(c(15L, 13L), c(16L, 14L
+), 7L, c(3L, 18L, 10L), c(1L, 6L, 8L), integer(0), integer(0), 
+    c(4L, 9L, 17L), c(5L, 12L), c(2L, 11L))), class = "network")
+```
+
+
+
+```{r test_load_friendship, results = 'markup'}
+friendship <- structure(list(mel = list(list(inl = 1L, outl = 5L, atl = list(
+    na = FALSE)), list(inl = 1L, outl = 10L, atl = list(na = FALSE)), 
+    list(inl = 2L, outl = 4L, atl = list(na = FALSE)), list(inl = 2L, 
+        outl = 8L, atl = list(na = FALSE)), list(inl = 2L, outl = 9L, 
+        atl = list(na = FALSE)), list(inl = 3L, outl = 5L, atl = list(
+        na = FALSE)), list(inl = 4L, outl = 3L, atl = list(na = FALSE)), 
+    list(inl = 4L, outl = 5L, atl = list(na = FALSE)), list(inl = 4L, 
+        outl = 8L, atl = list(na = FALSE)), list(inl = 5L, outl = 4L, 
+        atl = list(na = FALSE)), list(inl = 5L, outl = 10L, atl = list(
+        na = FALSE)), list(inl = 6L, outl = 9L, atl = list(na = FALSE)), 
+    list(inl = 7L, outl = 1L, atl = list(na = FALSE)), list(inl = 8L, 
+        outl = 2L, atl = list(na = FALSE)), list(inl = 9L, outl = 1L, 
+        atl = list(na = FALSE)), list(inl = 9L, outl = 2L, atl = list(
+        na = FALSE)), list(inl = 9L, outl = 8L, atl = list(na = FALSE)), 
+    list(inl = 10L, outl = 4L, atl = list(na = FALSE))), gal = list(
+    n = 10, mnext = 19L, directed = TRUE, hyper = FALSE, loops = FALSE, 
+    multiple = FALSE, bipartite = FALSE), val = list(list(na = FALSE, 
+    vertex.names = "john", name = "john"), list(na = FALSE, vertex.names = "peter", 
+    name = "peter"), list(na = FALSE, vertex.names = "baheer", 
+    name = "baheer"), list(na = FALSE, vertex.names = "elise", 
+    name = "elise"), list(na = FALSE, vertex.names = "felix", 
+    name = "felix"), list(na = FALSE, vertex.names = "mohammad", 
+    name = "mohammad"), list(na = FALSE, vertex.names = "mikel", 
+    name = "mikel"), list(na = FALSE, vertex.names = "joan", 
+    name = "joan"), list(na = FALSE, vertex.names = "gerrit", 
+    name = "gerrit"), list(na = FALSE, vertex.names = "gideon", 
+    name = "gideon")), iel = list(2:1, 5:3, 6L, 9:7, 11:10, 12L, 
+    13L, 14L, 15:17, 18L), oel = list(c(15L, 13L), c(16L, 14L
+), 7L, c(3L, 18L, 10L), c(1L, 6L, 8L), integer(0), integer(0), 
+    c(4L, 9L, 17L), c(5L, 12L), c(2L, 11L))), class = "network")
+
+if (!snafun::is_network(friendship) | !snafun::count_edges(friendship) == 18) {
+  sna4tutti::broken_info()
+  error <- knitr::opts_current$get(name = "label")
+  errors <- base::append(errors, error)
+}
+```
+
+You have a network in your R session that is called `friendship`. This is a 
+network and looks like this. 
+
+
+```{r opar_1a, echo = FALSE, eval = TRUE}
+opar <- par("mar")
+par(mar = c(1, 1, 1, 1))
+```
+
+
+```{r plot_load_friendship, exercise.setup = "load_friendship", exercise = TRUE}
+par(mar = c(1, 1, 1, 1))
+network::plot.network(friendship, 
+  label = snafun::extract_vertex_names(friendship),
+  vertex.lwd = 3,
+  label.cex = 1,
+  vertex.cex = 3,
+  edge.lwd = 3,
+  vertex.col = c(2 ,1 ,3 ,3 ,3 ,1 ,2 ,1 ,1 ,3) + 1
+)
+```
+
+You load the `sna` package to calculate the betweenness scores of the actors in
+the network (no worries, soon we will discuss the betweenness measure in
+detail). Run the following and see what happens:
+
+
+```{r library1, message = FALSE, warning = FALSE, exercise = TRUE, exercise.setup = "load_friendship"}
+library(sna)
+betweenness(friendship)
+```
+
+Nice. You don't know yet what this means, but it looks meaningful.<br>
+
+Now, let's say you loaded the `igraph` package, as part of your interactive 
+analysis of the data. Then, after half an hour, you realize you need the 
+betweenness scores again of 
+the persons on this network, so you run again `betweenness(friendship)`. This 
+is what you get:
+
+```{r error, exercise = TRUE, exercise.setup = "load_friendship"}
+library(igraph)
+# half an hour of interesting analyses
+# what again were those betweenness scores? Let me check them again:
+betweenness(friendship)
+```
+
+***WTF?!?!?!***
+
+<br>
+![](images/WTF.png)
+
+<br><br>
+
+What happened? Well, just like the `sna` package, `igraph` also has a function that is called
+`betweenness` and since you loaded `igraph` last, the `betweenness` function
+of the `igraph` package is now higher in R's search path than the
+`betweenness` function of the `sna` package. 
+As a result, R uses the `betweenness` function from the `igraph` package. 
+But that causes an error because `igraph` expects
+an object in a different form than the object `friendship`. 
+
+Of course, it is possible that `igraph` would have been able to deal with this 
+`friendship` object. In that case, you not have received an error. 
+This is even worse, because now you think all is working well. 
+If you do not get an error, **you may actually get a different result than you expected.** 
+But, if this is part of a longer analysis pipeline, you may not notice and hence 
+report results that are incorrect/do not mean what you think they do. 
+
+Oh, and this is not specific to network analysis packages. 
+Because there are many thousands of R packages, there are loads of 
+options for such clashes. 
+This even happens with straightforward function names like `filter`, `select`, `cut`, et cetera.
+
+> So, with or without the error message, just running `betweenness(friendship)` is dangerous and unwise. 
+
+Be smarter than that.
+
+### Solution
+This whole ordeal is easy to solve and prevent. 
+The best practice is to **explicitly** refer to external functions using the syntax
+`package::function()`. That way R will always use the function from the required
+package.
+
+Try it out:
+
+```{r prefix, warning = FALSE, message = FALSE, exercise = TRUE, exercise.setup = "load_friendship"}
+library(sna, quietly = TRUE)
+library(igraph, quietly = TRUE)
+sna::betweenness(friendship)
+```
+
+You now ensure that you run `betweenness` from `sna` on the `friendship` object, 
+regardless of any other packages that you might have currently loaded. 
+In fact, stop attaching at all!
+
+If you use a lot of functions from other packages this is can become rather
+verbose. There’s also a minor performance penalty associated with :: (on the
+order of 5µs, so it will only matter if you call the function millions of
+times). But, either way: it is generally __STUPID__ to use `library()` and
+__SMART__ to use `::`!
+
+Let me repeat:
+
+> it is generally __STUPID__ to use `library()` and
+__SMART__ to use `::`!
+So, in this course we expect you to use `::` throughout. There are a few
+exceptions to this rule, and we will let you know explicitly. Unless we tell you
+explicitly that you can make a specific exception, use `::` always!
+
+Try it out. In the code block below, write the code such that it will calculate
+*closeness* scores on this friendship network using the `sna` package. 
+The appropriate function is called `closeness`. 
+As just agreed upon, do not load the `sna` package for this.
+
+```{r library4, exercise = TRUE, exercise.setup = "load_friendship"}
+
+```
+
+```{r library4-solution}
+sna::closeness(friendship)
+```
+
+```{r library4-check}
+grade_code(correct = "Excellent, this is how we want it! Keep doing it this way for the rest of your life!")
+```
+
+Note: this is actually what you do in Python too. There, you import 
+a package and then use the name (or alias) of that package every time you 
+use a function from that package. So, if you are familiar with Python, this
+practice will be familiar to you already.
+
+
+### Best Practice II: Informative Names
+
+For all of the objects you use in your code, make sure to give them _informative
+names_. It is bad habit to call your network `g` or `x`, because you will likely
+not understand the code when you read it a few weeks or months later.
+And neither will your
+instructors, so helping you with/commenting on your code will become
+unnecessarily cumbersome. If you have data on friendships in a network, call it 
+`friendship` and not `g` or `x` or something like that.
+
+
+*Make sure to give all of your objects informative
+names, ie. names that make it immediately clear what the object is.*
+
+It may take you a
+little bit more time at first, but will save you tremendous amounts of time on
+the long run.
+
+> Always use informative names for all of your objects
+
+
+
+
 ## The End
 
 That's all for now! Hopefully you learned something helpful and had some fun! 
@@ -2621,20 +2973,7 @@ See you in the next tutorial!
 
 ![](images/artworks-000192822861-zqs0r2-t500x500.jpg)
 
-
-```{r check_results, echo = FALSE, results = 'markup'}
-cat("\n\n\n\n\n\n")
-
-if (length(errors) > 0) {
-  cat("There were issues with the following chunk(s):\n\n")
-  print(unlist(errors))
-  cat("\n\n")
-  cat("Please contact Claudia and Roger with this info!\n")
-}
-
-```
-
-
+<br><br><br><br>
 
 ```{r check_results_external, echo=FALSE, child = if (length(errors) > 0) "check_results.Rmd"}
 ```
