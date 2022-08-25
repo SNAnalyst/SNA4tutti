@@ -1,3 +1,16 @@
+
+broken_info <- function(broken_list = l ) {
+  l <- list()
+  lab <- knitr::opts_current$get(name = "label")
+  broken_list <<- append(broken_list, lab)
+  cat("==========================================================================\n")
+  cat(">>> Codebox \'", lab , "\' is broken. Please, contact the maintainers! <<<\n")
+  cat("==========================================================================")
+}
+
+
+
+
 # set fontawesome icon colours
 
 h_col <- function(header_level){

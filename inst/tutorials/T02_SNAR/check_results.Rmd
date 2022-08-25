@@ -1,0 +1,13 @@
+
+## (Challenges to be fixed)
+
+```{r check_results_separate, echo=FALSE, results='markup'}
+
+cat("There were issues with the following chunk(s):\n\n")
+print(unlist(errors))
+cat("\n\n")
+cat("Please contact Claudia and Roger with this info!\n")
+
+
+```
+
