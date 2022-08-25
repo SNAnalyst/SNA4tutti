@@ -54,6 +54,7 @@ check_RStudio <- function() {
 }
 
 
+
 # R check version (required 4.2.1) -updated Aug 2022
 check_R <- function() {
   sna4tutti::check_r_equal_or_larger(version = "4.2.1", verdict = TRUE)
@@ -125,7 +126,7 @@ Before we start the magical mystery tour, we need to make sure we carry our esse
 
 ### R Version 
 
-You need to have installed R version 4.1.1 and this tutorial is going to check it
+You need to have installed R version 4.2.1 and this tutorial is going to check it
 for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -292,13 +293,13 @@ if (base::isFALSE(network::get.vertex.attribute(kidsnet, 'vertex.names')[1] == "
 
 At this point, you might really think we are done. Are we? In fact, we are not. We need to pass an extra attribute to the network so that it is crystal clear that we are dealing with a bipartite. 
 
-Here a fun fact for you. The `ergm` developers included a typo in the package. So we are going to code an attribute named _"bipratite"_. The typo attribute needs to have the same dimension as the first partition. So in our case, it will be 10.
+We are going to code an attribute named _"bipartite"_. The bipartite attribute needs to have the same dimension as the first partition. So in our case, it will be 10.
  
 
 
 ```{r bip04readynet, exercise = TRUE, exercise.setup = "bip03"}
 
-network::set.vertex.attribute(kidsnet, "bipratite", value = rep(10, 10), v = 1:10)
+network::set.vertex.attribute(kidsnet, "bipartite", value = rep(10, 10), v = 1:10)
 
 kidsnet
 ```
@@ -463,14 +464,11 @@ summary(m4)
 
 Let's assume that we selected our best model comparing AIC and BIC across them, and we now move on to check the MCMC diagnostics.
 
-Is this model good? 
-
-```{r bip10, exercise = TRUE, exercise.setup = "bip09finMod"}
-
-ergm::mcmc.diagnostics(m4)
+Is this model good? By running `ergm::mcmc.diagnostics(m4)` you would get something like the image below
 
 
-```
+![](images/m4MCMCdianostics.png){width=100%}
+
 
 If and only if you think that the model is good enough, you can move to the goodness of fit. Otherwise, get back and try a different model specification (getting back to steps 1, 2, 3).
 
@@ -478,15 +476,18 @@ If and only if you think that the model is good enough, you can move to the good
 
 #### Step 5
 
-Let's assume that it is good enough for now...
+Is the goodness of fit good? If and only if you think that the model is good enough, you can move to the interpretation of results! Otherwise, get back and try a different model specification (getting back to steps 1, 2, 3).
 
 ```{r bip11, exercise = TRUE, exercise.setup = "bip09finMod"}
 
 ergm::gof(m4)
 
+# snafun::stat_plot_gof(m4)
+
 ```
 
-Is the goodness of fit good? If and only if you think that the model is good enough, you can move to the interpretation of results! Otherwise, get back and try a different model specification (getting back to steps 1, 2, 3).
+Let's assume that it is good enough for now so that we can move on...
+
 
 #### Step 6
 
@@ -497,7 +498,7 @@ Let's look at coefficients and odd ratios first.
 ```{r bip12, exercise = TRUE, exercise.setup = "bip09finMod"}
 
 
-snafun::Ef_int(m4, type = "odds")
+snafun::stat_ef_int(m4, type = "odds")
 
 ```
 
@@ -509,7 +510,7 @@ Let's look at probabilities.
 
 ```{r bip13, exercise = TRUE, exercise.setup = "bip09finMod"}
 
-snafun::Ef_int(m4, type = "prob")
+snafun::stat_ef_int(m4, type = "prob")
 
 ```
 
@@ -544,7 +545,8 @@ However, weight can express many other realities that need more complex definiti
 
 Let's take a look at a real case study published by 
 
-`James D. Wilson, Matthew J. Denny, Shankar Bhamidi, Skyler Cranmer, and Bruce Desmarais (2017). “Stochastic weighted graphs: Flexible model specification and simulation”. Social Networks, 49, 37–47.`
+`James D. Wilson, Matthew J. Denny, Shankar Bhamidi, Skyler Cranmer, and Bruce Desmarais (2017).` 
+`“Stochastic weighted graphs: Flexible model specification and simulation”. Social Networks, 49, 37–47.`
 
 We have 17 countries exchanging money with each other (international trade) in 2005.
 
@@ -619,19 +621,19 @@ This is how this weighted network looks like
 
 ```{r weight01, exercise = TRUE, exercise.setup = "weightloadData"}
 
-# snafun::plot_weighted_graph(lending_2005, seed = 123, 
-#                     white_background = TRUE, 
-#                     show_legend = FALSE) 
+lending <- igraph::graph.adjacency(lending_2005, mode="undirected", weighted=TRUE)
+
+plot(lending, 
+     edge.width = igraph::E(lending)$weight*0.4)
+
 
 ```
 
 
-Do you see the function for plotting? It is very different from what we used before. It is because the `GERGM` package does things in its own way.
-
 ### Importing the Data
 
-Since the `GERGM` package has its own environment, it does not rely either on `igraph` not `network` formats. 
-You need to pass row data (weighted adjacency matrices and data frames) to this model. 
+The `GERGM` package does things in its own way with its own environment, it does not rely either on `igraph` not `network` formats. 
+Hence, you need to pass row data (weighted adjacency matrices and data frames) to this model. 
 
 
 Let's inspect the weighted adjacency matrix.
@@ -718,7 +720,7 @@ _ALERT:_
 
 THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
 
-If you have more than two cores, you can increase the number below and make it faster.
+If you have more than three cores, you can increase the number below and make it faster.
 
 ```{r weight06, exercise = TRUE, exercise.setup = "weightloadData"}
 formula0 <- lending_2005 ~ edges + mutual
@@ -726,21 +728,21 @@ formula0 <- lending_2005 ~ edges + mutual
 
 m0 <- GERGM::gergm(formula0,
                    covariate_data = covariate_data_2005,
-                   number_of_networks_to_simulate = 10000,
+                   number_of_networks_to_simulate = 5000,
                    thin = 1/100,
                    proposal_variance = 0.05,
-                   MCMC_burnin = 5000,
+                   MCMC_burnin = 1000,
                    seed = 456,
                    convergence_tolerance = 0.5, 
                    parallel = TRUE,
-                   cores =2)
+                   cores = 3)
 ```
 
 
 Why don't you run other exploratory models here by trying some other terms? I give you the final one below, but first try to play a little (keep the number of cores in the parallelization in  mind!) :)
 
 _NOTE:_
-I inserted a burn-in of 1000 and simulated 10000 networks. I used this set up to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
+I inserted a burn-in of 1000 and simulated 5000 networks. I used this set up to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
 
 
 Let's move on with another model!
@@ -809,7 +811,7 @@ Is this model good enough? Let's analyse the diagnostics!
 
 #### Step four (MCMC diagnostics)
 
-Even if the `GERGM` models automatically print info about the quality of the model, it is possible to reprint them separately too. 
+Even if the `GERGM` models automatically prints info about the quality of the model, it is possible to reprint them separately too. 
 
 Here we can reprint and observe the MCMC diagnostics.
 
@@ -956,7 +958,7 @@ GERGM::Estimate_Plot(m2)
 
 ```
 
-Mutual is not significant, so apparently, trade is a one-way operation. But sender and receiver for what concerns GDP are! It seems that if we take GDP into account, we can predict the intensity of the trade relationship (the weight of the edge). In fact, here, we don't only predict the existence of an edge but also the strength of the edge. GDP seems to be positively associated with trade. Countries with higher GDP trade more, both are sending and receiving goods. It makes sense, right? 
+Mutual is not significant so, apparently, trade is a one-way operation. But sender and receiver for what concerns GDP are! It seems that if we take GDP into account, we can predict the intensity of the trade relationship (the weight of the edge). In fact, here, we don't only predict the existence of an edge but also the strength of the edge. GDP seems to be positively associated with trade. Countries with higher GDP trade more, both are sending and receiving goods. It makes sense, right? 
 
 How much does GDP influence the relationships between nodes? Well, up to you to check odds ratios and probabilities to find out :)
 

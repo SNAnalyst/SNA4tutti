@@ -124,12 +124,10 @@ So, let's get started!
 
 ## Checking installation
 
-First, let's make sure you have all of the required packages installed.
+### R installation
 
-### R Version
-
-You need to have installed at least R version 4.2.1 and this tutorial is going to check
-it for you. Please hit the `Run Code` button.
+You need to have installed `r rproj()` version 4.2.1 (or higher) and this tutorial
+is going to check it for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
 check_R()
@@ -558,7 +556,7 @@ typeof(var2)
 You can also change the type of your variables
 
 ```{r try_something7, exercise=TRUE, echo = TRUE}
-c <- c(0,1,1,0)
+c <- c(0, 1, 1, 0)
 typeof(c)
 c1 <- as.character(c)
 typeof(c1)
@@ -1675,7 +1673,7 @@ subsetting operations at the same time. For those cases we have the
 
 ```{r try_something351, exercise = TRUE, echo = TRUE}
 
-mtsub <- subset(mtcars, mpg <= 20, select = c("mpg", "gear", "wt"))
+(mtsub <- subset(mtcars, mpg <= 20, select = c("mpg", "gear", "wt")))
 
 
 ```
