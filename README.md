@@ -39,5 +39,5 @@ Translation of tutti – Italian–English dictionary
 
 **SNA4DS**
 
-all [adjective, pronoun]
-all of the cool tutorials for the SNA4DS course 
+* all [adjective, pronoun]
+    all of the cool tutorials for the SNA4DS course 
