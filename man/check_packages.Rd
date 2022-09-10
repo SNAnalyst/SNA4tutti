@@ -49,11 +49,8 @@ a message is returned that tells the user how to upgrade it manually.
 pkgs <- matrix(c(
 "gradethis", "0.2.3.9001", "rstudio/gradethis",
 "igraph", "1.2.6", "CRAN",
-"influenceR", "0.1.0", "CRAN",
-"intergraph", "2.0-2", "CRAN",
-"network", "1.17.1", "CRAN",
-"networkD3", "0.4", "CRAN",
-"sna", "2.6", "CRAN",
+"snaverse2", "0.0.1.9000", "SNAnalyst/snaverse2",
+"snaverse1", "0.0.1.9000", "SNAnalyst/snaverse1",
 "SNA4DSData", "0.9.9000", "SNAnalyst/SNA4DSData"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
