@@ -1,7 +1,7 @@
 Package: sna4tutti
 Type: Package
 Title: Social Network Analysis for Data Science
-Version: 0.5.0
+Version: 0.5.1
 Authors@R:
 	c(person(given = "Roger",
 					family = "Leenders",

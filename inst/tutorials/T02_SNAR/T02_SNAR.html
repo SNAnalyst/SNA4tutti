@@ -596,13 +596,16 @@ snafun::list_vertex_attributes(cheyenne)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>That’s simple and fun!</p>
-<p>Now, here is a little challenge.: - read in the network called
-“Texas”, that is inside the <code>emon</code> data - apply the functions
-from above on the Texas network instead of on Cheyenne - convert the
-Texas network to an <code>igraph</code> object, call that
-<code>texas_i</code> for now. - determine all of these numbers for
-<code>Texas_i</code>. - Check if you get the same results (you
-should)</p>
+<p>Now, here is a little challenge:</p>
+<ul>
+<li><p>read in the network called “Texas”, that is inside the
+<code>emon</code> data</p></li>
+<li><p>apply the functions from above on the Texas network instead of on
+Cheyenne - convert the Texas network to an <code>igraph</code> object,
+call that <code>texas_i</code> for now.</p></li>
+<li><p>determine all of these numbers for <code>Texas_i</code>.</p></li>
+<li><p>Check if you get the same results (you should)</p></li>
+</ul>
 <div class="tutorial-exercise" data-label="emon_load_exc5_fies"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="20">
@@ -2235,21 +2238,21 @@ learnr:::store_exercise_cache(structure(list(label = "load_bp_ex", global_setup 
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "bp_quiz", question = structure("How can you tell from the printout that this is a bipartite network?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_28452b7", 
+"character")), answers = list(structure(list(id = "lnr_ans_95ae1a", 
     option = "You can't, you need to examine the object further to see this", 
     value = "You can't, you need to examine the object further to see this", 
     label = structure("You can&#39;t, you need to examine the object further to see this", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c8ae638", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a7ce907", 
     option = "It has an attribute called *type*", value = "It has an attribute called *type*", 
     label = structure("It has an attribute called <em>type<\u002fem>", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_61ee98", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e4fd0fc", 
     option = "It shows a 'B' on the first line of the printout", 
     value = "It shows a 'B' on the first line of the printout", 
     label = structure("It shows a &#39;B&#39; on the first line of the printout", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_49c573e", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_7f126e3", 
     option = "By the number of edges and vertices", value = "By the number of edges and vertices", 
     label = structure("By the number of edges and vertices", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
@@ -2260,7 +2263,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "bp_quiz-answer", question = "bp_quiz"), loading = NULL, 
-    random_answer_order = FALSE, allow_retry = TRUE, seed = 279062292.370052, 
+    random_answer_order = FALSE, allow_retry = TRUE, seed = 100585682.453161, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -2849,16 +2852,16 @@ learnr:::store_exercise_cache(structure(list(label = "texas2_summary", global_se
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "isolates_quiz", 
     question = structure("Isolates are nodes that are unconnected to others. How many of those are there in this network?", html = TRUE, class = c("html", 
-    "character")), answers = list(structure(list(id = "lnr_ans_c61083d", 
+    "character")), answers = list(structure(list(id = "lnr_ans_885f8ae", 
         option = "0", value = 0, label = structure("0", html = TRUE, class = c("html", 
         "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b8d25b6", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_a25b6bb", 
         option = "1", value = 1, label = structure("1", html = TRUE, class = c("html", 
         "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_fbd8b1b", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_a6e9002", 
         option = "171", value = 171, label = structure("171", html = TRUE, class = c("html", 
         "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d11239e", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_28e8843", 
         option = "414", value = 414, label = structure("414", html = TRUE, class = c("html", 
         "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
     "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
@@ -2869,7 +2872,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
     "character")), message = NULL, post_message = NULL), ids = list(
         answer = "isolates_quiz-answer", question = "isolates_quiz"), 
     loading = NULL, random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1109487482.98335, options = list()), class = c("learnr_radio", 
+    seed = 1500518222.80127, options = list()), class = c("learnr_radio", 
 "tutorial_question")), session = session)
 </script>
 </p>

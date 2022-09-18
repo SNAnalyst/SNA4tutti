@@ -586,11 +586,18 @@ snafun::list_vertex_attributes(cheyenne)
 
 That's simple and fun!
 
-Now, here is a little challenge.: - read in the network called "Texas", that is
-inside the `emon` data - apply the functions from above on the Texas network
+Now, here is a little challenge: 
+
+- read in the network called "Texas", that is
+inside the `emon` data 
+
+- apply the functions from above on the Texas network
 instead of on Cheyenne - convert the Texas network to an `igraph` object, call
-that `texas_i` for now. - determine all of these numbers for `Texas_i`. - Check
-if you get the same results (you should)
+that `texas_i` for now. 
+
+- determine all of these numbers for `Texas_i`. 
+
+- Check if you get the same results (you should)
 
 ```{r emon_load_exc5_fies, include = TRUE, exercise.lines = 20, exercise = TRUE,  exercise.setup = "emon_load"}
 
