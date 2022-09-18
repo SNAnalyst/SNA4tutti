@@ -1172,7 +1172,7 @@ Beautiful. You have become quite eccentric yourself!
 
 ### Stress centrality
 
-The stress on a vertex is a rekevant measure in physical networks (e.g., networks 
+The stress on a vertex is a relevant measure in physical networks (e.g., networks 
 of roads, energy cables, water pipes, etc.) or in networks where the amount of 
 flow through the edges can be taxing on the the vertices. 
 An example would be a network where so much information is exchanged, that vertices 
