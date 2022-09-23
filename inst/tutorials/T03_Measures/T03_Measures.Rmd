@@ -29,7 +29,6 @@ source("../R/helper_code.R")
 # Check whether required packages are installed
 pkgs <- matrix(c(
   "learnr", "0.10.2", "CRAN",
-  "gradethis", "0.2.8.9000", "rstudio/gradethis",
   "igraph", "1.3.2", "CRAN",
   "igraphdata", "1.0.0", "CRAN",
   "sna", "2.7", "CRAN",
@@ -179,7 +178,7 @@ Moreover, you'll learn how to find and extract subgroups from a network.
 
 <br><br><br>
 
-```{r, fig.align='center', echo = FALSE}
+```{r T03_01, fig.align='center', echo = FALSE}
 knitr::include_graphics("images/cool_small.jpg")
 ```
 
@@ -193,7 +192,7 @@ Yeah, just to make sure, let's quickly  make sure you have all of the required p
 
 ### R Version 
 
-You need to have installed R version 4.1.1 and this tutorial is going to check it
+You need to have installed R version 4.2.1 and this tutorial is going to check it
 for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -203,7 +202,7 @@ check_R()
 
 ### R Studio Version
 
-You need to have installed RStudio version 1.4.1717 or above.
+You need to have installed a recent version of RStudio version 2022.7.1.554 or above.
 Let's check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -290,7 +289,7 @@ The algorithm needs to find the shortest possible path from any vertex to any ot
 vertex and then take the mean of those. 
 That's a lot of work, because there are **a lot** of pairs of vertices. <br>
 Can you figure out how many pairs of vertices exist in this graph?<br>
-(hint: you may need some info from a previous result in this tutorial...)
+(hint: it may be helpful to consider the graph in terms of its adjacency matrix...)
 
 ```{r number-of-pairs, echo=FALSE}
 question("How many pairs of actors are there in the `enwiki` network?",
@@ -360,7 +359,7 @@ edges <- matrix(
     "H", "M",
     "L", "M"
   ), ncol = 2, byrow = TRUE
-)
+) |> as.data.frame()
 
 fig25 <- snafun::to_igraph(edges)
 snafun::plot(fig25)
@@ -1173,7 +1172,7 @@ Beautiful. You have become quite eccentric yourself!
 
 ### Stress centrality
 
-The stress on a vertex is a rekevant measure in physical networks (e.g., networks 
+The stress on a vertex is a relevant measure in physical networks (e.g., networks 
 of roads, energy cables, water pipes, etc.) or in networks where the amount of 
 flow through the edges can be taxing on the the vertices. 
 An example would be a network where so much information is exchanged, that vertices 
@@ -1313,7 +1312,7 @@ between the nodes until an equilibrium is reached.**
 
 Let's consider a small 8-vertex network, we call it `internet`. It looks as follows:
 
-```{r, out.width = 1000, echo = FALSE}
+```{r T03_02, out.width = 1000, echo = FALSE}
 par(mar = c(.5, .5, .5, .5))
 snafun::plot(internet, vertex.label = igraph::V(internet)$code, layout = coor, 
                     edge.arrow.size = 0.4, margin = .1)
@@ -1383,7 +1382,7 @@ structure(c(0, 0.25, 0.25, 0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0.03125,
 "fromD", "fromE", "fromF", "fromG", "fromH", "Total")))
 ```
 
-```{r, echo = FALSE, eval = TRUE}
+```{r T03_03, echo = FALSE, eval = TRUE}
 knitr::kable(stap)
 ```
 
@@ -1419,13 +1418,13 @@ this graph `internet2`.
 This is what it looks like.
 
 
-```{r, echo = FALSE, eval=TRUE}
+```{r T03_04, echo = FALSE, eval=TRUE}
 print(internet2)
 ```
 
 
 
-```{r, echo = FALSE, eval=TRUE}
+```{r T03_05, echo = FALSE, eval=TRUE}
 par(mar = c(.5, .5, .5, .5))
 snafun::plot(internet2, vertex.label = igraph::V(internet2)$code, layout = coor, edge.arrow.size = 0.4, margin = .1)
 ```

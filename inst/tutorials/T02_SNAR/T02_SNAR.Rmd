@@ -548,7 +548,7 @@ This is what an object of class `network` looks like. This is a network with 14
 vertices that are connected by a total of 83 edges.
 
 You also see that the edges are *directed* (that is: they have a sender and a
-receiver), there are ni *loops* (a loop is an edge from an actor to himself).
+receiver), there are no *loops* (a loop is an edge from an actor to himself).
 You also see that there are several attributes in the data about the vertices,
 such as their *Location*, their *Paid.Staff* and their names (*vertex.names*).
 We also have an attribute *Frequency* for the edges. Again, the help file gives
@@ -586,11 +586,18 @@ snafun::list_vertex_attributes(cheyenne)
 
 That's simple and fun!
 
-Now, here is a little challenge.: - read in the network called "Texas", that is
-inside the `emon` data - apply the functions from above on the Texas network
+Now, here is a little challenge: 
+
+- read in the network called "Texas", that is
+inside the `emon` data 
+
+- apply the functions from above on the Texas network
 instead of on Cheyenne - convert the Texas network to an `igraph` object, call
-that `texas_i` for now. - determine all of these numbers for `Texas_i`. - Check
-if you get the same results (you should)
+that `texas_i` for now. 
+
+- determine all of these numbers for `Texas_i`. 
+
+- Check if you get the same results (you should)
 
 ```{r emon_load_exc5_fies, include = TRUE, exercise.lines = 20, exercise = TRUE,  exercise.setup = "emon_load"}
 
@@ -1071,12 +1078,12 @@ Defense ("KrCCD"). If you look at the adjacency matrix (or the edge list) (or
 the adjacency list), you would see that USArmy -\> Texas Highway Patrol -\>
 Kerrville Police Department -\> Kerr County Civil Defense. That's three steps.
 
-(there are alternatives, you can "Kerrville Police Department" replace with
+(there are alternatives, you can replace "Kerrville Police Department" with
 "Comfort Volunteer Fire Department" or "Red Cross" or "Texas National Guard",
 but it will never be less than three steps).
 
 You also see that the distance from the Salvation Army to all others is
-infinitely large. Whhy? Because there is not a single tie from the Salvation
+infinitely large. Why? Because there is not a single tie from the Salvation
 Army to any other organization. There are some ties *to* the Salvation Army, so
 they are not completely alone in the end.
 
