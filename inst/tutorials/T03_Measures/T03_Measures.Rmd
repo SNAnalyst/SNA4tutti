@@ -359,7 +359,7 @@ edges <- matrix(
     "H", "M",
     "L", "M"
   ), ncol = 2, byrow = TRUE
-)
+) |> as.data.frame()
 
 fig25 <- snafun::to_igraph(edges)
 snafun::plot(fig25)
