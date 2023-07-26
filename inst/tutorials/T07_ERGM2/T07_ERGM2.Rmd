@@ -49,14 +49,14 @@ check_pkgs <- function(.pkgs = pkgs) {
 
 # RStudio
 check_RStudio <- function() {
-  sna4tutti::check_rstudio_equal_or_larger(version = "2022.7.1.554", verdict = TRUE)
+  sna4tutti::check_rstudio_equal_or_larger(version = "2023.6.1.524", verdict = TRUE)
 }
 
 
 
-# R check version (required 4.2.1) -updated Aug 2022
+# R check version (required 4.3.1) -updated Jul 2023
 check_R <- function() {
-  sna4tutti::check_r_equal_or_larger(version = "4.2.1", verdict = TRUE)
+  sna4tutti::check_r_equal_or_larger(version = "4.3.1", verdict = TRUE)
 }
 
 
@@ -138,7 +138,7 @@ Before we start to bake the new tier, we need to make sure we have the ingredien
 
 ### R Version 
 
-You need to have installed R version 4.2.1 and this tutorial is going to check it
+You need to have installed `r rproj()` version 4.3.1 and this tutorial is going to check it
 for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -148,7 +148,7 @@ check_R()
 
 ### R Studio Version
 
-You need to have installed RStudio version 2022.02.3+492 or above.
+You need to have installed RStudio version 2023.6.1.524 or above.
 Let's check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}

@@ -42,14 +42,14 @@ check_pkgs <- function(.pkgs = pkgs) {
 
 # RStudio
 check_RStudio <- function() {
-  sna4tutti::check_rstudio_equal_or_larger(version = "2022.7.1.554", verdict = TRUE)
+  sna4tutti::check_rstudio_equal_or_larger(version = "2023.6.1.524", verdict = TRUE)
 }
 
 
 
 # R check version (required 4.2.1) -updated Aug 2022
 check_R <- function() {
-  sna4tutti::check_r_equal_or_larger(version = "4.2.1", verdict = TRUE)
+  sna4tutti::check_r_equal_or_larger(version = "4.3.1", verdict = TRUE)
 }
 
 
@@ -103,15 +103,15 @@ pre {
 
 ## Welcome to this new tutorial!
 
-We are already halfway through the course! Pat yourself on the back for the excellent work done!
+We are already halfway through the course! Pat yourself on the back for the excellent work you have done!
 
-So far, we have covered several techniques for understanding networks, and we will cover more in the following weeks. Still, sometimes the best analysis is not very much appreciated by your audience if it is difficult to understand.
+So far, we have covered several techniques for understanding networks, and we will cover more in the following weeks. Still, sometimes even the best analysis is not very much appreciated by your audience if it is difficult to understand.
 
 Imagine that your boss asked you for an overview of network data of interest, and you show up with a pdf file filled with tables and diagrams. It's not gonna fly if your boss has 5 minutes for you, right?
 
 With this tutorial, we will learn how to represent networks in pretty and informative ways so that your analyses will have a greater impact on the intended audience. If you do the job well, the 5 minutes your boss has for you will be more than enough to support your point!
 
-Let's get started with the art of depicting networks!
+Let's get started with the art of picturing networks!
 
 ![](images/cat-painting.jpg){width=75%}
 
@@ -123,7 +123,7 @@ As in formula 1, we first quickly make sure you have all the equipment ready for
 
 ### R Version 
 
-You need to have installed R version 4.2.1 and this tutorial is going to check it
+You need to have installed `r rproj()` version 4.3.1 and this tutorial is going to check it
 for you. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -133,7 +133,8 @@ check_R()
 
 ### R Studio Version
 
-You need to have installed RStudio version 2022.02.3+492 or above.
+
+You need to have installed RStudio version 2023.6.1.524 or above.
 Let's check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -186,7 +187,7 @@ Great visualizations are storytellers!
 
 Several software allow you to do pretty and less pretty network visualizations. Some examples are Gephy, UCInet, Pajek ... 
 
-Of course, we are coders, so we want to be able to do everything by ourselves. Several libraries do the job both in Python and R. Each of them has pros and cons. 
+Of course, we are programmers, so we want to be able to do everything by ourselves. Several libraries do the job both in Python and R. Each of them has pros and cons. 
 
 As you might imagine, we move on with `r rproj()` :)
 
@@ -332,11 +333,7 @@ the `plot()` function with an object of class `igraph`.
 
 ### Visualizing the network structure
 
-So, when I said your story, I meant your story properly! The data that we are going to visualize is YOUR data—the data collected with the survey that we did together in week 4. 
-
-Well, something close to your story, to be honest, since I anonymized it and changed it a bit so that no one can recognize themselves! 
-
-Still, this is your story!
+The data that we are going to visualize was collected here at JADS some time ago during this course. It represents your fellow students that are a little bit older than you. Are you that different from them? Let's check it together!
 
 
 
@@ -445,7 +442,7 @@ Let's make sure it is anonymous.
 igraph::V(net)$name
 ```
 
-We have 81 of you in there. From student 1 to 81. Who knows who you are? (Ahah... me! Evil laugh!)
+We have 81 students in there. From student 1 to 81. Maybe you already met some of them and you don't even know! ahahah (evil laugh!)
 
 
 Ok, let's get serious! Let's plot an overview of the network-level information.

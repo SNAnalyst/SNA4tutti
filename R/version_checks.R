@@ -248,7 +248,7 @@ check_r_equal <- function(version = "4.2.1", verdict = TRUE) {
 
 #' @describeIn  version_check
 #' @export
-check_rstudio_equal_or_larger <- function(version = "2022.7.1.554", verdict = TRUE) {
+check_rstudio_equal_or_larger <- function(version = "2023.6.1.524", verdict = TRUE) {
   ver <- rstudioapi::versionInfo()$version
   if (ver >= version) {
     if (verdict) cat("Your version of RStudio is fine")
