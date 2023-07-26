@@ -403,7 +403,7 @@ if (base::isFALSE(as.vector(table(igraph::V(net)$gender))[2] == 51)) {
 
 net <- SNA4DSData::DSstudents
 
-if (base::isFALSE(base::as.vector(base::table(igraph::E(net)$frequency))[2] == 37)) {
+if (base::isFALSE(base::as.vector(base::table(igraph::E(net)$frequency))[2] == 36)) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
   errors <- base::append(errors, error)
