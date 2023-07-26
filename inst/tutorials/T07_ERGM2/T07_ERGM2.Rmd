@@ -1018,7 +1018,7 @@ There is no theoretical reason that would make us think that all these effects a
 
 We might want to try to be more specific and to decrease the level of complexity of our educated guess.
 
-Checking on the model summary above, we see that the configurations that are highly represented in this sample are 012, 102, 021C, 021U, 201, 111D. The term 
+Checking on the model summary above, we see that the configurations that are highly represented in this sample are 012, 102, 021D, 021U, 201, 111D. The term 
 `intransitive` checks on three of them: 021C, 201, 111D. Let's try to run it and to see whether this time our model might make more sense. But before that, why don't you check what the term `intransitive` exactly does and whether this might make sense knowing the Sampson network's features?
 
 
