@@ -778,7 +778,7 @@ if (base::isFALSE(base::table(c("not spicy", "a bit spicy", "mildly spicy", "ver
 ## Looking for help
 
 If you struggled with the exercise you just tried, it is just because
-you still don't know how to find help in *R*. You needed to know that
+you still don't know how to find help in `r rproj()`. You needed to know that
 *levels* is also one of the arguments of the `factor()` function.
 
 R offers you a quick way to get info about its functions (and the
@@ -889,7 +889,7 @@ of the basic data types and data structures that this language handles
 and how to operate with them. We covered data types already, let's move
 on to data structures.
 
-There are 5 data structures in *R*:
+There are 5 data structures in `r rproj()`:
 
 -   vector
 -   data frame
@@ -1178,12 +1178,12 @@ a comma to separate values. Each line of the file is a data record. Each
 record consists of one or more fields, separated by commas. Sometimes
 instead of commas, you have semicolons.
 
-*R* has an inbuilt function to import *.txt* data and turn it into a
+`r rproj()` has an inbuilt function to import *.txt* data and turn it into a
 data frame:
 
 `read.table()`
 
-*R* also has an inbuilt function to import *.csv* data and turn it into
+`r rproj()` also has an inbuilt function to import *.csv* data and turn it into
 a data frame:
 
 `read.csv()`
@@ -1195,7 +1195,7 @@ your data frame. Let's see the essential arguments together.
 
 -   *file* = you pass the file's name within quotation marks, including
     the file extension. For example `read.csv(file = "data.csv")`. In
-    *R*, you can also omit the argument's name and write
+    `r rproj()`, you can also omit the argument's name and write
     `read.csv("data.csv")`.
 
 -   *header* = if you set the header as TRUE, the first row in your
@@ -1207,12 +1207,12 @@ your data frame. Let's see the essential arguments together.
 -   *sep* = this is the separator. It is either "," or ";" for *csv*
     data and " " empty for *txt* data.
 
--   *stringsAsFactors* = if your data contains character variables, *R*
+-   *stringsAsFactors* = if your data contains character variables, `r rproj()`
     will read them as characters unless you specify that they are
     factors setting this argument to TRUE.
 
 -   *na.strings* = if you know that you are importing a file with
-    missing data, you should use this argument to help *R* to recognize
+    missing data, you should use this argument to help `r rproj()` to recognize
     them. So if the missing data in your file is expressed as NA, you
     can use this argument as `na.strings = "NA"`. However, let's say
     that your missing data is expressed by the word *NO* and by this
@@ -1233,7 +1233,7 @@ rownames(tab) <- NULL
 knitr::kable(tab)
 ```
 
-Hence you would import it into *R* this way
+Hence you would import it into `r rproj()` this way
 
 `data <- read.csv('data.csv', sep = ",", header = TRUE, stringsAsFactors = TRUE,                 na.strings = ".")`
 
@@ -1242,10 +1242,10 @@ Hence you would import it into *R* this way
 Everyone nowadays is familiar with Microsoft Office and with its
 spreadsheet editor called Excel. And you surely already know that excel
 has its own extension... Actually, several of them, since they evolved
-over time. It is possible to import excel data into *R*.
+over time. It is possible to import excel data into `r rproj()`.
 
 If it is a simple spreadsheet, the easiest way is to save it as a *.csv*
-or *.txt* file and import it that way. Otherwise, you need to use an *R*
+or *.txt* file and import it that way. Otherwise, you need to use an `r rproj()`
 package that can do the job for you.
 
 According to which extension (how old is your file), you need different
@@ -1263,7 +1263,7 @@ For example:
 
 `mydata <- readxl::read_xlsx("excel_data.xlsx", sheet = 2 , range = "A2:U38")`
 
-Will import into *R* the data included in the range column A row 2 and
+Will import into `r rproj()` the data included in the range column A row 2 and
 column U row 38 taken from the second spreadsheet in your excel file.
 
 ### R data Format
@@ -1307,8 +1307,8 @@ who would have expected such an original name ;)
 
 After you loaded your data, unless it is very small and you can visually
 inspect it, you will realize that you have NO IDEA about what is inside
-that blurb you just imported into *R*. Instead of panicking (ok, you can
-panic for 10 seconds), use the functions that *R* already set up for you
+that blurb you just imported into `r rproj()`. Instead of panicking (ok, you can
+panic for 10 seconds), use the functions that `r rproj()` already set up for you
 to explore your data! Let's take a look at our options.
 
 ### print
@@ -1375,7 +1375,7 @@ summary(iris)
 ### str
 
 Another helpful function is `str()`. It compactly displays the structure
-of an *R* Object.
+of an `r rproj()` Object.
 
 Try with one of the data set above.
 
@@ -1402,7 +1402,7 @@ Some languages (Python) count the elements from 0.
 In those languages (Python), if you have a vector with three elements,
 they will be element 0, element 1, and element 2.
 
-*R* does not believe in this kind of zeros (in other it does), and it
+`r rproj()` does not believe in this kind of zeros (in other it does), and it
 counts from 1, so if you have a vector with three elements, they will be
 element 1, element 2, and element 3.
 
@@ -1634,7 +1634,7 @@ How would you subset a data frame in order to keep only certain values?
 Let's say that you want to keep only cars with `mpg` larger or equal to
 20. Since the `mpg` values are provided in the rows, you need to pass
 the information on the left-hand side of the square brackets [x, ].
-Hence you tell *R* that you are interested in the `mpg` column,
+Hence you tell `r rproj()` that you are interested in the `mpg` column,
 specifically in those values only.
 
 Run this code and inspect the result.
@@ -1695,7 +1695,7 @@ str(mtcars)
 
 str(mtcars)
 
-(mtsub <- subset(mtcars, -disp < 100, select = -carb ))
+(mtsub <- subset(mtcars, disp >= 100, select = -carb ))
 
 ```
 
@@ -1781,7 +1781,7 @@ table(mtcars$cyl)
 
 
 table(mtcars$cyl)
-mtcars$cyl <- ifelse(mtcars$gear == 8, "cool", "not_cool")
+mtcars$cyl <- ifelse(mtcars$cyl == 8, "cool", "not_cool")
 
 ```
 
@@ -1794,14 +1794,14 @@ up as many conditions as needed!
 
 ### The Pipe
 
-The very last version of *R* included a helpful tool called the pipe.
+The very last version of `r rproj()` included a helpful tool called the pipe.
 The pipe, represented by this symbol `|>`, allows you to pipe a value
 into a call expression or a function expression.
 
 A pipe expression passes, or "pipes", the result of the left-hand side
-expression to the very first part of tje right-hand side expression. 
+expression to the very first part of the right-hand side expression. 
 This is a bit
-revolutionary for the *R* way of thinking, and it allows you to perform
+revolutionary for the `r rproj()` way of thinking, and it allows you to perform
 certain kinds of manipulation in a very quick way.
 
 Let's try to subset flowers belonging to the species 'setosa' only with
@@ -1812,7 +1812,7 @@ iris |>
    subset(Species == "setosa")
 ```
 
-That was quick, right? What happens is that *R* inserts *iris* as the very 
+That was quick, right? What happens is that `r rproj()` inserts *iris* as the very 
 first argument of the `subset` call. In other words, your pipe actually 
 runs `subset(iris, Species == "setosa")`.
 
@@ -1843,7 +1843,7 @@ Fair enough, right? Still, let's see how to use packages, shall we?
 
 ### Installing, Removing, Updating
 
-In *R* packages are also called libraries. You can install them with the
+In `r rproj()` packages are also called libraries. You can install them with the
 function `install.packages()` if they are available in the Comprehensive
 R Archive Network, better know as CRAN. It is a different story if they
 are available on GitHub or other similar platforms, and we won't cover
@@ -1896,7 +1896,7 @@ their functions, and you might end up calling a function and not knowing
 what it does since it has two or more different versions in two or more
 different packages.
 
-Also, some packages conflict with each other, and your *R* session might
+Also, some packages conflict with each other, and your `r rproj()` session might
 even crash due to this.
 
 There are situations in which you need to attach a package, such as when
@@ -1953,7 +1953,7 @@ newVar # return value
 }
 ```
 
-In *R* a function ALWAYS uses {curly braces} :)
+In `r rproj()` a function ALWAYS uses {curly braces} :)
 
 Would you please build a function for me? I need one that has 4
 arguments. Take the sum of arg1 and arg2, divide them by the summation
@@ -2025,7 +2025,7 @@ f <- helper(iris$Sepal.Length, iris$Sepal.Width, iris$Petal.Length, iris$Petal.W
 gradethis::grade_code(correct = "It's lovely!")
 ```
 
-Ideally you should save your function in a clean *R* script and import
+Ideally you should save your function in a clean `r rproj()` script and import
 it for use by running
 
 `source("mypath/myfun.R")`
@@ -2228,7 +2228,7 @@ data manipulation!
 Your turn to play! Can you tell me who won the football matches? You
 have a list of four football matches. We stand for team 1. The score on
 the left always stands for team 1 and the one on the right for team 2.
-Can you make *R* print "Win" when team 1 wins and "Lose" when team 1
+Can you make `r rproj()` print "Win" when team 1 wins and "Lose" when team 1
 loses?
 
 call your index *i*
@@ -2265,8 +2265,8 @@ gradethis::grade_code(correct = "Yeahhh!")
 
 ## The Apply family
 
-As we have just seen, *R* uses for loops as much as any other
-programming language. However, in *R*, there is an alternative to
+As we have just seen, `r rproj()` uses for loops as much as any other
+programming language. However, in `r rproj()`, there is an alternative to
 perform the same task. This is the Apply family!
 
 The apply family consists of vectorized functions that minimize your
