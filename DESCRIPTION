@@ -1,7 +1,7 @@
 Package: sna4tutti
 Type: Package
 Title: Social Network Analysis for Data Science
-Version: 0.5.2
+Version: 0.5.3
 Authors@R:
 	c(person(given = "Roger",
 					family = "Leenders",
@@ -19,7 +19,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/SNAnalyst/sna4tutti
 BugReports: https://github.com/SNAnalyst/sna4tutti/issues
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports:
   ergm (>= 4.2.2),
   glue,

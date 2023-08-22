@@ -166,7 +166,7 @@ check_packages <- function(reqs) {
         paste0("The version of the following packages is too low:",
                names_low)
       ), "Upgrade using:"), (
-        glue::glue("      update.packages({package})",
+        glue::glue("      update.packages(\"{package}\")",
                    package = pkgs_low)
       ))
   }
