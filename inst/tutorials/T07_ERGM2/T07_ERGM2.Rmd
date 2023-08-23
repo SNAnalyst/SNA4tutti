@@ -325,14 +325,16 @@ Let's run a first exploratory round.
 mesaM1 <- ergm::ergm(mesa ~ edges +
                      nodematch('Grade', diff = TRUE) +
                      nodefactor('Grade'))
-summary(mesaM1)                     
+summary(mesaM1)    
+
+snafun::stat_ef_int(mesaM1, type = "prob")
 ```
 
-Every statistics in the result's table allows us to reject the null hypothesis of no effects. The coefficients produced by the `nodematch` term inform us of the existence of homophilic effects in each grade. Grade 12 is the one where these effects are less likely to take place. 
+Every statistics in the result's table allows us to reject the null hypothesis of no effects. The coefficients produced by the `nodematch` term inform us of the existence of homophilic effects in each grade. Grades 10 and  12 are the two categories where these effects are less likely to take place. Still, the probability of observing homophily in those years is very high. The problem with these two categories is their statistical significance. According to the alpha that we choose, we might conclude that the effect happened by chance. 
 
 The `nodefactor` term informs us of the probability that a certain grade characterizes nodes connected to other nodes. We can say that students in grade 12 are more likely to have friends than students in other grades. We interpret it just like we would interpret a categorical variable in a logistic regression!
 
-What happens if we try to run the same exploratory model but focusing on race? Can you do it? Call the model 'mesaM2' and give it a go. Don't forget to print the summary; we are interested in the results!
+What happens if we try to run the same exploratory model but focusing on race? Can you do it? Call the model 'mesaM2' and give it a go. Don't forget to print the summary and the probabilities; we are interested in the results!
 
 
 ```{r grade_ergmRace, exercise = TRUE, exercise.setup = "load_mesa"}
@@ -347,6 +349,8 @@ mesaM2 <- ergm::ergm(mesa ~ edges +
                        nodefactor('Race'))
 
 summary(mesaM2)
+
+snafun::stat_ef_int(mesaM2, type = "prob")
 
 
 ```
@@ -390,6 +394,7 @@ mesaM3 <- ergm::ergm(mesa ~ edges +
                        nodefactor('Sex', levels = -(2)))
 
 summary(mesaM3)
+snafun::stat_ef_int(mesaM3, type = "prob")
 
 ```
 
@@ -422,6 +427,7 @@ mesaM4 <- ergm::ergm(mesa ~ edges +
                        nodematch('Sex', diff = TRUE))
 
 summary(mesaM4)
+snafun::stat_ef_int(mesaM4, type = "odds")
 ```
 
 
