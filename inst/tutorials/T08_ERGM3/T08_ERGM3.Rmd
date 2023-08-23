@@ -415,7 +415,7 @@ Now we can run dyadic dependent exploratory models. Since the dyadic dependent i
 
 First, we should constraint the model. For instance, in the example below, I'm asking the simulation to exclude networks with nodes having degrees lower than 1 (isolate) and larger than 14 (max N nodes) since they would be unrealistic in the current situation that we are exploring.
 
-Second, we can control the model specifying how the simulation should run (but we know how to this already!).
+Second, we can control the model specifying how the simulation should run (but we know how to do this already!).
 
 Let's get to it.
 
@@ -506,6 +506,8 @@ The only significant term in the model is `nodematch` by gender. Interpreting th
 
 Interpreting the odds ratio ($2.375$), we know that this effect is really strong since the OR is much larger than 1. 
 
+Note: you might have slightly different odds since the model is stochastic!
+
 Let's look at probabilities.
 
 ```{r bip13, exercise = TRUE, exercise.setup = "bip09finMod"}
@@ -515,6 +517,8 @@ snafun::stat_ef_int(m4, type = "prob")
 ```
 
 Looking at the probabilities, we know that the probability of kids of the same gender attending the same play date is 70.4 % ($0.704*100$). Waw! this is really a strong effect, and it is in line with the OR, just easier to interpret!
+
+Note: you might have slightly different probabilities since the model is stochastic!
 
 ### Step 7
 

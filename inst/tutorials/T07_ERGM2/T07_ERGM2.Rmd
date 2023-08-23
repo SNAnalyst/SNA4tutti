@@ -1276,7 +1276,7 @@ UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle,
 summary(UKFit.2)
 ```
 
-Ouch, we used `tringles`, but do you remember that this term has convergence issues? In fact, it will not converge (increase the number of iterations if you don't believe me). Why don't you re-run it using the curved term alternative?
+Ouch, we used `tringles`, but do you remember that this term has convergence issues? In fact, it will not converge (increase the number of iterations if you don't believe me). Why don't you re-run it using the curved term alternative (gwesp - see documentation to learn how)?
 
 Let's focus on our third hypothesis. We can do that by checking for homophily, considering the group a nodal attribute. We want to check on the probability of having homophilic effects in each group. Hence we should check for differential homophily. 
 
@@ -1286,8 +1286,8 @@ Let's focus on our third hypothesis. We can do that by checking for homophily, c
 UKFN <- intergraph::asNetwork(UKF)
 
 UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE), 
-                      control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                   MCMC.samplesize = 10000,
+                      control = ergm::control.ergm(MCMC.burnin = 1000,
+                                                   MCMC.samplesize = 5000,
                                                    seed = 123456,
                                                    MCMLE.maxit = 1))
 
@@ -1306,8 +1306,8 @@ Ok, Let's wrap up what we found out and what we know so far. Remember to insert 
 UKFN <- intergraph::asNetwork(UKF)
 UKFit.4 <- ergm::ergm(UKFN ~ edges + 
                         mutual, 
-                      control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                   MCMC.samplesize = 10000,
+                      control = ergm::control.ergm(MCMC.burnin = 1000,
+                                                   MCMC.samplesize = 5000,
                                                    seed = 123456,
                                                    MCMLE.maxit = 1))
 
@@ -1322,8 +1322,8 @@ UKFit.4 <- ergm::ergm(UKFN ~ edges +
                         mutual + 
                         nodematch('Group') +
                         gwesp(0.25, fixed = T),
-                      control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                   MCMC.samplesize = 10000,
+                      control = ergm::control.ergm(MCMC.burnin = 1000,
+                                                   MCMC.samplesize = 5000,
                                                    seed = 123456,
                                                    MCMLE.maxit = 1))
 
@@ -1353,8 +1353,8 @@ Ok, have you decided on your favorite configuration? Yes? Let's move on to check
 ```{r UKFBestModel, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- intergraph::asNetwork(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual,
-                      control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                   MCMC.samplesize = 10000,
+                      control = ergm::control.ergm(MCMC.burnin = 1000,
+                                                   MCMC.samplesize = 5000,
                                                    seed = 123456,
                                                    MCMLE.maxit = 1))
 ergm::mcmc.diagnostics(UKFit)
@@ -1390,15 +1390,17 @@ Again, copy and paste your best model here below and comment on the results
 ```{r UKFBestModelres, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- intergraph::asNetwork(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual,
-                      control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                   MCMC.samplesize = 10000,
+                      control = ergm::control.ergm(MCMC.burnin = 1000,
+                                                   MCMC.samplesize = 5000,
                                                    seed = 123456,
                                                    MCMLE.maxit = 1))
 
 summary(UKFit)
 
 ```
+ 
 
+Final note: for making the tutorial work faster, the MCMC burn in and sample size have been set to very low standards. In order to have better model (better diagnostics), remember to increase these numbers in a real data analysis.
 
 ## Conclusion
 

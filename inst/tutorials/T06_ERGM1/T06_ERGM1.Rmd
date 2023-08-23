@@ -529,8 +529,8 @@ Let's specify our model and print the results! This might take your computer a f
 ```{r p1Sampson, exercise = TRUE, exercise.setup = "sampson_load"}
 
 P1 <- ergm::ergm(sampson ~ edges + sender + receiver + mutual, 
-                 control = ergm::control.ergm(MCMC.burnin = 5000,
-                                              MCMC.samplesize = 10000,
+                 control = ergm::control.ergm(MCMC.burnin = 1000,
+                                              MCMC.samplesize = 5000,
                                               seed = 123456,
                                               MCMLE.maxit = 20,
                                               parallel = 2,

@@ -209,7 +209,7 @@ NULL
 
 #' @describeIn  version_check
 #' @export
-check_rstudio_equal <- function(version = "2022.7.1", verdict = TRUE) {
+check_rstudio_equal <- function(version = "2023.6.1", verdict = TRUE) {
   ver <- rstudioapi::versionInfo()$version
   # limit to three levels
   ver_split <- strsplit(as.character(ver), ".", fixed = TRUE)[[1]][1:3]
@@ -229,7 +229,7 @@ check_rstudio_equal <- function(version = "2022.7.1", verdict = TRUE) {
 
 #' @describeIn  version_check
 #' @export
-check_r_equal <- function(version = "4.2.1", verdict = TRUE) {
+check_r_equal <- function(version = "4.3.1", verdict = TRUE) {
   major_r <- R.Version()$major
   minor_r <- R.Version()$minor
   ver <- paste0(major_r, ".", minor_r)
