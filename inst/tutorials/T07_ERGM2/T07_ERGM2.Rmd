@@ -429,12 +429,11 @@ This looks like a pretty nice model! Let's comment on this model's overall meani
 
 * nodematch-grade (differential homophily): There is a homophilic effect due to grade. The strongest homophily is in grade 7 and the weakest in grade 12 (check the odds ratios!).
 
-* nodefactor-grade: this term tell us the likelihood of students in each grade to make friends. Grade 12 students have the highest number of friends.
+* nodefactor-grade: this term tells us the likelihood of students in each grade to make friends. Grade 12 students have the highest number of friends.
 
 * nodematch-Race: there are homophily effects due to race
 
-* nodefactor-race: White students are more likely to have friends than the other
-categories
+* nodefactor-race: White students are less likely to have friends than black students, but still more likely than the other categories if compared to the reference one.
 
 * nodematch-sex (differential homophiliy): There are homophilic effects among
 female students, but not among males.
