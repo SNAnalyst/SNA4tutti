@@ -162,7 +162,7 @@ You need to have a few packages installed.
 Click the `Run Code` to check. 
 It will check whether you have the required packages installed and will 
 attempt to install any missing packages in case there are any (or it will 
-advise you to upgrade `SNA4DS`).
+advise you to upgrade `snafun`).
 
 ```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
 check_pkgs()
@@ -1234,7 +1234,7 @@ wealth_absdiff
 
 You can learn more about how to use this function by typing:
 
-    ?SNA4DS:::make_matrix_from_vertex_attribute
+    ?snafun:::make_matrix_from_vertex_attribute
 
 into your R session.
 

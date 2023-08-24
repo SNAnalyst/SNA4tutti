@@ -8,9 +8,9 @@
 \alias{check_r_equal_or_larger}
 \title{Check for correct version of R or RStudio}
 \usage{
-check_rstudio_equal(version = "2022.7.1", verdict = TRUE)
+check_rstudio_equal(version = "2023.6.1", verdict = TRUE)
 
-check_r_equal(version = "4.2.1", verdict = TRUE)
+check_r_equal(version = "4.3.1", verdict = TRUE)
 
 check_rstudio_equal_or_larger(version = "2023.6.1.524", verdict = TRUE)
 
