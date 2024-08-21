@@ -618,8 +618,7 @@ You will find out that these two classifications overlap. For instance, `edges` 
 
 ## Dyadic Independent Terms
 
-The terms we employed so far, but `mutual` only look at independent effects since the probability
-of observing them does not depend on the existence of other ties but only on the properties of the individual nodes. But, even still focusing only on the effects that do not involve edge dependencies, there are many more options. We need to explore more ERGM terms. If you type in your `RStudio` console `search.ergmTerms`, it will appear in the help file. Now we focus on the dyadic independent terms
+The terms we employed so far, except `mutual`, only look at independent effects since the probability of observing them does not depend on the existence of other ties but only on the properties of the individual nodes. But, even still focusing only on the effects that do not involve edge dependencies, there are many more options. We need to explore more ERGM terms. If you type in your `RStudio` console `search.ergmTerms`, it will appear in the help file. Now we focus on the dyadic independent terms
 only, which you can print out using the following line of code:
 
 
