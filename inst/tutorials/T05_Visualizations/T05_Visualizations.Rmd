@@ -290,7 +290,7 @@ learnr::quiz(learnr::question("What is the main problem with the plots of igraph
 
 ```{r test_testquiz, results = 'markup'}
 
-q1 <- learnr::quiz(learnr::question("What is the main problem with the plots of igraphNet and networkNet?",
+q1 <- learnr::quiz(learnr::question("What is the main problem with the plots of igraphNet and igraphNetLarge?",
                     learnr::answer("nodes are too small"),
                     learnr::answer("the colors are not color blind friendly"),
                     learnr::answer("the plot does not inform us on what the network represents", correct = TRUE),
