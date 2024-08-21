@@ -755,13 +755,11 @@ gradethis::grade_code(correct = "Great job! I knew that you could do it!")
 
 
 
-Ok, do you see that the story in model 4 is changed? This is the beauty of nesting models!
+Ok, do you see that the story in model 4 has changed? This is the beauty of nesting models!
+Even if our terms are significant in models two and three, they are not anymore when we combine them. Also, the AIC and BIC are higher than the ones in model 3.
+This could be because we are trying to estimate two effects that are too similar and interfere with each other. Remember, one estimates a vector and the other a matrix, but the substantive meaning is not that different.
 
-Even if in models two and three, our terms are significant, they are not anymore when we put them together. Also, the AIC and BIC are lower than the model 3 ones. 
-
-This could be because we are trying to estimate two effects that are too similar and interfere with each other. Remember, one estimates a vector and the other a matrix, but the substantive meaning is not that different. 
-
-In general, we know that model 4 is not a good fit for our network. We are going in the wrong direction, and when this happens, you simply discard that option and test others. But the good thing is that we checked! If we did not run model 3 and jump to model 4, we would not have known that being equally rich is a better explanation than being just the richest! It is, in fact, unlikely that people don't marry at all because they are not rich enough!  
+In general, we know that model 4 is not a good fit for our network. We are going in the wrong direction, and when this happens, you simply discard that option and test others. But the good thing is that we checked! If we did not run model 3 and jump to model 4, we would not have known that being equally rich is a better explanation than being just the richest! It is, in fact, unlikely that people don’t marry at all because they are not rich enough!
 
 That's how much you can fine-tune your hypothesis using ERG models! Isn't it awesome? I answer: it is. But it is also quite challenging, and unless you know what you are doing, you will be entangled in the almost unlimited options that this class of model offers you! 
 
