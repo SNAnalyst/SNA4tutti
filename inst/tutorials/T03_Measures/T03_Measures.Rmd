@@ -1,6 +1,6 @@
 ---
 title: "T03 - Network Measures"
-description: "Tutorial III -- Network Measures"
+description: "Network Measures"
 output: 
   learnr::tutorial:
     fig_caption: no

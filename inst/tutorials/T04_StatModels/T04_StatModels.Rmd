@@ -1,6 +1,6 @@
 ---
 title: "T04 - Statistical Models"
-description: "Week 06: Introduction to statistical network models"
+description: "Introduction to statistical network models"
 output: 
   learnr::tutorial:
     fig_caption: no
