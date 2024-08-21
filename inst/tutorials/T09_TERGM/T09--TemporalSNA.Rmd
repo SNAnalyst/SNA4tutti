@@ -31,15 +31,19 @@ source("../R/helper_code.R")
 
 # Check whether required packages are installed
 pkgs <- matrix(c(
-  "learnr", "0.10.5", "CRAN",
-  "gradethis", "0.2.9.9000", "rstudio/gradethis",
-  "knitr", "1.39", "CRAN",
+  
+  
+  "learnr", "0.11.5", "CRAN",
+  "gradethis", "0.2.14", "rstudio/gradethis",
+  "igraph", "2.0.3", "CRAN",
+  "igraphdata", "1.0.0", "CRAN",
+  "knitr", "1.48", "CRAN",
+  "network","1.18.2" , "CRAN",
   "sna", "2.7", "CRAN",
-  "snafun", "0.2022.8", "SNAnalyst/snafun",
-  "network","1.17.2" , "CRAN",
-  "ndtv","0.13.2" , "CRAN",
+  "snafun", "0.2024.2", "SNAnalyst/snafun",
+  "ndtv","0.13.4" , "CRAN",
   "tsna", "0.3.5" , "CRAN",
-  "networkDynamic", "0.11.2" , "CRAN"
+  "networkDynamic", "0.11.4" , "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
@@ -50,13 +54,13 @@ check_pkgs <- function(.pkgs = pkgs) {
 
 # RStudio
 check_RStudio <- function() {
-  sna4tutti::check_rstudio_equal_or_larger(version = "2022.7.1.554", verdict = TRUE)
+  sna4tutti::check_rstudio_equal_or_larger(version = "2024.04.2", verdict = TRUE)
 }
 
 
 # R check version (required 4.2.1) -updated Aug 2022
 check_R <- function() {
-  sna4tutti::check_r_equal_or_larger(version = "4.2.1", verdict = TRUE)
+  sna4tutti::check_r_equal_or_larger(version = "4.4.1", verdict = TRUE)
 }
 
 
@@ -300,7 +304,7 @@ How about some basic measures:
 
 ```{r basics, exercise = TRUE, warning=FALSE}
 snafun::g_density(classroom)
-snafun::g_centralize(classroom, "betweenness")$centralization
+snafun::v_betweenness(classroom)
 ```
 
 And look at some of the attributes:
