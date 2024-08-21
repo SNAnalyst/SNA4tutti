@@ -32,14 +32,14 @@ source("../R/helper_code.R")
 
 # Check whether required packages are installed
 pkgs <- matrix(c(
-  "learnr", "0.10.2", "CRAN",
-  "gradethis", "0.2.8.9000", "rstudio/gradethis",
-  "igraph", "1.3.2", "CRAN",
-  "knitr", "1.39", "CRAN",
+  "learnr", "0.11.5", "CRAN",
+  "gradethis", "0.2.14", "rstudio/gradethis",
+  "igraph", "2.0.3", "CRAN",
+  "knitr", "1.48", "CRAN",
   "sna", "2.7", "CRAN",
-  "snafun", "0.2022.8", "SNAnalyst/snafun",
-  "SNA4DSData", "0.9.91", "SNAnalyst/SNA4DSData",
-  "network", "1.17.1", "CRAN"
+  "snafun", "0.2024.2", "SNAnalyst/snafun",
+  "SNA4DSData", "0.9.93", "SNAnalyst/SNA4DSData",
+  "network", "1.18.2", "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
@@ -50,13 +50,13 @@ check_pkgs <- function(.pkgs = pkgs) {
 
 # RStudio
 check_RStudio <- function() {
-  sna4tutti::check_rstudio_equal_or_larger(version = "2022.7.1.554", verdict = TRUE)
+  sna4tutti::check_rstudio_equal_or_larger(version = "2024.04.2", verdict = TRUE)
 }
 
 
 # R check version (required 4.2.1) -updated Aug 2022
 check_R <- function() {
-  sna4tutti::check_r_equal_or_larger(version = "4.2.1", verdict = TRUE)
+  sna4tutti::check_r_equal_or_larger(version = "4.4.1", verdict = TRUE)
 }
 
 
@@ -248,19 +248,20 @@ By immersing yourself in `r rproj()` , you will become well-versed in the best
 tool for the job. No, let me rephrase that: ***BY FAR*** the best tool for the
 job!
 
-![](images/greg-rosenke-xoxnfVIE7Qw-unsplash.jpg "Photo by <a href="https://unsplash.com/@greg_rosenke?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Greg Rosenke</a> on <a href="https://unsplash.com/s/photos/tool?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>"){width="800"}
+![](images/greg-rosenke-xoxnfVIE7Qw-unsplash.jpg "Photo by <a href="https://unsplash.com/@greg_rosenke?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Greg Rosenke</a> on <a href="https://unsplash.com/s/photos/tool?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>"){width="322"}
 
-<div class = "credit">
+::: credit
 (Photo by [Greg Rosenke](https://unsplash.com/@greg_rosenke) on
 [Unsplash](https://unsplash.com/s/photos/tool))
-</div>
+:::
 
-<!-- <p style="font-size:0.8rem; font-style:italic; text-align:right"> -->
+<!-- <p style="font-size:0.4rem; font-style:italic; text-align:right"> -->
+
 <!-- (Photo by [Greg Rosenke](https://unsplash.com/@greg_rosenke) on -->
+
 <!-- [Unsplash](https://unsplash.com/s/photos/tool)) -->
+
 <!-- </p> -->
-
-
 
 ### SNA outside of `r rproj()`
 
@@ -310,7 +311,11 @@ making their tools available through R for the rest of us.
 
 This leads us to some good news and some bad news.
 
-<div class = "green">The good news first</div><br>
+::: {.green style="font-size: large;"}
+The good news first
+:::
+
+<br>
 
 In `r rproj()` you can do virtually any analysis you want to perform on
 networked data. Especially when it comes to modeling networks, `r rproj()` is
@@ -319,7 +324,11 @@ too, but lots of modeling methods have been implemented in `r rproj()` only. The
 wonderful thing is that you can run an entire network analysis pipeline inside
 `r rproj()` alone.
 
-<div class="red">Then the bad news</div><br>
+::: {.red style="font-size: large;"}
+Then the bad news
+:::
+
+<br>
 
 The fact that `r rproj()` is so incredibly powerful is due to tens of thousands
 of researchers implementing their models and techniques into `r rproj()`
@@ -343,7 +352,11 @@ that many `r rproj()` users live by: create packages that do a single group of
 things really well, rather than creating large packages that try to do it all
 (and then possibly not all as well).
 
-<div class="orange">Some better news</div><br>
+::: {.orange style="font-size: large;"}
+Some better news
+:::
+
+<br>
 
 Although there are many packages that each specialize in a specific analysis
 method, there are two packages that have set a standard that many other packages
@@ -393,7 +406,11 @@ So, although you will still need to convert your network data between these
 three structures (*network*, *matrix*, and *igraph*), in most projects you will
 not have to deal with other data structures as well.
 
-<div class = "green">All is well that ends well</div><br>
+::: {.green style="font-size: large;"}
+All is well that ends well
+:::
+
+<br>
 
 OK, so you learnt that there are three data structures that you will need to
 convert between and that you will have to switch between several packages (esp.
@@ -427,38 +444,43 @@ convert your data to the `network` data structure and off you go.
 
 ### The `snafun` API
 
-We have tried to use a consistent API for the `snafun` package. The package 
-is very recent (we developed it over the last few months), so there may be 
-some space for further development and extension. But this is the general idea 
-behind the API. This is what it looks like:
+We have tried to use a consistent API for the `snafun` package. The package is
+very recent (we developed it over the last few months), so there may be some
+space for further development and extension. But this is the general idea behind
+the API. This is what it looks like:
 
-- add_* : add stuff to network objects
-- count_* : counting things in the graph, such as the number of vertices, number of edges, dyad census, triad census
-- create_* : create graphs (in igraph or network format) with specific characteristics
-- extract_* : access specific data from (network) objects
-- find_* : identify specific parts of the network, such as who the isolates are
-- is_* : checks, such as whether a network is bipartite
-- has_* : checks, such as whether a network has loops
-- list_*: list characteristics, such as list_edge_attributes
-- make_* : create objects based on graphs, ie. make a matrix from vertex attributes, make a mixing_matrix, etc.
-- plot_* : several plot functions
-- remove_* : delete parts of the network, such as remove the isolates
-- stat_* : help functions for statistical modeling
-- to_* : conversion methods, converting from igraph, network, matrix, data.frame to igraph, network, matrix, data.frame
+-   add\_\* : add stuff to network objects
+-   count\_\* : counting things in the graph, such as the number of vertices,
+    number of edges, dyad census, triad census
+-   create\_\* : create graphs (in igraph or network format) with specific
+    characteristics
+-   extract\_\* : access specific data from (network) objects
+-   is\_\* : checks, such as whether a network is bipartite
+-   has\_\* : checks, such as whether a network has loops
+-   list\_\*: list characteristics, such as list_edge_attributes
+-   make\_\* : create objects based on graphs, ie. make a matrix from vertex
+    attributes, make a mixing_matrix, etc.
+-   plot\_\* : several plot functions
+-   remove\_\* : delete parts of the network, such as remove the isolates
+-   stat\_\* : help functions for statistical modeling
+-   to\_\* : conversion methods, converting from igraph, network, matrix,
+    data.frame to igraph, network, matrix, data.frame
 
-Then, there are indices/measures at three levels:
-- e_* : edge level indices
-- g_* : graph level indices, such as betweenness centralization
-- v_* : vertex level indices, such as betweenness
+Then, there are indices/measures at three levels: - e\_\* : edge level indices -
+g\_\* : graph level indices, such as betweenness centralization - v\_\* : vertex
+level indices, such as betweenness.
 
-Finally, it is inevitable to have a few some functions that don't fit within a 
+Finally, it is inevitable to have a few some functions that don't fit within a
 clear category and don't follow this API.
 
-Anyway, try to remember the API above, so you can easily find the functions you need.
-And, most of all: ***ENJOY!!!***
+Anyway, try to remember the API above, so you can easily find the functions you
+need. We also have an extensive website for the package, with access to all the
+help files and cheatsheets (under "Articles"): [SNAFUN
+website](https://snanalyst.github.io/SNAfun/ "SNAFUN website").
 
-![](images/gratisography-sunburn-man-free-stock-photo-1170x780.jpg){width=70}
+***ENJOY!!!***
 
+![](images/gratisography-sunburn-man-free-stock-photo-1170x780.jpg){width="681"}
 
 ## Exploring network data
 
@@ -552,7 +574,7 @@ receiver), there are no *loops* (a loop is an edge from an actor to himself).
 You also see that there are several attributes in the data about the vertices,
 such as their *Location*, their *Paid.Staff* and their names (*vertex.names*).
 We also have an attribute *Frequency* for the edges. Again, the help file gives
-info on what these attrbutes mean.
+info on what these attributes mean.
 
 This is what a `network` object looks like. Let's look at the same data in a
 `igraph` format. How? USE THAT AWESOME PACKAGE YOU LEARNED ABOUT ABOVE!
@@ -566,7 +588,7 @@ That looks different! On the first line you see "14 83" which means: 14 vertices
 with 83 edges. You also see the capital D saying: this is a "directed" network.
 You also see the attributes that we just saw above. The presentation of the
 network data is different because an `igraph` object is very different from a
-`network` object.
+`network` object, even when both encode the same data.
 
 ### Gimme some numbers
 
@@ -586,18 +608,17 @@ snafun::list_vertex_attributes(cheyenne)
 
 That's simple and fun!
 
-Now, here is a little challenge: 
+Now, here is a little challenge:
 
-- read in the network called "Texas", that is
-inside the `emon` data 
+-   read in the network called "Texas", that is inside the `emon` data
 
-- apply the functions from above on the Texas network
-instead of on Cheyenne - convert the Texas network to an `igraph` object, call
-that `texas_i` for now. 
+-   apply the functions from above on the Texas network instead of on Cheyenne -
+    convert the Texas network to an `igraph` object, call that `texas_i` for
+    now.
 
-- determine all of these numbers for `Texas_i`. 
+-   determine all of these numbers for `Texas_i`.
 
-- Check if you get the same results (you should)
+-   Check if you get the same results (you should)
 
 ```{r emon_load_exc5_fies, include = TRUE, exercise.lines = 20, exercise = TRUE,  exercise.setup = "emon_load"}
 
@@ -654,7 +675,7 @@ network data you are working with.
 > whether you feed it an `igraph` object or a `network` object? That's the power
 > of `snafun`: it just understands what to do. BRILLIANT!
 
-(isn't it wonderful that we remain so humble and modest about it?)
+(and isn't it wonderful that we remain so humble and modest about it?)
 
 ### Gimme more data from the object!
 
@@ -806,8 +827,8 @@ igraph::as_adj_list(flobus)
 Compare this with the results above, can you see how this works?
 
 [There is no implementation for this in `snafun` yet. But if you really want to
-have it, ask Claudia and Roger and it might just magically be added to the
-package!]
+have it, ask Claudia and Roger nicely and it might just magically be added to
+the package!]
 
 ## Bipartite networks
 
@@ -952,9 +973,9 @@ One final note. Why did `snafun::to_matrix` create an incidence matrix (ie. a
 matrix with vertices of one type as senders and vertices of another type as
 receivers), while it gave us an adjacency matrix before? The answer is:
 
-***because `snafun` is smart***
+***because*** **`snafun`*is smart***
 
-It understands how `igraph` objects work. Fun!
+It understands how `igraph` objects work. That's fun!
 
 ## Doing your first analysis
 
@@ -1013,7 +1034,6 @@ Although it says `add_vertex_attribute`, you can also use this function to set
 an existing attribute to some value. Check it out and extract the vertex names
 from `texas2`.
 
-
 ```{r names_t2, exercise = TRUE, exercise.setup = "emon_load", exercise.lines = 2}
 
 ```
@@ -1024,20 +1044,18 @@ snafun::extract_vertex_names(texas2)
 
 Wonderful, you are getting the hang of it!
 
+Actually, there is a shorter way of doing this, because `snafun` actually has a
+specific function to add vertex names:
 
-Actually, there is a shorter way of doing this, because `snafun` actually 
-has a specific function to add vertex names:
-
-```r
+``` r
 texas2 <- snafun::add_vertex_names(x = texas, value = new_names)
 ```
 
-We recommend that you use this function for vertex names (and the regular 
-`snafun::add_vertex_attributes` to set any other vertex attribute), because 
-the `igraph` and `network` objects store vertex names differently.
-Our specialized function does it correctly for both graph classes, so you don't 
-have to remember how they differ exactly. Much easier, and much safer too.
-
+We recommend that you use this function for vertex names (and the regular
+`snafun::add_vertex_attributes` to set any other vertex attribute), because the
+`igraph` and `network` objects store vertex names differently. Our specialized
+function does it correctly for both graph classes, so you don't have to remember
+how they differ exactly. Much easier, and much safer too.
 
 ### Distance
 
@@ -1083,9 +1101,9 @@ Kerrville Police Department -\> Kerr County Civil Defense. That's three steps.
 but it will never be less than three steps).
 
 You also see that the distance from the Salvation Army to all others is
-infinitely large. Why? Because there is not a single tie from the Salvation
-Army to any other organization. There are some ties *to* the Salvation Army, so
-they are not completely alone in the end.
+infinitely large. Why? Because there is not a single tie from the Salvation Army
+to any other organization. There are some ties *to* the Salvation Army, so they
+are not completely alone.
 
 ### Density
 
@@ -1187,20 +1205,19 @@ edges), you dabbled with bipartite networks and even computed some measures on
 the networks and the dyads.
 
 This is only the necessary foundation, so that we can start doing some actual
-analyses of social networks. You need to have ***mastered the foundations*** of how
-to deal with this type of data before you can start doing cool stuff with them.
+analyses of social networks. You need to have ***mastered the foundations*** of
+how to deal with this type of data before you can start doing cool stuff with
+them.
 
+| [Foundation!](https://www.politico.com/states/new-york/city-hall/story/2015/12/minority-workers-sue-operating-engineers-union-028979) | [Foundation!](https://www.pexels.com/photo/black-woman-spreading-foundation-on-face-with-brush-6954108/) |
+|:--------------------------------------:|:--------------------------------------:|
+|                                           ![](images/foundation_politico.png){width="100%"}                                           |                    ![](images/pexels-george-milton-6954109_smaller.jpg){width="87%"}                     |
 
-[Foundation!](https://www.politico.com/states/new-york/city-hall/story/2015/12/minority-workers-sue-operating-engineers-union-028979)           |  [Foundation!](https://www.pexels.com/photo/black-woman-spreading-foundation-on-face-with-brush-6954108/) 
-:-------------------------:|:-------------------------:
-![](images/foundation_politico.png){width=90%} |  ![](images/pexels-george-milton-6954109_smaller.jpg){width=90%}
-
-
-You are now ready to try some of this stuff on your own. Please do the homeplay 
+You are now ready to try some of this stuff on your own. Please do the homeplay
 (see Canvas), which will be the foundation for the upcoming lab.
 
-It's going to go faster from here and we'll be more adventurous in every 
-future tutorial and lab and you now have the skills to travel along.
+It's going to go faster from here and we'll be more adventurous in every future
+tutorial and lab and you now have the skills to travel along.
 
 ENJOY the ride!
 
@@ -1209,7 +1226,6 @@ ENJOY the ride!
 ```{r, fig.align='center', echo = FALSE}
 knitr::include_graphics("images/roadtrip.gif")
 ```
-
 
 <br><br><br>
 
