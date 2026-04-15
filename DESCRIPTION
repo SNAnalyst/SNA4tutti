@@ -25,7 +25,7 @@ Imports:
   	gradethis (>= 0.2.14),
 	igraph (>= 2.2.3),
 	igraphdata (>= 1.0.1),
-	learnr  (>= 0.11.16),
+	learnr  (>= 0.11.6),
 	network (>= 1.20.0),
 	rstudioapi (>= 0.18),
 	SNA4DSData,
@@ -35,8 +35,7 @@ Remotes:
 	github::rstudio-education/gradethis,
 	github::SNAnalyst/SNA4DSData,
 	github::SNAnalyst/snafun,
-	github::matthewjdenny/GERGM,
-	github::rstudio/learnr
+	github::matthewjdenny/GERGM
 Suggests:
 	desc,
 	fs,
