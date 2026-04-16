@@ -24,7 +24,7 @@ Encoding: UTF-8
 URL: https://github.com/SNAnalyst/sna4tutti
 BugReports: https://github.com/SNAnalyst/sna4tutti/issues
 RoxygenNote: 7.3.3
-Config/sna4tutti/min-rstudio: 2024.04.2
+Config/sna4tutti/min-rstudio: 2026.01.1
 Imports:
     ergm (>= 4.12.0),
     GERGM (>= 0.13.0),

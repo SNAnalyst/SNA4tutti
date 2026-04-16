@@ -235,6 +235,23 @@ tutorial_package_requirements <- function(package = "sna4tutti",
   version
 }
 
+.current_rstudio_version <- function() {
+  if (rstudioapi::isAvailable(child_ok = TRUE)) {
+    version <- tryCatch(rstudioapi::versionInfo()$version,
+                        error = function(e) NULL)
+    if (!is.null(version) && nzchar(as.character(version))) {
+      return(as.character(version))
+    }
+  }
+
+  version <- Sys.getenv("RSTUDIO_VERSION", unset = "")
+  if (nzchar(version)) {
+    return(version)
+  }
+
+  NA_character_
+}
+
 .normalize_version <- function(version, n = NULL) {
   version <- sub("\\+.*$", "", as.character(version))
   parts <- strsplit(version, ".", fixed = TRUE)[[1]]
@@ -336,12 +353,12 @@ check_rstudio_equal <- function(version = NULL, verdict = TRUE) {
     version <- .minimum_rstudio_version()
   }
 
-  if (!rstudioapi::isAvailable()) {
+  ver <- .current_rstudio_version()
+  if (is.na(ver)) {
     if (verdict) cat("RStudio is not available in this session")
     return(invisible(FALSE))
   }
 
-  ver <- rstudioapi::versionInfo()$version
   if (.version_is_equal(ver, version)) {
     if (verdict) cat("Your version of RStudio is perfectly fine")
     invisible(TRUE)
@@ -382,12 +399,12 @@ check_rstudio_equal_or_larger <- function(version = NULL, verdict = TRUE) {
     version <- .minimum_rstudio_version()
   }
 
-  if (!rstudioapi::isAvailable()) {
+  ver <- .current_rstudio_version()
+  if (is.na(ver)) {
     if (verdict) cat("RStudio is not available in this session")
     return(invisible(FALSE))
   }
 
-  ver <- rstudioapi::versionInfo()$version
   if (.version_is_at_least(ver, version)) {
     if (verdict) cat("Your version of RStudio is fine")
     invisible(TRUE)
