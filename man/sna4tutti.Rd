@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Roger Leenders \email{r.t.a.j.leenders@jads.nl}
+\strong{Maintainer}: Roger Leenders \email{SNA4DS@jads.nl}
 
 Authors:
 \itemize{

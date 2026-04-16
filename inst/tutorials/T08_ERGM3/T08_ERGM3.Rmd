@@ -42,7 +42,7 @@ check_RStudio <- function() {
 
 
 
-# R check version (required 4.3.1) -updated Jul 23
+# Check whether the current R version meets the package requirement
 check_R <- function() {
   sna4tutti::check_r_equal_or_larger(verdict = TRUE)
 }
@@ -113,8 +113,9 @@ Before we start the magical mystery tour, we need to make sure we carry our esse
 
 ### R Version 
 
-You need to have installed `r rproj()` version 4.3.1 and this tutorial is going to check it
-for you. Please hit the `Run Code` button.
+You need a recent enough version of `r rproj()` for this tutorial.
+The check below uses the minimum version required by the currently installed
+`sna4tutti` package. Please hit the `Run Code` button.
 
 ```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
 check_R()
@@ -123,7 +124,9 @@ check_R()
 
 ### R Studio Version
 
-You need to have installed RStudio version 2023.6.1.524 or above.
+You need a recent enough version of RStudio for this tutorial.
+The check below uses the minimum version required by the currently installed
+`sna4tutti` package.
 Let's check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
@@ -133,11 +136,10 @@ check_RStudio()
 
 ### Packages
 
-You need to have a few packages installed. 
-Click the `Run Code` to check. 
-It will check whether you have the required packages installed and will 
-attempt to install any missing packages in case there are any (or it will 
-advise you to upgrade `sna4tutti`).
+You need to have a few packages installed.
+Click the `Run Code` button to check.
+It will verify whether the required packages are installed and will tell you
+which packages you need to install or update when something is missing or too old.
 
 ```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
 

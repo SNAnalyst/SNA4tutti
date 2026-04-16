@@ -2,24 +2,28 @@
 % Please edit documentation in R/check_SNA4tutti.R
 \name{check_sna4tutti}
 \alias{check_sna4tutti}
-\title{Check sna4tutti version}
+\title{Check whether the installed `sna4tutti` package is current on GitHub}
 \usage{
 check_sna4tutti()
 }
 \value{
-nothing relevant, this function is useful for its side effect.
+An invisible logical value. `TRUE` means that the installed package
+  is up-to-date, `FALSE` means that GitHub reports a newer version, and `NA`
+  means that the check could not be completed or the package is not
+  installed.
 }
 \description{
-Check the installed sna4tutti version
+Checks whether the locally installed version of `sna4tutti` matches the
+version declared in the `DESCRIPTION` file on the GitHub repository.
 }
 \details{
-With this function you can check if you have the most recent version of
-the sna4tutti package installed.
+The function is designed as a user-facing convenience helper. It prints a
+short status message and, in interactive sessions, can offer to install or
+update the package from GitHub.
 
-If you are current, the function returns a message that tells you so.
-If there is a more recent version on Github, the function will inform you
-that an update is available. It will also offer you the option to update
-the package by simply pressing the "1" or "Y" key.
+The latest version is read from the repository's `main` branch. If GitHub
+cannot be reached, the function returns `NA` invisibly after printing an
+informative message.
 }
 \examples{
 \dontrun{

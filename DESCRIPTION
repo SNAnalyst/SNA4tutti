@@ -55,5 +55,6 @@ Suggests:
     remotes,
     rlang,
     rprojroot,
+    tinytest,
     usethis (>= 3.2.1)
 License: AGPL (>= 3) + file LICENSE
