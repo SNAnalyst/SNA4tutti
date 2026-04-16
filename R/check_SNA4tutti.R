@@ -35,7 +35,7 @@ check_and_update_github <- function(pkg) {
     print(paste0("The ", check$package, " package is not installed\n"))
     choice <- utils::menu(c("Y", "N"), title = c("Do you want me to install", pkg, "?"))
     if (choice == 1) {
-      remotes::install_github(repo = pkg, dependencies = TRUE)
+      install_github_if_available(repo = pkg, dependencies = TRUE)
     }
     invisible(NA)
   } else if (check$installed_version >= check$latest_version) {
@@ -46,10 +46,22 @@ check_and_update_github <- function(pkg) {
 
     choice <- utils::menu(c("Y", "N"), title = "Do you want me to update sna4tutti?")
     if (choice == 1) {
-      remotes::install_github(repo = pkg, dependencies = TRUE)
+      install_github_if_available(repo = pkg, dependencies = TRUE)
     }
     invisible(FALSE)
   }
+}
+
+
+
+
+
+install_github_if_available <- function(repo, dependencies = TRUE) {
+  if (!requireNamespace("remotes", quietly = TRUE)) {
+    stop("Package 'remotes' is required to install from GitHub.")
+  }
+
+  remotes::install_github(repo = repo, dependencies = dependencies)
 }
 
 

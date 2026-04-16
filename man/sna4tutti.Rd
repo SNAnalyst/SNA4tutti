@@ -2,6 +2,7 @@
 % Please edit documentation in R/SNA4tutti-package.r
 \docType{package}
 \name{sna4tutti}
+\alias{sna4tutti-package}
 \alias{sna4tutti}
 \title{SNA4DS}
 \description{
@@ -9,5 +10,22 @@ Package supporting the SNA4DS course
 }
 \details{
 Functions, datasets, and tutorials, useful for the SNA4DS course.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/SNAnalyst/sna4tutti}
+  \item Report bugs at \url{https://github.com/SNAnalyst/sna4tutti/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Roger Leenders \email{r.t.a.j.leenders@jads.nl}
+
+Authors:
+\itemize{
+  \item Claudia Zucca \email{SNA4DS@jads.nl}
+}
+
 }
 \keyword{package}

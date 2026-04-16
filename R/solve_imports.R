@@ -8,10 +8,19 @@
 # used outside of a chunk.
 solve_imports <- function() {
   hack <- ergm::logLikNull
+  hack <- GERGM::gergm
   hack <- gradethis::code_feedback
+  hack <- htmltools::HTML
   hack <- igraph::add.edges
+  hack <- requireNamespace("igraphdata", quietly = TRUE)
+  hack <- knitr::knit_print
   hack <- learnr::answer
   hack <- network::add.edge
+  hack <- rstudioapi::versionInfo
+  hack <- sna::betweenness
+  hack <- SNA4DSData::Sampson
+  hack <- snafun::g_density
+  hack <- texreg::screenreg
   hack <- tsna::as.network.tPath
   rm(hack)
 }

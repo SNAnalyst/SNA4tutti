@@ -1,178 +1,297 @@
 
-
 #' Check for presence of packages
 #'
-#' Checks whether a set of packages is present and of the correct version
+#' Checks whether a set of packages is present and of the correct version.
 #'
 #' Useful inside a learnr tutorial.
 #'
-#' \code{reqs} is a data.frame with column names "pkg", "version", "where".
-#' All items are \code{character}!
+#' By default, the requirements are read from the installed package
+#' \code{DESCRIPTION} file, so package version requirements only need to be
+#' maintained in one place.
 #'
-#' \itemize{
-#' \item{pkg}{names of the packages}
-#' \item{version}{the minimally required version}
-#' \item{where}{location of the package for download}
+#' If supplied, \code{reqs} must be a data.frame with column names
+#' \code{"pkg"}, \code{"version"}, and \code{"where"}. All items are
+#' \code{character}!
+#'
+#' \describe{
+#'   \item{pkg}{name of the package}
+#'   \item{version}{minimum required version, or an empty string if no minimum
+#'     is enforced}
+#'   \item{where}{download source, either \code{"CRAN"} or a GitHub
+#'     \code{"owner/repo"} reference}
 #' }
 #'
-#' For \code{where} there are two options. If the package resides on CRAN,
-#' it should be "CRAN". If it is on github, it should be "username/reponame" (ie.
-#' whatever would go inside \code{remotes::install_github(where)}).
-#'
-#' First, the function checks if a package is installed and, if installed, whether
-#' it has the required version number or higher.
-#' If eigher of these checks fail, it will attempt to download/upgrade the package.
-#'
-#' After a first pass along all packages (as described above), a second check is
-#' performed if a package is now installed and, if installed, whether
-#' it has the required version number or higher.
+#' If \code{attempt_install = TRUE}, the function tries to install or update
+#' missing packages before reporting any remaining issues. The default is
+#' \code{FALSE}, which is safer for locked-down teaching environments.
 #'
 #' If a package is still not installed, a message is returned that tells the user
-#' how to install it manually.
-#' If a package still does not at least have the required version,
-#' a message is returned that tells the user how to upgrade it manually.
+#' how to install it manually. If a package still does not at least have the
+#' required version, a message is returned that tells the user how to upgrade it
+#' manually.
 #'
-#' @param reqs data.frame (see details)
+#' @param reqs optional data.frame (see details)
+#' @param attempt_install logical, should missing or outdated packages be
+#'   installed automatically before reporting the result?
 #'
 #' @return character string, summarizing the results
 #' @keywords internal
 #'
 #' @examples
 #' \dontrun{
-#' pkgs <- matrix(c(
-#' "gradethis", "0.2.3.9001", "rstudio/gradethis",
-#' "igraph", "1.2.6", "CRAN",
-#' "snaverse2", "0.0.1.9000", "SNAnalyst/snaverse2",
-#' "snaverse1", "0.0.1.9000", "SNAnalyst/snaverse1",
-#' "SNA4DSData", "0.9.9000", "SNAnalyst/SNA4DSData"
-#' ), byrow = TRUE, ncol = 3) |>
-#'   as.data.frame() |>
-#'   setNames(c("pkg", "version", "where"))
-#'
-#' check_packages(pkgs)
+#' check_packages()
 #' }
-check_packages <- function(reqs) {
-  ok <- 0
-  all_installed <- utils::installed.packages()
-  cat("...checking individual packages now...\n")
-  for (pak in 1:nrow(reqs)) {
-    installed <- unname(which(all_installed[, "Package"] ==
-                                reqs[pak, "pkg"]))
-    if (length(installed) == 0) {
-      if (reqs[pak, "where"] == "CRAN") {
-        try(utils::install.packages(reqs[pak, "pkg"],
-                                    dependencies = TRUE),
-            silent = TRUE)
-      }
-      else {
-        cat("...attempting to download a package from github...\n")
-        try(remotes::install_github(reqs[pak, "where"]),
-            silent = TRUE)
-      }
-    }
-    else {
-      if (all_installed[installed, "Version"] < reqs[pak,
-                                                     "version"]) {
-        if (reqs[pak, "where"] == "CRAN") {
-          try(utils::install.packages(reqs[pak, "pkg"],
-                                      dependencies = TRUE),
-              silent = TRUE)
-        }
-        else {
-          cat("...attempting to download a package from github...\n")
-          try(remotes::install_github(reqs[pak, "where"]),
-              silent = TRUE)
-        }
-      }
-      else {
-        ok <- ok + 1
+check_packages <- function(reqs = tutorial_package_requirements(),
+                           attempt_install = FALSE) {
+  reqs <- as.data.frame(reqs, stringsAsFactors = FALSE)
+  needed <- c("pkg", "version", "where")
+
+  if (!all(needed %in% names(reqs))) {
+    stop("`reqs` must contain columns named 'pkg', 'version', and 'where'.")
+  }
+
+  reqs <- reqs[, needed]
+  reqs$version[is.na(reqs$version)] <- ""
+  reqs$where[is.na(reqs$where)] <- "CRAN"
+
+  if (attempt_install) {
+    cat("...checking and attempting to install required packages now...\n")
+    for (pak in seq_len(nrow(reqs))) {
+      if (.package_requirement_problem(reqs[pak, , drop = FALSE])) {
+        .install_required_package(reqs[pak, , drop = FALSE])
       }
     }
+  } else {
+    cat("...checking required packages now...\n")
   }
 
   pkg_missing <- NULL
   pkg_low <- NULL
-  if (ok == nrow(reqs)) {
+  all_installed <- utils::installed.packages()
+
+  for (pak in seq_len(nrow(reqs))) {
+    installed <- unname(which(all_installed[, "Package"] == reqs[pak, "pkg"]))
+    if (length(installed) == 0) {
+      pkg_missing <- c(pkg_missing, pak)
+      next
+    }
+
+    if (!.version_is_at_least(all_installed[installed, "Version"],
+                              reqs[pak, "version"])) {
+      pkg_low <- c(pkg_low, pak)
+    }
+  }
+
+  if (is.null(pkg_missing) && is.null(pkg_low)) {
     verdict <- "Wonderful, all is fine."
-    return(verdict)
-  }
-  else {
-    all_installed <- utils::installed.packages()
-    for (pak in 1:nrow(reqs)) {
-      installed <- unname(which(all_installed[, "Package"] ==
-                                  reqs[pak, "pkg"]))
-      if (length(installed) == 0) {
-        pkg_missing <- c(pkg_missing, pak)
-      }
-      else {
-        if (all_installed[installed, "Version"] < reqs[pak,
-                                                       "version"]) {
-          pkg_low <- c(pkg_low, pak)
-        }
-      }
+    if (attempt_install) {
+      verdict <- "Deficiencies have been fixed, all is fine now."
     }
-  }
-  if ((is.null(pkg_low)) & (is.null(pkg_missing))) {
-    verdict <- "Deficiencies have been fixed, all is fine now."
     return(verdict)
   }
-  verdict <- logical(0)
+
+  verdict <- character(0)
+
   if (!is.null(pkg_missing)) {
-    names_missing <- paste0("'", reqs[pkg_missing, "pkg"],
-                            "'", collapse = ", ")
-    verdict <-
-      c(c(
-        verdict,
-        paste0("The following packages are missing: ",
-               names_missing)
-      ), "Install these using:")
-
-
-    reqs_missing <- reqs[pkg_missing,]
-    reqs_missing_cran <- reqs_missing[reqs_missing[, "where"] ==
-                                        "CRAN", "pkg", drop = TRUE]
-    if (length(reqs_missing_cran) > 0 && nrow(reqs_missing_cran) > 0) {
-      verdict <-
-        c(
-          verdict,
-          glue::glue("     install.packages('{package}')",
-                     package = reqs_missing_cran)
-        )
-    }
-    reqs_missing_github <- reqs_missing[reqs_missing[, "where"] != "CRAN",]
-    if (length(reqs_missing_github) > 0 && nrow(reqs_missing_github) > 0) {
-      verdict <-
-        c(c(
-          verdict,
-          # glue::glue("     remotes::install_github('{location}')",
-          #            location = reqs_missing_github[, "where", drop = TRUE])
-          paste0(
-            "     remotes::install_github('",
-            reqs_missing_github[, 'where', drop = TRUE],
-            "')"
-            )
-        ),
-        "", "")
-    }
+    names_missing <- paste0("'", reqs[pkg_missing, "pkg"], "'", collapse = ", ")
+    verdict <- c(verdict,
+                 paste0("The following packages are missing: ", names_missing),
+                 "Install these using:")
+    verdict <- c(verdict, .install_commands(reqs[pkg_missing, , drop = FALSE]))
   }
+
   if (!is.null(pkg_low)) {
-    pkgs_low <- reqs[pkg_low, "pkg"]
-    names_low <- paste0("'", pkgs_low, "'", collapse = ", ")
-    verdict <-
-      c(c(c(
-        verdict,
-        "",
-        "",
-        paste0("The version of the following packages is too low:",
-               names_low)
-      ), "Upgrade using:"), (
-        glue::glue("      update.packages(\"{package}\")",
-                   package = pkgs_low)
-      ))
+    names_low <- paste0("'", reqs[pkg_low, "pkg"], "'", collapse = ", ")
+    verdict <- c(verdict,
+                 "",
+                 paste0("The version of the following packages is too low: ", names_low),
+                 "Reinstall or upgrade these using:")
+    verdict <- c(verdict, .install_commands(reqs[pkg_low, , drop = FALSE]))
   }
-  return(noquote(verdict))
+
+  noquote(verdict)
 }
 
+.package_description_field <- function(field, package = "sna4tutti") {
+  value <- utils::packageDescription(package, fields = field)
+  if (length(value) == 0) {
+    return(NA_character_)
+  }
+
+  value <- unname(value[[1]])
+  if (is.null(value) || is.na(value) || !nzchar(value)) {
+    return(NA_character_)
+  }
+
+  value
+}
+
+.parse_dependency_field <- function(field, package = "sna4tutti") {
+  value <- .package_description_field(field = field, package = package)
+  if (is.na(value)) {
+    return(data.frame(pkg = character(0),
+                      version = character(0),
+                      stringsAsFactors = FALSE))
+  }
+
+  entries <- trimws(unlist(strsplit(value, ",")))
+  entries <- entries[nzchar(entries)]
+
+  rows <- lapply(entries, function(entry) {
+    match <- regexec("^([A-Za-z][A-Za-z0-9.]*)\\s*(?:\\(>=\\s*([^\\)]+)\\))?$",
+                     entry)
+    parsed <- regmatches(entry, match)[[1]]
+    if (length(parsed) == 0) {
+      stop("Could not parse dependency entry: ", entry)
+    }
+
+    version <- ""
+    if (length(parsed) >= 3 && !is.na(parsed[3])) {
+      version <- parsed[3]
+    }
+
+    data.frame(pkg = parsed[2],
+               version = version,
+               stringsAsFactors = FALSE)
+  })
+
+  do.call(rbind, rows)
+}
+
+.parse_remote_field <- function(package = "sna4tutti") {
+  value <- .package_description_field(field = "Remotes", package = package)
+  if (is.na(value)) {
+    return(data.frame(pkg = character(0),
+                      where = character(0),
+                      stringsAsFactors = FALSE))
+  }
+
+  entries <- trimws(unlist(strsplit(value, ",")))
+  entries <- entries[nzchar(entries)]
+
+  rows <- lapply(entries, function(entry) {
+    remote <- sub("^[^:]+::", "", entry)
+    repo <- basename(remote)
+    repo <- sub("@.*$", "", repo)
+    data.frame(pkg = repo, where = remote, stringsAsFactors = FALSE)
+  })
+
+  do.call(rbind, rows)
+}
+
+tutorial_package_requirements <- function(package = "sna4tutti",
+                                          fields = "Imports",
+                                          packages = NULL) {
+  reqs <- do.call(
+    rbind,
+    lapply(fields, function(field) {
+      .parse_dependency_field(field = field, package = package)
+    })
+  )
+
+  if (is.null(reqs) || nrow(reqs) == 0) {
+    return(data.frame(pkg = character(0),
+                      version = character(0),
+                      where = character(0),
+                      stringsAsFactors = FALSE))
+  }
+
+  reqs <- unique(reqs)
+  reqs$where <- "CRAN"
+
+  remotes <- .parse_remote_field(package = package)
+  if (nrow(remotes) > 0) {
+    for (idx in seq_len(nrow(remotes))) {
+      hit <- reqs$pkg == remotes$pkg[idx]
+      reqs$where[hit] <- remotes$where[idx]
+    }
+  }
+
+  if (!is.null(packages)) {
+    reqs <- reqs[reqs$pkg %in% packages, , drop = FALSE]
+  }
+
+  reqs[order(reqs$pkg), c("pkg", "version", "where")]
+}
+
+.minimum_r_version <- function(package = "sna4tutti") {
+  depends <- .parse_dependency_field(field = "Depends", package = package)
+  depends <- depends[depends$pkg == "R", , drop = FALSE]
+
+  if (nrow(depends) == 0 || !nzchar(depends$version[1])) {
+    stop("No minimum R version found in DESCRIPTION Depends field.")
+  }
+
+  depends$version[1]
+}
+
+.minimum_rstudio_version <- function(package = "sna4tutti") {
+  version <- .package_description_field(field = "Config/sna4tutti/min-rstudio",
+                                        package = package)
+  if (is.na(version)) {
+    stop("No minimum RStudio version found in DESCRIPTION.")
+  }
+
+  version
+}
+
+.normalize_version <- function(version, n = NULL) {
+  version <- sub("\\+.*$", "", as.character(version))
+  parts <- strsplit(version, ".", fixed = TRUE)[[1]]
+
+  if (!is.null(n)) {
+    parts <- parts[seq_len(min(length(parts), n))]
+  }
+
+  paste(parts, collapse = ".")
+}
+
+.version_is_at_least <- function(installed, required) {
+  if (is.na(required) || !nzchar(required)) {
+    return(TRUE)
+  }
+
+  utils::compareVersion(.normalize_version(installed),
+                        .normalize_version(required)) >= 0
+}
+
+.version_is_equal <- function(installed, required) {
+  parts <- length(strsplit(required, ".", fixed = TRUE)[[1]])
+  utils::compareVersion(.normalize_version(installed, n = parts),
+                        .normalize_version(required, n = parts)) == 0
+}
+
+.package_requirement_problem <- function(req) {
+  all_installed <- utils::installed.packages()
+  installed <- unname(which(all_installed[, "Package"] == req[1, "pkg"]))
+  if (length(installed) == 0) {
+    return(TRUE)
+  }
+
+  !.version_is_at_least(all_installed[installed, "Version"], req[1, "version"])
+}
+
+.install_required_package <- function(req) {
+  if (req[1, "where"] == "CRAN") {
+    try(utils::install.packages(req[1, "pkg"], dependencies = TRUE), silent = TRUE)
+  } else {
+    cat("...attempting to download a package from github...\n")
+    if (!requireNamespace("remotes", quietly = TRUE)) {
+      return(invisible(FALSE))
+    }
+    try(remotes::install_github(req[1, "where"], dependencies = TRUE), silent = TRUE)
+  }
+}
+
+.install_commands <- function(reqs) {
+  unlist(lapply(seq_len(nrow(reqs)), function(idx) {
+    if (reqs[idx, "where"] == "CRAN") {
+      glue::glue("     install.packages('{reqs[idx, 'pkg']}')")
+    } else {
+      glue::glue("     remotes::install_github('{reqs[idx, 'where']}')")
+    }
+  }), use.names = FALSE)
+}
 
 
 
@@ -191,15 +310,18 @@ check_packages <- function(reqs) {
 #'
 #' If required, a verdict can be printed to the console as well (when \code{verdict = TRUE})
 #'
-#' The functions \code{check_rstudio_equal} and  \code{check_r_equal} check
+#' The functions \code{check_rstudio_equal} and \code{check_r_equal} check
 #' whether RStudio or R have the exact version asked for.
 #'
 #' The functions \code{check_rstudio_equal_or_larger} and \code{check_r_equal_or_larger} check
-#' whether RStudio or R have at least the version asked for (havig a higher version is fine).
+#' whether RStudio or R have at least the version asked for (having a higher version is fine).
+#'
+#' When \code{version = NULL}, the requirement is read from the installed
+#' package \code{DESCRIPTION} file.
 #'
 #' @param version required version number to test against
 #' @param verdict logical, whether a text with the verdict needs to be printed
-#' to the console
+#'   to the console
 #'
 #' @return logical (invisibly) and, if asked for, a printed verdict
 #' @keywords internal
@@ -209,15 +331,18 @@ NULL
 
 #' @describeIn  version_check
 #' @export
-check_rstudio_equal <- function(version = "2023.6.1", verdict = TRUE) {
-  ver <- rstudioapi::versionInfo()$version
-  # limit to three levels
-  ver_split <- strsplit(as.character(ver), ".", fixed = TRUE)[[1]][1:3]
-  ver <- paste0(ver_split, collapse = ".")
-  version_split <- strsplit(version, ".", fixed = TRUE)[[1]][1:3]
-  version <- paste0(version_split, collapse = ".")
+check_rstudio_equal <- function(version = NULL, verdict = TRUE) {
+  if (is.null(version)) {
+    version <- .minimum_rstudio_version()
+  }
 
-  if (ver == version) {
+  if (!rstudioapi::isAvailable()) {
+    if (verdict) cat("RStudio is not available in this session")
+    return(invisible(FALSE))
+  }
+
+  ver <- rstudioapi::versionInfo()$version
+  if (.version_is_equal(ver, version)) {
     if (verdict) cat("Your version of RStudio is perfectly fine")
     invisible(TRUE)
   } else {
@@ -229,11 +354,15 @@ check_rstudio_equal <- function(version = "2023.6.1", verdict = TRUE) {
 
 #' @describeIn  version_check
 #' @export
-check_r_equal <- function(version = "4.3.1", verdict = TRUE) {
+check_r_equal <- function(version = NULL, verdict = TRUE) {
+  if (is.null(version)) {
+    version <- .minimum_r_version()
+  }
+
   major_r <- R.Version()$major
   minor_r <- R.Version()$minor
   ver <- paste0(major_r, ".", minor_r)
-  if (ver == version) {
+  if (.version_is_equal(ver, version)) {
     if (verdict) cat("Your version of R is exactly right")
     invisible(TRUE)
   } else {
@@ -248,9 +377,18 @@ check_r_equal <- function(version = "4.3.1", verdict = TRUE) {
 
 #' @describeIn  version_check
 #' @export
-check_rstudio_equal_or_larger <- function(version = "2023.6.1.524", verdict = TRUE) {
+check_rstudio_equal_or_larger <- function(version = NULL, verdict = TRUE) {
+  if (is.null(version)) {
+    version <- .minimum_rstudio_version()
+  }
+
+  if (!rstudioapi::isAvailable()) {
+    if (verdict) cat("RStudio is not available in this session")
+    return(invisible(FALSE))
+  }
+
   ver <- rstudioapi::versionInfo()$version
-  if (ver >= version) {
+  if (.version_is_at_least(ver, version)) {
     if (verdict) cat("Your version of RStudio is fine")
     invisible(TRUE)
   } else {
@@ -262,11 +400,15 @@ check_rstudio_equal_or_larger <- function(version = "2023.6.1.524", verdict = TR
 
 #' @describeIn  version_check
 #' @export
-check_r_equal_or_larger <- function(version = "4.3.1", verdict = TRUE) {
+check_r_equal_or_larger <- function(version = NULL, verdict = TRUE) {
+  if (is.null(version)) {
+    version <- .minimum_r_version()
+  }
+
   major_r <- R.Version()$major
   minor_r <- R.Version()$minor
   ver <- paste0(major_r, ".", minor_r)
-  if (ver >= version) {
+  if (.version_is_at_least(ver, version)) {
     if (verdict) cat("Your version of R is fine")
     invisible(TRUE)
   } else {

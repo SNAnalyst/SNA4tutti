@@ -32,18 +32,7 @@ knitr::opts_chunk$set(
 source("../R/helper_code.R")
 
 # Check whether required packages are installed
-pkgs <- matrix(c(
-  "learnr", "0.11.5", "CRAN",
-  "gradethis", "0.2.14", "rstudio/gradethis",
-  "igraph", "2.0.3", "CRAN",
-  "igraphdata", "1.0.0", "CRAN",
-  "knitr", "1.48", "CRAN",
-  "sna", "2.7", "CRAN",
-  "snafun", "0.2024.2", "SNAnalyst/snafun",
-  "SNA4DSData", "0.9.93", "SNAnalyst/SNA4DSData"
-), byrow = TRUE, ncol = 3) |> 
-  as.data.frame() |> 
-  setNames(c("pkg", "version", "where"))
+pkgs <- sna4tutti:::tutorial_package_requirements()
 
 
 check_pkgs <- function(.pkgs = pkgs) {
@@ -52,13 +41,13 @@ check_pkgs <- function(.pkgs = pkgs) {
 
 # RStudio
 check_RStudio <- function() {
-  sna4tutti::check_rstudio_equal_or_larger(version = "2024.04.2", verdict = TRUE)
+  sna4tutti::check_rstudio_equal_or_larger(verdict = TRUE)
 }
 
 
 # R check version (required 4.2.1) -updated Aug 2022
 check_R <- function() {
-  sna4tutti::check_r_equal_or_larger(version = "4.4.1", verdict = TRUE)
+  sna4tutti::check_r_equal_or_larger(verdict = TRUE)
 }
 
 

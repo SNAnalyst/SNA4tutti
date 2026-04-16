@@ -29,19 +29,7 @@ knitr::opts_chunk$set(
 source("../R/helper_code.R")
 
 # Check whether required packages are installed
-pkgs <- matrix(c(
-  "learnr", "0.10.2", "CRAN",
-  "gradethis", "0.2.8.9000", "rstudio/gradethis",
-  "igraph", "1.3.2", "CRAN",
-  "knitr", "1.39", "CRAN",
-  "sna", "2.7", "CRAN",
-  "SNA4DSData", "0.9.91", "SNAnalyst/SNA4DSData",
-  "ergm", "4.1.2", "CRAN",
-  "network","1.17.1" , "CRAN",
-  "texreg", "1.38.6" , "CRAN"
-), byrow = TRUE, ncol = 3) |> 
-  as.data.frame() |> 
-  setNames(c("pkg", "version", "where"))
+pkgs <- sna4tutti:::tutorial_package_requirements()
 
 check_pkgs <- function(.pkgs = pkgs) {
   sna4tutti:::check_packages(.pkgs)
@@ -49,14 +37,14 @@ check_pkgs <- function(.pkgs = pkgs) {
 
 # RStudio
 check_RStudio <- function() {
-  sna4tutti::check_rstudio_equal_or_larger(version = "2023.6.1.524", verdict = TRUE)
+  sna4tutti::check_rstudio_equal_or_larger(verdict = TRUE)
 }
 
 
 
 # R check version (required 4.3.1) -updated Jul 2023
 check_R <- function() {
-  sna4tutti::check_r_equal_or_larger(version = "4.3.1", verdict = TRUE)
+  sna4tutti::check_r_equal_or_larger(verdict = TRUE)
 }
 
 
@@ -467,7 +455,7 @@ model by reading the information that the model prints for you while running.
 
 florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
-flobusiness <- intergraph::asNetwork(flo_bus)
+flobusiness <- snafun::to_network(flo_bus)
 
 ```
 
@@ -478,7 +466,7 @@ flobusiness <- intergraph::asNetwork(flo_bus)
 
 florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
-flobusiness <- intergraph::asNetwork(flo_bus)
+flobusiness <- snafun::to_network(flo_bus)
 
 if (base::isFALSE(base::table((network::get.vertex.attribute(flobusiness, 'vertex.names')) == c("Acciaiuoli", "Albizzi", "Barbadori", "Bischeri", "Castellani", "Ginori", "Guadagni", "Lamberteschi", "Medici", "Pazzi", "Peruzzi",       "Pucci", "Ridolfi", "Salviati", "Strozzi", "Tornabuoni")) == 16)) {
   sna4tutti::broken_info()
@@ -492,7 +480,7 @@ if (base::isFALSE(base::table((network::get.vertex.attribute(flobusiness, 'verte
 
 florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
-flobusiness <- intergraph::asNetwork(flo_bus)
+flobusiness <- snafun::to_network(flo_bus)
 
 if (base::isFALSE(network::get.vertex.attribute(flobusiness, 'NumberPriorates')[2] == 65)) {
   sna4tutti::broken_info()
@@ -507,7 +495,7 @@ if (base::isFALSE(network::get.vertex.attribute(flobusiness, 'NumberPriorates')[
 
 florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
-flobusiness <- intergraph::asNetwork(flo_bus)
+flobusiness <- snafun::to_network(flo_bus)
 
 if (base::isFALSE(base::sum(network::get.vertex.attribute(flobusiness, 'NumberTies')) == 222)) {
   sna4tutti::broken_info()
@@ -523,7 +511,7 @@ if (base::isFALSE(base::sum(network::get.vertex.attribute(flobusiness, 'NumberTi
 
 florentine <- SNA4DSData::florentine
 flo_bus <- florentine$flobusiness
-flobusiness <- intergraph::asNetwork(flo_bus)
+flobusiness <- snafun::to_network(flo_bus)
 
 if (base::isFALSE(network::get.vertex.attribute(flobusiness, 'Wealth')[9] == 103)) {
   sna4tutti::broken_info()
@@ -920,7 +908,7 @@ Let's try with the Sampson data we have used many times before. Please, note tha
 ```{r sampson_load, include = FALSE}
 SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
-sampson <- intergraph::asNetwork(SampsonLike2Ig)
+sampson <- snafun::to_network(SampsonLike2Ig)
 
 ```
 
@@ -929,7 +917,7 @@ sampson <- intergraph::asNetwork(SampsonLike2Ig)
 
 SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
-sampson <- intergraph::asNetwork(SampsonLike2Ig)
+sampson <- snafun::to_network(SampsonLike2Ig)
 
 
 if (base::isFALSE(base::table((network::get.vertex.attribute(sampson, 'vertex.names')) == 
@@ -947,7 +935,7 @@ if (base::isFALSE(base::table((network::get.vertex.attribute(sampson, 'vertex.na
 
 SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
-sampson <- intergraph::asNetwork(SampsonLike2Ig)
+sampson <- snafun::to_network(SampsonLike2Ig)
 
 if (base::isFALSE(network::get.vertex.attribute(sampson, 'id')[2] == "0x2112a4aae00")) {
   sna4tutti::broken_info()
@@ -962,7 +950,7 @@ if (base::isFALSE(network::get.vertex.attribute(sampson, 'id')[2] == "0x2112a4aa
 
 SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
-sampson <- intergraph::asNetwork(SampsonLike2Ig)
+sampson <- snafun::to_network(SampsonLike2Ig)
 
 if (base::isFALSE(network::get.vertex.attribute(sampson, 'like2')[16] == "T")) {
   sna4tutti::broken_info()
@@ -977,7 +965,7 @@ if (base::isFALSE(network::get.vertex.attribute(sampson, 'like2')[16] == "T")) {
 
 SampsonIgraphtot <- SNA4DSData::Sampson
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
-sampson <- intergraph::asNetwork(SampsonLike2Ig)
+sampson <- snafun::to_network(SampsonLike2Ig)
 
 if (base::isFALSE(base::sum(network::get.edge.attribute(sampson, 'weight')) == 111)) {
   sna4tutti::broken_info()
@@ -1252,7 +1240,7 @@ If we want to check whether relationships are reciprocated, we can use the term 
 
 ```{r Model1, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 
 UKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2), 
                       control = ergm::control.ergm(MCMC.burnin = 5000,
@@ -1270,7 +1258,7 @@ Let's add one or more terms to test whether there are groups of friends in the n
 
 ```{r Model2, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 
 UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle, 
                       control = ergm::control.ergm(MCMC.burnin = 5000,
@@ -1288,7 +1276,7 @@ Let's focus on our third hypothesis. We can do that by checking for homophily, c
 
 
 ```{r Model3, exercise = TRUE, exercise.setup = "load_UKfaculty"}
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 
 UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE), 
                       control = ergm::control.ergm(MCMC.burnin = 1000,
@@ -1308,7 +1296,7 @@ Ok, Let's wrap up what we found out and what we know so far. Remember to insert 
 
 
 ```{r grade_model4, exercise = TRUE, exercise.setup = "load_UKfaculty"}
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 UKFit.4 <- ergm::ergm(UKFN ~ edges + 
                         mutual, 
                       control = ergm::control.ergm(MCMC.burnin = 1000,
@@ -1322,7 +1310,7 @@ summary(UKFit.4)
 
 
 ```{r grade_model4-solution}
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 UKFit.4 <- ergm::ergm(UKFN ~ edges + 
                         mutual + 
                         nodematch('Group') +
@@ -1356,7 +1344,7 @@ Well done! How else can we improve this model? Why don't you try a few more opti
 Ok, have you decided on your favorite configuration? Yes? Let's move on to check goodness of fit. Substitute the model below with your best one and run `mcmc.diagnostics`.
 
 ```{r UKFBestModel, exercise = TRUE, exercise.setup = "load_UKfaculty"}
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual,
                       control = ergm::control.ergm(MCMC.burnin = 1000,
                                                    MCMC.samplesize = 5000,
@@ -1376,7 +1364,7 @@ What is the MCMC diagnostics telling you? Is your model good? Shall you spend so
 If, and only if, your MCMC diagnostic is good enough, you can move on to the goodness of fit.
 
 ```{r UKFBestModelgof, exercise = TRUE, exercise.setup = "load_UKfaculty"}
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual)
 
 UKgof <- ergm::gof(UKFit)
@@ -1393,7 +1381,7 @@ If it's not, you have to go back and try to specify different terms. If, and onl
 Again, copy and paste your best model here below and comment on the results
 
 ```{r UKFBestModelres, exercise = TRUE, exercise.setup = "load_UKfaculty"}
-UKFN <- intergraph::asNetwork(UKF)
+UKFN <- snafun::to_network(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual,
                       control = ergm::control.ergm(MCMC.burnin = 1000,
                                                    MCMC.samplesize = 5000,

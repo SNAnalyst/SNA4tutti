@@ -16,6 +16,6 @@ NULL
 #' Functions, datasets, and tutorials, useful for the SNA4DS course.
 #'
 #' @name sna4tutti
+#' @import igraphdata
 #' @keywords package
-#' @docType package
-NULL
+"_PACKAGE"

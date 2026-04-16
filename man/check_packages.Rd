@@ -4,59 +4,51 @@
 \alias{check_packages}
 \title{Check for presence of packages}
 \usage{
-check_packages(reqs)
+check_packages(reqs = tutorial_package_requirements(), attempt_install = FALSE)
 }
 \arguments{
-\item{reqs}{data.frame (see details)}
+\item{reqs}{optional data.frame (see details)}
+
+\item{attempt_install}{logical, should missing or outdated packages be
+installed automatically before reporting the result?}
 }
 \value{
 character string, summarizing the results
 }
 \description{
-Checks whether a set of packages is present and of the correct version
+Checks whether a set of packages is present and of the correct version.
 }
 \details{
 Useful inside a learnr tutorial.
 
-\code{reqs} is a data.frame with column names "pkg", "version", "where".
-All items are \code{character}!
+By default, the requirements are read from the installed package
+\code{DESCRIPTION} file, so package version requirements only need to be
+maintained in one place.
 
-\itemize{
-\item{pkg}{names of the packages}
-\item{version}{the minimally required version}
-\item{where}{location of the package for download}
+If supplied, \code{reqs} must be a data.frame with column names
+\code{"pkg"}, \code{"version"}, and \code{"where"}. All items are
+\code{character}!
+
+\describe{
+  \item{pkg}{name of the package}
+  \item{version}{minimum required version, or an empty string if no minimum
+    is enforced}
+  \item{where}{download source, either \code{"CRAN"} or a GitHub
+    \code{"owner/repo"} reference}
 }
 
-For \code{where} there are two options. If the package resides on CRAN,
-it should be "CRAN". If it is on github, it should be "username/reponame" (ie.
-whatever would go inside \code{remotes::install_github(where)}).
-
-First, the function checks if a package is installed and, if installed, whether
-it has the required version number or higher.
-If eigher of these checks fail, it will attempt to download/upgrade the package.
-
-After a first pass along all packages (as described above), a second check is
-performed if a package is now installed and, if installed, whether
-it has the required version number or higher.
+If \code{attempt_install = TRUE}, the function tries to install or update
+missing packages before reporting any remaining issues. The default is
+\code{FALSE}, which is safer for locked-down teaching environments.
 
 If a package is still not installed, a message is returned that tells the user
-how to install it manually.
-If a package still does not at least have the required version,
-a message is returned that tells the user how to upgrade it manually.
+how to install it manually. If a package still does not at least have the
+required version, a message is returned that tells the user how to upgrade it
+manually.
 }
 \examples{
 \dontrun{
-pkgs <- matrix(c(
-"gradethis", "0.2.3.9001", "rstudio/gradethis",
-"igraph", "1.2.6", "CRAN",
-"snaverse2", "0.0.1.9000", "SNAnalyst/snaverse2",
-"snaverse1", "0.0.1.9000", "SNAnalyst/snaverse1",
-"SNA4DSData", "0.9.9000", "SNAnalyst/SNA4DSData"
-), byrow = TRUE, ncol = 3) |>
-  as.data.frame() |>
-  setNames(c("pkg", "version", "where"))
-
-check_packages(pkgs)
+check_packages()
 }
 }
 \keyword{internal}

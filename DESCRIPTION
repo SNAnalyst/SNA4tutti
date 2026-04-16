@@ -3,44 +3,57 @@ Type: Package
 Title: Social Network Analysis for Data Science
 Version: 0.5.5
 Authors@R:
-	c(person(given = "Roger",
-					family = "Leenders",
-					role = c("aut", "cre"),
-					email = "SNA4DS@jads.nl"),
-	  person(given = "Claudia",
-					family = "Zucca",
-					role = c("aut"),
-					email = "SNA4DS@jads.nl"))
-Description: Contains the tutorials for the JADS course "Social Network Analysis for Data Science" (2021-2022). Update the package frequently, to have access to the most up-to-date tutorials. The tutorials will be added throughout the semester. The package contains a vignette that shows the most important functions you need to know for this course.
-Depends: 
-	R (>= 4.5.0)
+    c(
+      person(given = "Roger",
+             family = "Leenders",
+             role = c("aut", "cre"),
+             email = "SNA4DS@jads.nl"),
+      person(given = "Claudia",
+             family = "Zucca",
+             role = "aut",
+             email = "SNA4DS@jads.nl")
+    )
+Description: Provides interactive learnr tutorials and supporting helper
+    functions for the JADS course "Social Network Analysis for Data Science".
+    The package is intended to install and run the complete SNA4DS tutorial
+    environment, including course-specific data, checks, and network analysis
+    workflows.
+Depends:
+    R (>= 4.5.0)
 Encoding: UTF-8
 URL: https://github.com/SNAnalyst/sna4tutti
 BugReports: https://github.com/SNAnalyst/sna4tutti/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
+Config/sna4tutti/min-rstudio: 2024.04.2
 Imports:
-  	ergm (>= 4.12.0),
-	GERGM,
-  	glue,
-  	gradethis (>= 0.2.14),
-	igraph (>= 2.2.3),
-	igraphdata (>= 1.0.1),
-	learnr  (>= 0.11.6),
-	network (>= 1.20.0),
-	rstudioapi (>= 0.18),
-	SNA4DSData,
-	snafun (>= 0.2026.0),
-	tsna (>= 0.3.5)
+    ergm (>= 4.12.0),
+    GERGM (>= 0.13.0),
+    glue (>= 1.8.0),
+    gradethis (>= 0.2.14),
+    htmltools,
+    igraph (>= 2.2.3),
+    igraphdata (>= 1.0.1),
+    knitr (>= 1.48),
+    learnr (>= 0.11.6),
+    network (>= 1.20.0),
+    rstudioapi (>= 0.18),
+    sna (>= 2.7),
+    SNA4DSData (>= 0.9.93),
+    snafun (>= 0.2026.0),
+    texreg (>= 1.38.6),
+    tsna (>= 0.3.5)
 Remotes:
-	github::rstudio-education/gradethis,
-	github::SNAnalyst/SNA4DSData,
-	github::SNAnalyst/snafun,
-	github::matthewjdenny/GERGM
+    github::rstudio-education/gradethis,
+    github::SNAnalyst/SNA4DSData,
+    github::SNAnalyst/snafun,
+    github::matthewjdenny/GERGM
 Suggests:
-	desc,
-	fs,
-	remotes,
-	rlang,
-	rprojroot,
-	usethis (>= 3.2.1)
+    desc,
+    fs,
+    ndtv (>= 0.13.4),
+    networkDynamic (>= 0.11.4),
+    remotes,
+    rlang,
+    rprojroot,
+    usethis (>= 3.2.1)
 License: AGPL (>= 3) + file LICENSE
