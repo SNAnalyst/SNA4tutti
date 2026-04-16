@@ -21,9 +21,9 @@ The function is designed as a user-facing convenience helper. It prints a
 short status message and, in interactive sessions, can offer to install or
 update the package from GitHub.
 
-The latest version is read from the repository's `main` branch. If GitHub
-cannot be reached, the function returns `NA` invisibly after printing an
-informative message.
+The latest version is read from the repository's `main` branch on GitHub, so
+this check requires internet access. If GitHub cannot be reached, the
+function returns `NA` invisibly after printing an informative message.
 }
 \examples{
 \dontrun{

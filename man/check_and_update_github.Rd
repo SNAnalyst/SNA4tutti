@@ -41,6 +41,7 @@ with the version currently installed locally.
 This helper keeps the user-facing logic in one place and is written to be
 easy to test. For that reason, both the installed version and the remote
 `DESCRIPTION` contents can be injected directly, so tests do not need network
-access.
+access. When no `DESCRIPTION` contents are supplied, the helper needs internet
+access to GitHub.
 }
 \keyword{internal}

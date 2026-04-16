@@ -90,6 +90,17 @@ unknown_remote <- check_github(
 expect_true(is.na(unknown_remote$latest_version))
 expect_true(is.na(unknown_remote$up_to_date))
 
+expect_message(
+  check_and_update_github(
+    pkg = "SNAnalyst/sna4tutti",
+    ref = "main",
+    description_lines = c("Package: sna4tutti"),
+    installed_version = "0.5.5",
+    ask = FALSE
+  ),
+  pattern = "requires internet access to GitHub"
+)
+
 missing_install <- suppressMessages(
   check_and_update_github(
     pkg = "SNAnalyst/sna4tutti",

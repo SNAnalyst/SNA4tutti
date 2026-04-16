@@ -7,9 +7,9 @@
 #' short status message and, in interactive sessions, can offer to install or
 #' update the package from GitHub.
 #'
-#' The latest version is read from the repository's `main` branch. If GitHub
-#' cannot be reached, the function returns `NA` invisibly after printing an
-#' informative message.
+#' The latest version is read from the repository's `main` branch on GitHub, so
+#' this check requires internet access. If GitHub cannot be reached, the
+#' function returns `NA` invisibly after printing an informative message.
 #'
 #' @return An invisible logical value. `TRUE` means that the installed package
 #'   is up-to-date, `FALSE` means that GitHub reports a newer version, and `NA`
@@ -37,7 +37,8 @@ check_sna4tutti <- function() {
 #' This helper keeps the user-facing logic in one place and is written to be
 #' easy to test. For that reason, both the installed version and the remote
 #' `DESCRIPTION` contents can be injected directly, so tests do not need network
-#' access.
+#' access. When no `DESCRIPTION` contents are supplied, the helper needs internet
+#' access to GitHub.
 #'
 #' @param pkg Character scalar in `"owner/repo"` format.
 #' @param ref Character scalar indicating the Git ref to inspect. Defaults to
@@ -67,7 +68,8 @@ check_and_update_github <- function(pkg,
 
   if (is.na(check$latest_version)) {
     message("Could not determine the latest version of ", package_name,
-            " from GitHub. Please check your GitHub access and try again.")
+            " from GitHub. This check requires internet access to GitHub. ",
+            "Please check your GitHub access and try again.")
     return(invisible(NA))
   }
 
