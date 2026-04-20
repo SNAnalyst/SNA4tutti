@@ -2,24 +2,31 @@
 % Please edit documentation in R/broken_checks.R
 \name{broken_info}
 \alias{broken_info}
-\title{Within tutorial sna4tutti unit test error report function}
+\title{Report which hidden tutorial chunk failed}
 \usage{
-broken_info(broken_list = l)
+broken_info(broken_list = NULL)
 }
 \arguments{
-\item{broken_list}{internal parameter to fetch the name of the code box with broken code}
+\item{broken_list}{deprecated compatibility argument. It is ignored.}
 }
 \value{
-nothing relevant, this function is useful for its side effect.
+invisibly returns the current chunk label
 }
 \description{
-This function prints an error message in case of broken code chunk and it
-reports the name of the broken code box
+Hidden validation chunks inside the tutorials use this helper when a data
+object or intermediate result no longer matches the expected value. The
+function prints a highly visible message that includes the current chunk
+label, so maintainers can trace the failing tutorial step quickly.
+}
+\details{
+The \code{broken_list} argument is kept only for backward compatibility with
+older chunk code. The tutorials already manage their own \code{errors}
+collection, so this helper only reports the failing label and returns it
+invisibly for tests.
 }
 \examples{
 \dontrun{
 broken_info()
 }
-
 
 }

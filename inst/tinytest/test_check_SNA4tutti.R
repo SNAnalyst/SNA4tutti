@@ -1,25 +1,37 @@
-# These tests focus on the update-check helpers because they are easy to break
-# with small changes in version handling or GitHub URL construction.
+# These tests focus on the GitHub update helpers because small changes in URL
+# construction or version handling can silently break update guidance.
 
-pkg_namespace <- getNamespace("sna4tutti")
-tinytest_namespace <- getNamespace("tinytest")
-attach(tinytest_namespace, name = "tinytest_expectations")
+if (!"tinytest_expectations" %in% base::search()) {
+  base::attach(base::asNamespace("tinytest"), name = "tinytest_expectations")
+}
 
-check_and_update_github <- get("check_and_update_github",
-                               envir = pkg_namespace,
-                               inherits = FALSE)
-check_github <- get("check_github",
-                    envir = pkg_namespace,
-                    inherits = FALSE)
-description_field_from_lines <- get(".description_field_from_lines",
-                                    envir = pkg_namespace,
-                                    inherits = FALSE)
-github_description_url <- get(".github_description_url",
-                              envir = pkg_namespace,
-                              inherits = FALSE)
-github_package_name <- get(".github_package_name",
-                           envir = pkg_namespace,
-                           inherits = FALSE)
+pkg_namespace <- base::getNamespace("sna4tutti")
+
+check_and_update_github <- base::get(
+  "check_and_update_github",
+  envir = pkg_namespace,
+  inherits = FALSE
+)
+check_github <- base::get(
+  "check_github",
+  envir = pkg_namespace,
+  inherits = FALSE
+)
+description_field_from_lines <- base::get(
+  ".description_field_from_lines",
+  envir = pkg_namespace,
+  inherits = FALSE
+)
+github_description_url <- base::get(
+  ".github_description_url",
+  envir = pkg_namespace,
+  inherits = FALSE
+)
+github_package_name <- base::get(
+  ".github_package_name",
+  envir = pkg_namespace,
+  inherits = FALSE
+)
 
 description_lines <- c(
   "Package: sna4tutti",
@@ -49,7 +61,7 @@ expect_identical(
 )
 
 expect_true(
-  is.na(description_field_from_lines(description_lines, "MissingField"))
+  base::is.na(description_field_from_lines(description_lines, "MissingField"))
 )
 
 current_check <- check_github(
@@ -59,7 +71,7 @@ current_check <- check_github(
   installed_version = "0.5.5"
 )
 
-expect_true(isTRUE(current_check$up_to_date))
+expect_true(base::isTRUE(current_check$up_to_date))
 expect_identical(current_check$latest_version, "0.5.5")
 
 outdated_check <- check_github(
@@ -69,7 +81,7 @@ outdated_check <- check_github(
   installed_version = "0.5.4"
 )
 
-expect_true(isFALSE(outdated_check$up_to_date))
+expect_true(base::isFALSE(outdated_check$up_to_date))
 
 development_check <- check_github(
   pkg = "SNAnalyst/sna4tutti",
@@ -78,7 +90,7 @@ development_check <- check_github(
   installed_version = "0.5.6"
 )
 
-expect_true(isTRUE(development_check$up_to_date))
+expect_true(base::isTRUE(development_check$up_to_date))
 
 unknown_remote <- check_github(
   pkg = "SNAnalyst/sna4tutti",
@@ -87,8 +99,8 @@ unknown_remote <- check_github(
   installed_version = "0.5.5"
 )
 
-expect_true(is.na(unknown_remote$latest_version))
-expect_true(is.na(unknown_remote$up_to_date))
+expect_true(base::is.na(unknown_remote$latest_version))
+expect_true(base::is.na(unknown_remote$up_to_date))
 
 expect_message(
   check_and_update_github(
@@ -111,4 +123,4 @@ missing_install <- suppressMessages(
   )
 )
 
-expect_true(is.na(missing_install))
+expect_true(base::is.na(missing_install))

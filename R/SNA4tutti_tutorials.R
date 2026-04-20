@@ -22,17 +22,58 @@
 #' open_sna4tutti_tutorials()
 #' }
 open_sna4tutti_tutorials <- function(graphics = TRUE) {
-  if (!is.logical(graphics)) stop("You need to set 'graphics' to TRUE or FALSE only (without parentheses)")
-  all_tuts <- learnr::available_tutorials("sna4tutti")
-  # perform <- glue::glue("learnr::run_tutorial('{tuto}', package = 'sna4tutti')",
-  #                       tuto = all_tuts$name)
-  perform <- paste0("learnr::run_tutorial('", all_tuts$name, "', package = 'sna4tutti')")
+  tutorials <- learnr::available_tutorials("sna4tutti")
+  .open_selected_tutorial(tutorials = tutorials, graphics = graphics)
+  base::invisible()
+}
 
-  cat("\n\nPlease pick which tutorial you want to run, it will open in your default browser.\n")
-  cat("The following tutorials are currently available to pick from:\n")
-  pick <- utils::menu(all_tuts$title, graphics = graphics)
-  eval(parse(text = perform[pick], keep.source = FALSE), envir = .GlobalEnv)
-  # glue::identity_transformer(perform[pick], .GlobalEnv)
-  invisible()
+#' Open one selected tutorial from a tutorial table
+#'
+#' This helper isolates the interactive selection logic from the exported
+#' launcher so we can test it without starting a real browser session. The
+#' public API still stays simple, while tests can inject a fake menu and a fake
+#' tutorial runner.
+#'
+#' @param tutorials data.frame returned by \code{learnr::available_tutorials()}
+#' @param graphics logical, should \code{utils::menu()} use the graphical menu?
+#' @param menu_fun function used to collect the user's selection
+#' @param run_fun function used to launch the selected tutorial
+#'
+#' @return invisibly returns the selected tutorial name, or \code{NULL} when
+#'   the user cancels the menu
+#' @keywords internal
+#' @noRd
+.open_selected_tutorial <- function(tutorials,
+                                    graphics = TRUE,
+                                    menu_fun = utils::menu,
+                                    run_fun = learnr::run_tutorial) {
+  if (!base::is.logical(graphics) || base::length(graphics) != 1L || base::is.na(graphics)) {
+    base::stop("You need to set 'graphics' to TRUE or FALSE only (without parentheses)")
+  }
+
+  if (base::NROW(tutorials) == 0L) {
+    base::stop("No tutorials are currently available in package 'sna4tutti'.")
+  }
+
+  base::cat("\n\nPlease pick which tutorial you want to run, it will open in your default browser.\n")
+  base::cat("The following tutorials are currently available to pick from:\n")
+
+  pick <- menu_fun(tutorials$title, graphics = graphics)
+
+  # A menu choice of 0 means that the user cancelled. Returning NULL keeps this
+  # branch explicit and avoids the brittle parse/eval logic that used to live
+  # here.
+  if (pick == 0L) {
+    return(base::invisible(NULL))
+  }
+
+  if (!pick %in% base::seq_len(base::NROW(tutorials))) {
+    base::stop("Tutorial selection is out of range.")
+  }
+
+  tutorial_name <- tutorials$name[[pick]]
+  run_fun(tutorial_name, package = "sna4tutti")
+
+  base::invisible(tutorial_name)
 }
 

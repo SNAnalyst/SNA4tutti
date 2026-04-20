@@ -75,7 +75,7 @@ check_is_package <- function(whos_asking = NULL) {
   if (is_package()) {
     return(invisible())
   }
-  message <- "Project {ui_value(project_name())} is not an R package."
+  message <- "Project {usethis::ui_value(usethis::project_name())} is not an R package."
   if (!is.null(whos_asking)) {
     message <- c("{usethis::ui_code(whos_asking)} is designed to work with packages.",
                  message)
@@ -98,7 +98,7 @@ get_objs_from_dots <- function(.dots) {
                                            objs))
   if (length(duplicated_objs) > 0L) {
     objs <- unique(objs)
-    usethis::ui_warn("Saving duplicates only once: {ui_value(names(duplicated_objs))}")
+    usethis::ui_warn("Saving duplicates only once: {usethis::ui_value(names(duplicated_objs))}")
   }
   objs
 }
@@ -142,10 +142,10 @@ use_dependency <- function(package, type, min_version = NULL) {
                      in \\\n      {usethis::ui_value(existing_type)} in DESCRIPTION, no change made.")
   }
   else if (delta == 0 && !is.null(min_version)) {
-    upgrade <- existing_ver == "*" || numeric_version(min_version) >
+    upgrade <- existing_ver == "*" || base::numeric_version(min_version) >
       version_spec(existing_ver)
     if (upgrade) {
-      usethis::ui_done("Increasing {ui_value(package)} version to {ui_value(version)} in DESCRIPTION")
+      usethis::ui_done("Increasing {usethis::ui_value(package)} version to {usethis::ui_value(version)} in DESCRIPTION")
       desc::desc_set_dep(package, type, version = version,
                          file = usethis::proj_get())
     }
@@ -187,7 +187,7 @@ dots <- function(...) {
 #' @keywords internal
 version_spec <- function(x) {
   x <- gsub("(<=|<|>=|>|==)\\s*", "", x)
-  numeric_version(x)
+  base::numeric_version(x)
 }
 
 
