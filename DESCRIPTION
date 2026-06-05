@@ -13,7 +13,7 @@ Authors@R:
              role = "aut",
              email = "SNA4DS@jads.nl")
     )
-Description: Provides interactive learnr tutorials and supporting helper
+Description: Provides interactive learnr tutorials and supporting helpers
     functions for the JADS course "Social Network Analysis for Data Science".
     The package is intended to install and run the complete SNA4DS tutorial
     environment, including course-specific data, checks, and network analysis
@@ -27,7 +27,7 @@ RoxygenNote: 7.3.3
 Config/sna4tutti/min-rstudio: 2026.01.1
 Imports:
     ergm (>= 4.12.0),
-    GERGM (>= 0.13.0),
+    GERGM (>= 0.13.1),
     glue (>= 1.8.0),
     gradethis (>= 0.2.14),
     htmltools,
@@ -46,7 +46,7 @@ Remotes:
     github::rstudio-education/gradethis,
     github::SNAnalyst/SNA4DSData,
     github::SNAnalyst/snafun,
-    github::matthewjdenny/GERGM
+    github::czucca/GERGM
 Suggests:
     desc,
     fs,
