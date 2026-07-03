@@ -1,0 +1,124 @@
+
+R version 4.5.2 (2025-10-31 ucrt) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "sna4tutti"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('sna4tutti')
+
+Welcome to sna4tutti version 0.5.5
+Type ?sna4tutti to access the package documentation
+
+To suppress this message use:
+	suppressPackageStartupMessages(library(sna4tutti))
+
+You can check if you have the latest version with 'check_sna4tutti()'
+
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("broken_info")
+> ### * broken_info
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: broken_info
+> ### Title: Report which hidden tutorial chunk failed
+> ### Aliases: broken_info
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D broken_info()
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("check_packages")
+> ### * check_packages
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_packages
+> ### Title: Check for presence of packages
+> ### Aliases: check_packages
+> ### Keywords: internal
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D check_packages()
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("check_sna4tutti")
+> ### * check_sna4tutti
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_sna4tutti
+> ### Title: Check whether the installed 'sna4tutti' package is current on
+> ###   GitHub
+> ### Aliases: check_sna4tutti
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D check_sna4tutti()
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("open_sna4tutti_tutorials")
+> ### * open_sna4tutti_tutorials
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: open_sna4tutti_tutorials
+> ### Title: Pick a tutorial
+> ### Aliases: open_sna4tutti_tutorials
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D open_sna4tutti_tutorials()
+> ## End(Not run)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  0.03 0.03 0.06 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

@@ -1,0 +1,6 @@
+broken_info             Report which hidden tutorial chunk failed
+check_sna4tutti         Check whether the installed 'sna4tutti' package
+                        is current on GitHub
+open_sna4tutti_tutorials
+                        Pick a tutorial
+sna4tutti               SNA4DS

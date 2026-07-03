@@ -1,0 +1,60 @@
+
+R version 4.5.2 (2025-10-31 ucrt) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # This runner ensures that `R CMD check` executes the tinytest suite stored in
+> # `inst/tinytest`. Without it, the tests would exist but not protect releases.
+> if (requireNamespace("tinytest", quietly = TRUE)) {
++   tinytest::test_package("sna4tutti")
++ }
+
+Welcome to sna4tutti version 0.5.5
+Type ?sna4tutti to access the package documentation
+
+To suppress this message use:
+	suppressPackageStartupMessages(library(sna4tutti))
+
+You can check if you have the latest version with 'check_sna4tutti()'
+
+The following object is masked from package:base:
+
+    isTRUE
+
+test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    0 tests    test_check_SNA4tutti.R........    1 tests OK test_check_SNA4tutti.R........    2 tests OK test_check_SNA4tutti.R........    3 tests OK test_check_SNA4tutti.R........    4 tests OK test_check_SNA4tutti.R........    5 tests OK test_check_SNA4tutti.R........    5 tests OK test_check_SNA4tutti.R........    6 tests OK test_check_SNA4tutti.R........    7 tests OK test_check_SNA4tutti.R........    7 tests OK test_check_SNA4tutti.R........    8 tests OK test_check_SNA4tutti.R........    8 tests OK test_check_SNA4tutti.R........    9 tests OK test_check_SNA4tutti.R........    9 tests OK test_check_SNA4tutti.R........   10 tests OK test_check_SNA4tutti.R........   11 tests OK test_check_SNA4tutti.R........   12 tests OK test_check_SNA4tutti.R........   12 tests OK test_check_SNA4tutti.R........   13 tests OK 33ms
+test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    0 tests    test_runtime_helpers.R........    1 tests OK test_runtime_helpers.R........    2 tests OK test_runtime_helpers.R........    3 tests OK test_runtime_helpers.R........    4 tests OK test_runtime_helpers.R........    5 tests OK test_runtime_helpers.R........    6 tests OK 
+
+Please pick which tutorial you want to run, it will open in your default browser.
+The following tutorials are currently available to pick from:
+test_runtime_helpers.R........    7 tests OK 
+
+Please pick which tutorial you want to run, it will open in your default browser.
+The following tutorials are currently available to pick from:
+test_runtime_helpers.R........    8 tests OK test_runtime_helpers.R........    9 tests OK 
+
+Please pick which tutorial you want to run, it will open in your default browser.
+The following tutorials are currently available to pick from:
+test_runtime_helpers.R........   10 tests OK test_runtime_helpers.R........   11 tests OK test_runtime_helpers.R........   11 tests OK test_runtime_helpers.R........   11 tests OK test_runtime_helpers.R........   11 tests OK test_runtime_helpers.R........   11 tests OK test_runtime_helpers.R........   12 tests OK test_runtime_helpers.R........   13 tests OK test_runtime_helpers.R........   14 tests OK 1.8s
+test_tutorial_regressions.R...    0 tests    test_tutorial_regressions.R...    0 tests    test_tutorial_regressions.R...    0 tests    test_tutorial_regressions.R...    1 tests OK test_tutorial_regressions.R...    2 tests OK test_tutorial_regressions.R...    2 tests OK test_tutorial_regressions.R...    2 tests OK test_tutorial_regressions.R...    2 tests OK test_tutorial_regressions.R...    3 tests OK test_tutorial_regressions.R...    4 tests OK test_tutorial_regressions.R...    5 tests OK test_tutorial_regressions.R...    5 tests OK test_tutorial_regressions.R...    6 tests OK test_tutorial_regressions.R...    7 tests OK test_tutorial_regressions.R...    8 tests OK test_tutorial_regressions.R...    9 tests OK test_tutorial_regressions.R...   10 tests OK test_tutorial_regressions.R...   11 tests OK test_tutorial_regressions.R...   12 tests OK test_tutorial_regressions.R...   12 tests OK test_tutorial_regressions.R...   12 tests OK test_tutorial_regressions.R...   12 tests OK test_tutorial_regressions.R...   13 tests OK test_tutorial_regressions.R...   14 tests OK test_tutorial_regressions.R...   15 tests OK test_tutorial_regressions.R...   16 tests OK test_tutorial_regressions.R...   17 tests OK test_tutorial_regressions.R...   18 tests OK test_tutorial_regressions.R...   19 tests OK test_tutorial_regressions.R...   19 tests OK test_tutorial_regressions.R...   19 tests OK test_tutorial_regressions.R...   20 tests OK test_tutorial_regressions.R...   21 tests OK test_tutorial_regressions.R...   22 tests OK test_tutorial_regressions.R...   22 tests OK test_tutorial_regressions.R...   22 tests OK test_tutorial_regressions.R...   23 tests OK test_tutorial_regressions.R...   23 tests OK test_tutorial_regressions.R...   23 tests OK test_tutorial_regressions.R...   23 tests OK test_tutorial_regressions.R...   23 tests OK test_tutorial_regressions.R...   23 tests OK test_tutorial_regressions.R...   23 tests OK test_tutorial_regressions.R...   24 tests OK test_tutorial_regressions.R...   25 tests OK test_tutorial_regressions.R...   26 tests OK test_tutorial_regressions.R...   27 tests OK test_tutorial_regressions.R...   27 tests OK test_tutorial_regressions.R...   28 tests OK test_tutorial_regressions.R...   28 tests OK test_tutorial_regressions.R...   29 tests OK test_tutorial_regressions.R...   29 tests OK test_tutorial_regressions.R...   30 tests OK 59ms
+test_util_helpers.R...........    0 tests    test_util_helpers.R...........    0 tests    test_util_helpers.R...........    0 tests    test_util_helpers.R...........    0 tests    test_util_helpers.R...........    0 tests    test_util_helpers.R...........    0 tests    test_util_helpers.R...........    0 tests    test_util_helpers.R...........    1 tests OK test_util_helpers.R...........    2 tests OK test_util_helpers.R...........    3 tests OK test_util_helpers.R...........    4 tests OK test_util_helpers.R...........    5 tests OK test_util_helpers.R...........    6 tests OK test_util_helpers.R...........    7 tests OK test_util_helpers.R...........    7 tests OK test_util_helpers.R...........    8 tests OK test_util_helpers.R...........    8 tests OK test_util_helpers.R...........    8 tests OK test_util_helpers.R...........    9 tests OK test_util_helpers.R...........   10 tests OK test_util_helpers.R...........   11 tests OK test_util_helpers.R...........   12 tests OK 0.1s
+test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    0 tests    test_version_checks.R.........    1 tests OK test_version_checks.R.........    2 tests OK test_version_checks.R.........    3 tests OK test_version_checks.R.........    3 tests OK test_version_checks.R.........    4 tests OK test_version_checks.R.........    5 tests OK test_version_checks.R.........    5 tests OK test_version_checks.R.........    6 tests OK test_version_checks.R.........    7 tests OK test_version_checks.R.........    8 tests OK test_version_checks.R.........    8 tests OK test_version_checks.R.........    9 tests OK test_version_checks.R.........   10 tests OK test_version_checks.R.........   11 tests OK test_version_checks.R.........   11 tests OK test_version_checks.R.........   12 tests OK test_version_checks.R.........   13 tests OK test_version_checks.R.........   14 tests OK test_version_checks.R.........   15 tests OK test_version_checks.R.........   16 tests OK test_version_checks.R.........   17 tests OK test_version_checks.R.........   18 tests OK test_version_checks.R.........   19 tests OK test_version_checks.R.........   20 tests OK test_version_checks.R.........   21 tests OK test_version_checks.R.........   22 tests OK test_version_checks.R.........   23 tests OK test_version_checks.R.........   23 tests OK test_version_checks.R.........   24 tests OK ...checking required packages now...
+test_version_checks.R.........   25 tests OK ...checking required packages now...
+test_version_checks.R.........   25 tests OK test_version_checks.R.........   26 tests OK test_version_checks.R.........   27 tests OK ...checking required packages now...
+test_version_checks.R.........   27 tests OK test_version_checks.R.........   28 tests OK test_version_checks.R.........   29 tests OK test_version_checks.R.........   30 tests OK test_version_checks.R.........   31 tests OK test_version_checks.R.........   32 tests OK test_version_checks.R.........   33 tests OK test_version_checks.R.........   33 tests OK test_version_checks.R.........   33 tests OK test_version_checks.R.........   35 tests OK 1.1s
+All ok, 104 results (3.1s)
+> 
+> proc.time()
+   user  system elapsed 
+   1.71    1.60    3.34 
