@@ -999,7 +999,7 @@ samM1 <- ergm::ergm(sampson ~ edges +
                     control = ergm::control.ergm(MCMC.burnin = 5000,
                                               MCMC.samplesize = 10000,
                                               seed = 123456,
-                                              MCMLE.maxit = 20,
+                                              MCMLE.maxit = 2,
                                               parallel = 2,
                                               parallel.type = "PSOCK"))
 
@@ -1021,9 +1021,11 @@ Checking on the model summary above, we see that the configurations that are hig
 
 samM2 <- ergm::ergm(sampson ~ edges + intransitive, 
                     control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                 MCMC.samplesize = 10000,
-                                                 seed = 123456,
-                                                 MCMLE.maxit = 5))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 summary(samM2)
 ```
@@ -1059,9 +1061,11 @@ Hint: the correct number to pass to `cycle` makes that term work exactly like `m
 
 samM3 <- ergm::ergm(sampson ~ edges + cycle(4), 
                     control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                 MCMC.samplesize = 10000,
-                                                 seed = 123456,
-                                                 MCMLE.maxit = 5))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 summary(samM3)
 ```
 
@@ -1069,9 +1073,11 @@ summary(samM3)
 
 samM3 <- ergm::ergm(sampson ~ edges + cycle(2),
                     control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                 MCMC.samplesize = 10000,
-                                                 seed = 123456,
-                                                 MCMLE.maxit = 5))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 summary(samM3)
 
 ```
@@ -1246,9 +1252,11 @@ UKFN <- snafun::to_network(UKF)
 
 UKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2), 
                       control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                   MCMC.samplesize = 10000,
-                                                   seed = 123456,
-                                                   MCMLE.maxit = 5))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 summary(UKFit.1)
 ```
@@ -1264,9 +1272,11 @@ UKFN <- snafun::to_network(UKF)
 
 UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle, 
                       control = ergm::control.ergm(MCMC.burnin = 5000,
-                                                   MCMC.samplesize = 10000,
-                                                   seed = 123456,
-                                                   MCMLE.maxit = 1))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 1,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 summary(UKFit.2)
 ```
@@ -1281,10 +1291,12 @@ Let's focus on our third hypothesis. We can do that by checking for homophily, c
 UKFN <- snafun::to_network(UKF)
 
 UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE), 
-                      control = ergm::control.ergm(MCMC.burnin = 1000,
-                                                   MCMC.samplesize = 5000,
-                                                   seed = 123456,
-                                                   MCMLE.maxit = 1))
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 summary(UKFit.3)
 ```
@@ -1301,10 +1313,12 @@ Ok, Let's wrap up what we found out and what we know so far. Remember to insert 
 UKFN <- snafun::to_network(UKF)
 UKFit.4 <- ergm::ergm(UKFN ~ edges + 
                         mutual, 
-                      control = ergm::control.ergm(MCMC.burnin = 1000,
-                                                   MCMC.samplesize = 5000,
-                                                   seed = 123456,
-                                                   MCMLE.maxit = 1))
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 summary(UKFit.4)
 
@@ -1317,10 +1331,12 @@ UKFit.4 <- ergm::ergm(UKFN ~ edges +
                         mutual + 
                         nodematch('Group') +
                         gwesp(0.25, fixed = T),
-                      control = ergm::control.ergm(MCMC.burnin = 1000,
-                                                   MCMC.samplesize = 5000,
-                                                   seed = 123456,
-                                                   MCMLE.maxit = 1))
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 summary(UKFit.4)
 
@@ -1348,10 +1364,12 @@ Ok, have you decided on your favorite configuration? Yes? Let's move on to check
 ```{r UKFBestModel, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- snafun::to_network(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual,
-                      control = ergm::control.ergm(MCMC.burnin = 1000,
-                                                   MCMC.samplesize = 5000,
-                                                   seed = 123456,
-                                                   MCMLE.maxit = 1))
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 ergm::mcmc.diagnostics(UKFit)
 
 
@@ -1385,10 +1403,12 @@ Again, copy and paste your best model here below and comment on the results
 ```{r UKFBestModelres, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- snafun::to_network(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual,
-                      control = ergm::control.ergm(MCMC.burnin = 1000,
-                                                   MCMC.samplesize = 5000,
-                                                   seed = 123456,
-                                                   MCMLE.maxit = 1))
+                      control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 summary(UKFit)
 
