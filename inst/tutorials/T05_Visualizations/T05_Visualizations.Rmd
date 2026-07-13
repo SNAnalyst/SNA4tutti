@@ -275,7 +275,7 @@ This last plot does not meet any of the goal we stated above.
 
 
 ```{r testquiz, echo = FALSE}
-learnr::quiz(learnr::question("What is the main problem with the plots of igraphNet and networkNet?",
+learnr::quiz(learnr::question("What is the main problem with the plots of igraphNet and igraphNetLarge?",
                               learnr::answer("nodes are too small"),
                               learnr::answer("the colors are not color blind friendly"),
                               learnr::answer("the plot does not inform us on what the network represents", correct = TRUE),
@@ -294,33 +294,13 @@ q1 <- learnr::quiz(learnr::question("What is the main problem with the plots of 
                     random_answer_order = TRUE,
                     allow_retry = TRUE))
 
-if (base::isFALSE(q1$questions[[1]]$question == "What is the main problem with the plots of igraphNet and networkNet?")) {
+if (base::isFALSE(q1$questions[[1]]$question == "What is the main problem with the plots of igraphNet and igraphNetLarge?")) {
   sna4tutti::broken_info()
   error <- knitr::opts_current$get(name = "label")
   errors <- base::append(errors, error)
 }
-
-
 ```
 
-
-```{r test_testquiz2, results = 'markup'}
-# test correct answer
-q1in <- learnr::question("What is the main problem with the plots of igraphNet and networkNet?",
-                 learnr::answer("nodes are too small"),
-                 learnr::answer("the colors are not color blind friendly"),
-                 learnr::answer("the plot does not inform us on what the network represents", correct = TRUE)
-                 )
-
-
-if (isFALSE(q1in$answers[[3]]$correct)) {
-  sna4tutti::broken_info()
-  error <- knitr::opts_current$get(name = "label")
-  errors <- base::append(errors, error)
-  
-}
-
-```
 
 
 Yes, unless we are working with a toy network, we are not going to tell a story just using 
