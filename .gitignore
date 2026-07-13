@@ -4,3 +4,4 @@
 .Ruserdata
 *.tar.gz
 /Meta/
+.DS_Store
