@@ -15,6 +15,9 @@ runtime: shiny_prerendered
 
 
 ```{r setup, include=FALSE}
+options(cli.progress_show_after = Inf)
+options(cli.default_handler = "none")
+
 library(learnr)
 library(gradethis)
 library(ergm)
@@ -415,9 +418,11 @@ Let's get to it.
 m3 <-ergm::ergm(kidsnet ~ edges + b1star(2), 
                 constraints = ~ bd(minout = 0, maxout=14),
                 control = ergm::control.ergm(MCMC.burnin = 5000,
-                                             MCMC.samplesize = 10000,
-                                             seed = 1234,
-                                             MCMLE.maxit = 20))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 summary(m3)
 
 
@@ -439,11 +444,11 @@ If you have more than two cores, you can increase the number below and make it f
 m4 <-ergm::ergm(kidsnet ~ edges + b1cov("Age") + b1nodematch("Gender") + b1star(2), 
                 constraints = ~ bd(minout = 0, maxout=14),
                 control = ergm::control.ergm(MCMC.burnin = 5000,
-                                             MCMC.samplesize = 10000,
-                                             seed = 1234,
-                                             MCMLE.maxit = 20,
-                                             parallel = 2,
-                                             parallel.type = "PSOCK"))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 summary(m4)
 
 ```

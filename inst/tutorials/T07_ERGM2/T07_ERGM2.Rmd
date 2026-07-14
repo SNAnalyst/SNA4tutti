@@ -15,6 +15,9 @@ runtime: shiny_prerendered
 
 
 ```{r setup, include=FALSE}
+options(cli.progress_show_after = Inf)
+options(cli.default_handler = "none")
+
 library(learnr)
 library(gradethis)
 library(ergm)
@@ -551,7 +554,13 @@ dependent term `degree` to the previous model. This specification checks on the 
 
 ```{r flob_dyad_dep, exercise = TRUE, exercise.setup = "load_flob"}
 
-fit <- ergm::ergm(flobusiness ~ edges + degree(1))
+fit <- ergm::ergm(flobusiness ~ edges + degree(1),
+                  control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 summary(fit)
 
 ```
@@ -584,7 +593,13 @@ We rerun the model with the Florentine Business network using the terms `edges` 
 ```{r flob_mcmc_dia, exercise = TRUE, exercise.setup = "load_flob"}
 
 set.seed(1234)
-fit <- ergm::ergm(flobusiness ~ edges + degree(1))
+fit <- ergm::ergm(flobusiness ~ edges + degree(1),
+                  control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 ergm::mcmc.diagnostics(fit)
 
@@ -624,7 +639,9 @@ fit <- ergm::ergm(flobusiness ~ edges + degree(1),
                   control = ergm::control.ergm(MCMC.burnin = 5000,
                                               MCMC.samplesize = 10000,
                                               seed = 123456,
-                                              MCMLE.maxit = 20))
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 ergm::mcmc.diagnostics(fit)
 
@@ -839,9 +856,11 @@ Let's fit again the flobusiness model we already used in the section 'Good Fit' 
 
 fit <- ergm::ergm(flobusiness ~ edges + degree(1),
                   control = ergm::control.ergm(MCMC.burnin = 5000,
-                                               MCMC.samplesize = 10000,
-                                               seed = 123456,
-                                               MCMLE.maxit = 20))
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 fit.gof <- ergm::gof(fit)
 snafun::stat_plot_gof(fit.gof)
 
@@ -863,7 +882,7 @@ snafun::stat_plot_gof(fit.gof)
 
 The goodness of fit table for degrees has one row for each degree value in the distribution of the observed network. The column `obs` reports how many nodes with that degree are in the observed network, while the columns min, mean and max report the simulated values for each degree value. Finally, the last column reports the p-value; as we said, we want it as close as possible to one. 
 
-The plot simply visualizes these results using box plots. The blue square is the observed value, and the black tick line shows the simulated values. We want the black tick line to be as close as possible to the blue square and possibly never outside the min and max interval. 
+The plot simply visualizes these results using box plots. The blue square and the boxplots display the simulated data, and the black tick line represents the observed values. We want the black tick line to be as close as possible to the blue squares and possibly never outside the min and max interval. 
 
 You interpret the other two remaining points analogously. 
 
@@ -1385,7 +1404,13 @@ If, and only if, your MCMC diagnostic is good enough, you can move on to the goo
 
 ```{r UKFBestModelgof, exercise = TRUE, exercise.setup = "load_UKfaculty"}
 UKFN <- snafun::to_network(UKF)
-UKFit <- ergm::ergm(UKFN ~ edges + mutual)
+UKFit <- ergm::ergm(UKFN ~ edges + mutual,
+                    control = ergm::control.ergm(MCMC.burnin = 5000,
+                                              MCMC.samplesize = 10000,
+                                              seed = 123456,
+                                              MCMLE.maxit = 20,
+                                              parallel = 3,
+                                              parallel.type = "PSOCK"))
 
 UKgof <- ergm::gof(UKFit)
 
@@ -1401,16 +1426,6 @@ If it's not, you have to go back and try to specify different terms. If, and onl
 Again, copy and paste your best model here below and comment on the results
 
 ```{r UKFBestModelres, exercise = TRUE, exercise.setup = "load_UKfaculty"}
-UKFN <- snafun::to_network(UKF)
-UKFit <- ergm::ergm(UKFN ~ edges + mutual,
-                      control = ergm::control.ergm(MCMC.burnin = 5000,
-                                              MCMC.samplesize = 10000,
-                                              seed = 123456,
-                                              MCMLE.maxit = 20,
-                                              parallel = 3,
-                                              parallel.type = "PSOCK"))
-
-summary(UKFit)
 
 ```
  
