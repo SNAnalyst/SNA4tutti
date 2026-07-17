@@ -103,10 +103,10 @@ pre {
 
 Welcome to the second tutorial on Exponential Random Graph Models (ERGMs).
 
-In the first ERGM tutorial you learned
+In the first ERGM tutorial, you learned:
 
 * How to run an ERGM with the structural term `edges`, comparing it to an
-Erdos Renyi model
+Erdos-Renyi model
 * How to simulate networks from a specified model
 * How to read a model summary
 * How to specify a P1 model using the dyadic independent terms `edges` 
@@ -115,7 +115,7 @@ Erdos Renyi model
 * How to search for terms with the function `ergm::search.ergmTerms`
 * How to use and interpret the dyadic independent, exogenous terms `nodecov` and `absdiff`
 
-In this tutorial we build on this, improve our understanding of ERG models and learn how to check whether the model we run has a good fit.
+In this tutorial, we build on this, improve our understanding of ERG models, and learn how to check whether the model we run has a good fit.
 
 Let's add a new tier to our ERGM knowledge!
 
@@ -124,7 +124,7 @@ Let's add a new tier to our ERGM knowledge!
 
 ## Ingredients check!
 
-Before we start to bake the new tier, we need to make sure we have the ingredients for our recipe ready!
+Before we start baking the new tier, we need to make sure we have all the ingredients for our recipe ready!
 
 
 ### R Version 
@@ -154,8 +154,7 @@ check_RStudio()
 
 You need to have a few packages installed.
 Click the `Run Code` button to check.
-It will verify whether the required packages are installed and will tell you
-which packages you need to install or update when something is missing or too old.
+It will verify that the required packages are installed and tell you which packages you need to install or update if any are missing or outdated.
 
 ```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
 
@@ -173,13 +172,13 @@ Turn on the oven, we are ready for some mouth watering bun to cook!
 ## A Dyadic independent model
 
 In the first ERGM tutorial, we run very simple models on very small networks. 
-However, very often, networks are larger than the Florentine or Sampson's ones and the relationships they map down require more sophisticated efforts to be explained.
+However, very often, networks are larger than those of the Florentine or Sampson, and the relationships they map require more sophisticated explanations.
 
 Let's take a look at the `faux.mesa.high` data set, one of the networks
 included in the `ergm` package and employed in the `statnet` tutorials. Remember,
-`statnet` is the project that developed the `r` package `ergm`. Their tutorials are the first source of information if you are running ERGMs in `r`.
+`statnet` is the project that developed the `r` package `ergm`. Their tutorials are the first place to look for information if you are running ERGMs in `r`.
 
-The `faux.mesa.high` is modified data collected at the Mesa High School in the US
+The `faux.mesa.high` is modified data collected at the Mesa High School in the US.
 
 ![](images/Mesa_high_school.png){width=75%}
 
@@ -209,6 +208,7 @@ if (base::isFALSE(base::sum(network::get.vertex.attribute(mesa, 'Grade')) == 179
 }
 
 ```
+
 
 ```{r test_load_mesa2, results = 'markup'}
 
@@ -247,7 +247,7 @@ Let's explore this network
 summary(mesa)
 ```
 
-The mesa network contains information about 203 relationships among 205 students enrolled at the Mesa High School. Well, it's not entirely true. The real information about the students is classified for privacy reasons, but we can look at something that is close enough. This way we can explore the network without revealing any sensitive data. 
+The Mesa network contains information about 203 relationships among 205 students enrolled at Mesa High School. Well, it's not entirely true. The actual information about the students is classified for privacy reasons, but we can look at something close enough. This way, we can explore the network without revealing any sensitive data. 
 
 We have three nodal attributes: 
 
@@ -295,22 +295,22 @@ legend('bottomleft', fill = 1:2,
 gradethis::grade_code(correct = "Well Done!")
 ```
 
-Wonderful! You just made plots using the `network` package! Did you notice that? Quite similar to `igraph` right? Well, I hope you enjoyed the experience. For the reminder of the course get back to `igraph` plotting! :)
+Wonderful! You just made plots using the `network` package! Did you notice that? Quite similar to `igraph` right? Well, I hope you enjoyed the experience. For the remainder of the course, get back to `igraph` plotting! :)
 
 Switching back to ERGMs... Carefully observe the nature of the relationships in the plots. 
 
 
-Do Grade, Race, or Sex drive friendship? That's the research question we are going to answer using ERMGs!
+Does Grade, Race, or Sex drive friendship? That's the research question we are going to answer using ERMGs!
 
 
-After adding the term `edges` that is our intercept, what does come next? 
+After adding the term `edges`, which is our intercept, what comes next? 
 
-Let's focus on Grade. This nodal attribute is categorical. Hence we need to choose terms that can handle this typology of data. 
+Let's focus on Grade. This nodal attribute is categorical. Hence, we need to choose terms that can handle this typology of data. 
 
-Since we want to know whether being in the same grade fosters friendship formation, we can use the term `nodematch`. This term handles categorical data and explores the existence of homophilic relationships among people who share the same category (grade in this case).
+Since we want to know whether being in the same grade fosters friendship formation, we can use the term `nodematch`. This term deals with categorical data and examines the presence of homophilic relationships among people who share the same category (grade, in this case).
 
 Another term that we can use with a categorical nodal attribute is`nodefactor`.
-This term outputs one statistics for each category in the attribute minus one to avoid linear dependency. Each of these statistics gives the number of times a node with that attribute, and that category appears in an edge in the network.
+This term outputs one statistic for each category in the attribute minus one to avoid linear dependency. Each of these statistics gives the number of times a node with that attribute and that category appears in an edge in the network.
 
 Let's run a first exploratory round.
 
@@ -323,11 +323,12 @@ summary(mesaM1)
 snafun::stat_ef_int(mesaM1, type = "prob")
 ```
 
-Every statistics in the result's table allows us to reject the null hypothesis of no effects. The coefficients produced by the `nodematch` term inform us of the existence of homophilic effects in each grade. Grades 10 and  12 are the two categories where these effects are less likely to take place. Still, the probability of observing homophily in those years is very high. The problem with these two categories is their statistical significance. According to the alpha that we choose, we might conclude that the effect happened by chance. 
+Every statistic in the results table allows us to reject the null hypothesis of no effects. The coefficients produced by the `nodematch` term inform us of the existence of homophilic effects in each grade. Grades 10 and 12 are the two categories in which these effects are less likely to occur. Still, the probability of observing homophily in those years is very high. The problem with these two categories is their statistical significance. Depending on the alpha level we choose, we might conclude that the effect occurred by chance. 
 
-The `nodefactor` term informs us of the probability that a certain grade characterizes nodes connected to other nodes. We can say that students in grade 12 are more likely to have friends than students in other grades. We interpret it just like we would interpret a categorical variable in a logistic regression!
+The `nodefactor` term indicates the probability that a given grade characterizes nodes connected to other nodes. We can say that students in grade 12 are more likely to have friends than students in other grades. We interpret it just like we would interpret a categorical variable in a logistic regression!
 
-What happens if we try to run the same exploratory model but focusing on race? Can you do it? Call the model 'mesaM2' and give it a go. Don't forget to print the summary and the probabilities; we are interested in the results!
+What happens if we try to run the same exploratory model, but focusing on race? Can you do it? Call the model 'mesaM2' and give it a go. Don't forget to print the summary and the probabilities; we are interested in the results!
+
 
 
 ```{r grade_ergmRace, exercise = TRUE, exercise.setup = "load_mesa"}
@@ -354,7 +355,7 @@ gradethis::grade_code(correct = "Well Done!")
 ```
 
 
-The first thing that we see when checking the `mesaM2` result's table is that two of the `nodematch` coefficients are estimated at `-Inf`. Is there something wrong with the model? Let's check on its descriptive statistics. 
+The first thing that we see when checking the `mesaM2` results table is that two of the `nodematch` coefficients are estimated at `-Inf`. Is there something wrong with the model? Let's check on its descriptive statistics. 
 
 ```{r mesaErgmRaceStats, exercise = TRUE, exercise.setup = "load_mesa"}
 summary(mesa ~ edges +
@@ -362,24 +363,25 @@ summary(mesa ~ edges +
           nodefactor('Race'))
 ```
 
-We can see that the two categories that produced the `-Inf` coefficients correspond to a 0 in the descriptive statistics table. Does it mean that we don't have any student of Race black and other in the school? 
+We can see that the two categories that produced the `-Inf` coefficients correspond to a 0 in the descriptive statistics table. Does it mean that we don't have any students of Black race and others in the school? 
 Let's check the frequency of the nodal attribute to dig deeper.
 
 ```{r mesaErgmRaceFreq, exercise = TRUE, exercise.setup = "load_mesa"}
 table(network::get.vertex.attribute(mesa, "Race"))
 ```
 
-Nope! There are no empty categories in the variable. If there were empty categories we would have had `-Inf` in the `nodefactor` results rather than the `nodematch` results since that term checks on the likelihood of each of these categories forming friends. The zero corresponds to the homophilic cases measured by the term's formula. AKA: there are no homophilic effects for students of races `black` and other. Still, even if these two categories are not empty, they are less represented than the other. Hence, having a larger sample, we might have found effects for these two too.  
+Nope! There are no empty categories in the variable. If there were empty categories, we would have had `-Inf` in the `nodefactor` results rather than the `nodematch` results, since that term checks on the likelihood of each of these categories forming friends. The zero corresponds to the homophilic cases measured by the term's formula. AKA: there are no homophilic effects for students of the `black` race and `other`. Still, even if these two categories are not empty, they are underrepresented compared to the others. Hence, with a larger sample, we might have found effects for these two as well.  
 
 
 _In case one or more frequencies were empty_ we should have considered treating
 this case as _missing data_ and discussed our option accordingly. However, this is NOT a missing data case. 
 
-It's always crucial to check both the nodal attribute's frequency and the model specification's descriptive statistics. Only checking both we can have the full picture and avoid mistakes, such as treating this case as a missing data one. 
+It's always crucial to check both the frequency of the nodal attribute and the descriptive statistics of the model specification. Only by checking both can we get the full picture and avoid mistakes, such as treating this case as a missing-data case. 
 
-Since, we don't have homophilic effects for two categories, it would be better to specify `nodematch` with `diff = FALSE`
+Since we don't have homophilic effects for two categories, it would be better to specify `nodematch` with `diff = FALSE`
 
 Let's move on and check what happens with the nodal attribute Sex, still considering the same specification.
+
 
 ```{r mesaErgmSex, exercise = TRUE, exercise.setup = "load_mesa"}
 mesaM3 <- ergm::ergm(mesa ~ edges +
@@ -390,23 +392,22 @@ summary(mesaM3)
 snafun::stat_ef_int(mesaM3, type = "prob")
 
 ```
+If you read the text output by the model (not here, but in the `r rproj()` Render tab), it says that it might be the case that 'the model is nonidentifiable.' This is a new error message introduced with `ergm 3.11`.
+It indicates linear dependence between the results of these two terms. `nodematch` indicates whether there are homophilic effects due to sex, while `nodefactor` indicates the probability that female and male students make friends. In this context, homophily is more interesting; hence, since we need to remove one term to avoid linear dependence, let's discard `nodefactor`. 
 
-If you read the text outputed by the model (not here, but in the `r rproj()` Render tab), it says that it might be the case that 'the model is nonidentifiable.' This is a new error message introduced with `ergm 3.11`.
-It indicates linear dependence between the results of these two terms. `nodematch` tells us whether there are homophilic effects due to sex, while `nodefactor` tells us what's the probability for female and male students to make friends. In this context, homophily is more interesting; hence since we need to get rid of one term to avoid linear dependence, let's discard `nodefactor`. 
-
-Please note that I used the levels argument in this exploratory model to tell the software to compute and print the statistic for the female category rather than the male one. That's how you change your model reference category. If you do change the reference category, obviously, your output will be different. The options for changing the reference category might be different from term to term, so you need to read the manual.
+Please note that I used the levels argument in this exploratory model to tell the software to compute and print the statistic for the female category rather than the male one. That's how you change your model reference category. If you do change the reference category, obviously, your output will be different. The options for changing the reference category may vary from term to term, so you need to read the manual.
 
 After running a few exploratory models, let's try to fit a comprehensive one. 
-We can keep both terms for what concerns Grade. 
+We can keep both terms as far as Grade. 
 
-When it comes to Race the term looking for homophily shows two empty categories. What do we do?
+When it comes to Race, the term looking for homophily shows two empty categories. What do we do?
 
-The way we specified `nodematch` so far checks for _differential homophily_, that looks for homophily within each category. But it can also be specified to check overall homophily in the whole network.
+The way we specified `nodematch` so far checks for _differential homophily_, which looks for homophily within each category. But it can also be specified to check overall homophily in the whole network.
 
-For what concerns Race in the mesa school, since some categories are empty, but others are not, removing the term might seem a loss of information. We can then specify the more generic option that assesses whether there is homophily overall, not informing us about each category but providing one single statistic
-for the all network. 
+As far as Race in the Mesa school, since some categories are empty, but others are not, removing the term might seem a loss of information. We can then specify the more generic option that assesses whether there is homophily overall, not informing us about each category, but providing a single statistic
+for the entire network. 
 
-What concerns the Sex attribute, let's keep differential homophily and remove the `nodefactor` term.
+Concerning the Sex attribute, let's keep differential homophily and remove the `nodefactor` term.
 
 Let's fit the model!
 
@@ -426,35 +427,37 @@ snafun::stat_ef_int(mesaM4, type = "odds")
 
 This looks like a pretty nice model! Let's comment on this model's overall meaning. 
 
-* nodematch-grade (differential homophily): There is a homophilic effect due to grade. The strongest homophily is in grade 7 and the weakest in grade 12 (check the odds ratios!).
+* nodematch-grade (differential homophily): There is a homophilic effect due to grade. Students are more likely to be friends with other students in their same year. The strongest homophily is in grade 7 and the weakest in grade 12 (check the odds ratios!).
 
 * nodefactor-grade: this term tells us the likelihood of students in each grade to make friends. Grade 12 students have the highest number of friends.
 
-* nodematch-Race: there are homophily effects due to race
+* nodematch-Race: there are homophily effects due to race. Students tend to be friends with other students of the same race.
 
 * nodefactor-race: White students are less likely to have friends than black students, but still more likely than the other categories if compared to the reference one.
 
 * nodematch-sex (differential homophiliy): There are homophilic effects among
-female students, but not among males.
+female students, but not among males. Girls tend to be friends with girls, but boys tend to have both male and female friends.
 
 Quite informative for a simple model, right? What if I tell you that we can look at even more informative model configurations? 
 
-So far, we explored only dyadic independent terms that look at the probability of relationship as a consequence of the nodes' properties. We looked at nodal attributes, or the simple node propensity to connect to others (`edges`, `sender`, `receiver`). 
+So far, we have explored only dyadic independent terms that examine the probability of a relationship as a function of the nodes' properties. We looked at nodal attributes, or the simple node propensity to connect to others (`edges`, `sender`, `receiver`). 
 
 We already know that there is more than this. 
 
 With these dyadic independent model configurations, we cannot explore situations where you meet a new friend who was in school with your roommate. We cannot explore situations where you start to follow someone on Instagram just because all your other friends do, among other examples. 
 
 These are all important things to explore, and that's why we need to use 
-dyadic dependent terms too.
+dyadic dependent terms too. Also, from a more technical perspective, it is not advisable to run a network model without information about the network structure, as it cannot predict anything accurately without it. Hence, avoid running ERGMs without endogenous and dyadic dependent terms. 
 
 
 ## Dyadic dependent terms
 
-We covered the conceptual difference between dyadic independence and dependence. To wrap this up: We have dyadic independence when the probability of edge formation is related to nodes properties or attributes; the second is related to the probability of other existing edges. 
+We covered the conceptual difference between dyadic independence and dependence. To wrap this up: We have dyadic independence when the probability of edge formation is related to nodes' attributes; the second is related to the probability of other existing edges. 
 
 In practice, you know when you are running a dyadic independent or dependent 
-model by reading the information that the model prints for you while running.
+model by reading the information it prints as it runs.
+
+
 
 ```{r load_flob, include = FALSE}
 
@@ -538,7 +541,7 @@ if (base::isFALSE(network::get.vertex.attribute(flobusiness, 'Wealth')[9] == 103
 
 
 
-Let's run a dyadic independent
+Let's run a dyadic independent model
 
 ```{r flob_dyad_indep, exercise = TRUE, exercise.setup = "load_flob"}
 
@@ -547,10 +550,10 @@ summary(fit)
 
 ```
 
-You cannot see it in the tutorial, but if you check on your `r rproj()` Render tab you will see some text informing us that the results are estimated computing maximum pseudolikelihood estimation (MPLE). 
+You cannot see it in the tutorial, but if you check your `r rproj()` Render tab, you will see some text informing us that the results are estimated using maximum pseudolikelihood estimation (MPLE). 
 
 Let's check a dyadic dependent example to compare. We can simply add the dyadic
-dependent term `degree` to the previous model. This specification checks on the probability that the number of nodes with degree one in the florentine business network is non-random. We care only about the output text now, though. Let's read on.
+dependent term `degree` to the previous model. This specification assesses the probability that the number of nodes with degree 1 in the Florentine business network is non-random. We care only about the output text now, though. Let's read on.
 
 ```{r flob_dyad_dep, exercise = TRUE, exercise.setup = "load_flob"}
 
@@ -569,22 +572,28 @@ This text (also in the console) tells us that results are computed using Monte C
 Dyadic dependent models cannot be estimated as the dyadic independent ones. 
 They are solved using Monte Carlo Markov Chains that stochastically approximate the Maximum Likelihood. 
 
-This means that when you have dyadic dependent terms, your model is computationally more complex. It might take longer to run, and you also need to check whether the simulation is actually doing its job correctly or if your specification is driving the model in some other directions. To check on all these things, you need to run MCMC diagnostics. 
+This means that when you have dyadic dependent terms, your model is computationally more complex. It will take longer to run, and you also need to check whether the simulation is actually doing its job correctly or if your specification is driving the model in some other directions. To check on all these things, you need to run MCMC diagnostics. 
 
-Nitty-gritty: If you get great statistics (coefficients, p-values) next to poor diagnostics results, you can trash your model. It's important!
+Nitty-gritty: If you get great statistics (coefficients, p-values) next to poor MCMC diagnostic results, you can trash your model. Remember this, it is crucial!
 
 ## MCMC Dyagnostics
 
-While solving an ERGM with MPLE is almost the same as running Logit Models, computing your results using MCMC simulations is something quite far from that. Conceptually, you are simulating (Monte Carlo) many networks (Markov chains) that are described and evolve according to the terms you specified. The values assumed by each parameter in the simulation are 'managed' by an algorithm (such as the Metropolis Hastings) that helps them get closer to the observed network's values. If the estimates do not progressively get closer to the observed network's ones, it means that your model is not working as it should, and you get a poor fit, or in the worst-case scenario, the degeneracy of the model. The latter indicates that the estimates do not 'converge' toward the values of the observed (actual) network.
+While solving an ERGM with MPLE as the dyadic independent model is almost the same as running Logit Models, a dyadic dependent model that uses MCMC simulations is something quite far from that. 
 
-If the terms chosen for your model were important for your dyadic independent model, they are absolutely crucial for your dyadic dependent one since they are literally the rules that govern the world you are simulating (your Sim City). Your goal is to create a synthetic reality that reproduces the social processes that generated your observed network. If you specify the model in a different direction, your synthetic reality will look very different from the observed one. Same as in a dystopian movie, where some 'wrong specification' generates unwanted consequences. 
+Conceptually, you are simulating (Monte Carlo) many networks (Markov chains) that are described and evolve according to the terms you specified. The values assumed by each parameter in the simulation are 'managed' by an algorithm (such as the Metropolis-Hastings) that helps them get closer to the observed network's values. If the estimates do not progressively get closer to the observed network's estimates, it means your model is not working as it should, resulting in a poor fit or, in the worst case, model degeneracy (yes, the model crashes). The latter indicates that the estimates do not 'converge' toward the values of the observed (actual) network.
 
-Let's use a metaphor. You go to a fancy shop, and you buy the best cookie of your life. But it is too expensive! You can't possibly buy that cookie every week. Hence you decide to try to recreate the recipe at home, making several attempts. 100 g of flour, 120 of sugar, 2 eggs? Or 120 of flour, 100 of sugar, and 1 egg? You try all the combinations that are more likely to taste like the original until you approximate the original cookie. Let's also say that you have a little elf that helps you a little with the job. That's what the simulations and your specifications are doing. 
+If the terms chosen for your model were important for your dyadic independent model, they are absolutely crucial for your dyadic dependent one, since they are literally the rules that govern the world you are simulating (your Sim City). 
+
+Your goal with dyadic dependent ERGMs is to create a synthetic reality that reproduces the social processes that generated your observed network. If you specify the model in a different direction, your synthetic reality will look very different from the observed one. Same as in a dystopian movie, where some 'wrong specification' generates unwanted consequences. 
+
+Let's use a metaphor. You go to a fancy shop, and you buy the best cookie of your life. But it is too expensive! You can't possibly buy that cookie every day. Hence, you decide to try to recreate the recipe at home, making several attempts. 100 g of flour, 120 of sugar, 2 eggs? Or 120 of flour, 100 of sugar, and 1 egg? You try all the combinations that are most likely to taste like the original until you approximate the original cookie's flavor. Let's also say that you have a little elf who helps you a little with the job. That's what the simulations and your specifications are doing in an ERGM. 
+
+
 
 ![](images/4499.png){width=75%}
 
 
-Let's take a look at what a good fit looks like! 
+Let's take a look at what a good model fit looks like! 
 
 ### Good Fit
 
