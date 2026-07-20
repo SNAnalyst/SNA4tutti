@@ -1029,7 +1029,7 @@ summary(sampson ~ edges + triadcensus)
 
 ```
 
-Waw! In the Sampson network we observe every configuration but the 120C. 
+Wow! In the Sampson network we observe every configuration but the 120C. 
 That's a useful term indeed!
 
 Let's run the model and see what happens.
@@ -1041,8 +1041,8 @@ samM1 <- ergm::ergm(sampson ~ edges +
                     control = ergm::control.ergm(MCMC.burnin = 5000,
                                               MCMC.samplesize = 10000,
                                               seed = 123456,
-                                              MCMLE.maxit = 2,
-                                              parallel = 2,
+                                              MCMLE.maxit = 3,
+                                              parallel = 3,
                                               parallel.type = "PSOCK"))
 
 summary(samM1)
