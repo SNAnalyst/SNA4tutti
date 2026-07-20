@@ -101,11 +101,11 @@ pre {
 
 ## Introduction 
 
-Since now you rock the basic one, welcome to the magical mystery tour on advanced ERGMs!
+Since you have now mastered the basics, welcome to the advanced ERGM tutorial.
 
-In this tutorial, we are going to cover two types of advanced ERGMs. First, the bipartite. It can be specified as a particular option of the regular ERGM with the `ergm` package. Second, we are going to learn the weighted ERGM, which requires a new package named `GERGM`, standing for Generalized Exponential Random Graph Models
+In this tutorial, we will cover two types of advanced ERGMs. First, the bipartite ERGM, which can be specified as a particular option of the regular ERGM with the `ergm` package. Second, we will learn the weighted ERGM, which requires a new package named `GERGM`, standing for Generalized Exponential Random Graph Models.
 
-Put your seat belt on, and let's go!
+Fasten your seat belt, and let us begin.
 
 ![](images/the-beatles-magical-mystery-tour-album-i56827.jpg){width=75%}
 
@@ -155,17 +155,17 @@ All packed up! Let's roll!!
 
 ## The 7-step Research Flow
 
-From now on, when we fit a model, we put it in the context of carrying out actual research. To do so, we rely on the 7-step flow approach introduced in the ERGM2 Lab: 
+From now on, when we fit a model, we place it in the context of doing actual research. To do so, we rely on the 7-step flow approach introduced in the ERGM2 Lab:
 
 1. Literature research/ Questions & Hypotheses (based on the literature) [- data collection]
-2. Data Exploration + terms selection
+2. Data exploration + term selection
 3. Running models (baseline, exploratory models, final model)
 4. MCMC diagnostics of the model selected as the best
 5. Goodness of fit
 6. Interpreting results
-7. Write up about your research telling how this journey went
+7. Writing up your research and explaining how this journey went
 
-Take a look at the image below. It guides you step by step on how to use the flow!
+Take a look at the image below. It guides you step by step through how to use the flow.
 
 ![](images/7stepsFlow.png){width=100%}
 
@@ -174,22 +174,23 @@ Take a look at the image below. It guides you step by step on how to use the flo
 
 Bipartite ERGMs require a bipartite network. DUH!
 
-Just to be clear. A bipartite network has two sets of nodes that can be connected to each other but not within, as in the image below.
+Just to be clear. A bipartite network has two sets of nodes that can be connected to each other but not within each set, as in the image below.
 
 ![](images/Simple-bipartite-graph.png){width=75%}
 
-Even if the concept of bipartite network is pretty straightforward, 
-Setting up your network as a bipartite to be ready for a bipartite ERGM with the `ergm` package is not that simple. 
+Even if the concept of a bipartite network is pretty straightforward, 
+Setting up your network as a bipartite, ready for a bipartite ERGM with the `ergm` package, can be a bit tricky.
 
 Let's see how to do it step by step. 
+
 
 ### Setting up a network as bipartite
 
 Both unimodal and bipartite networks can be expressed as node lists, but while unimodal networks can also be represented by adjacency matrices, bipartite networks require _incidence matrices_.
 
-While adjacency matrices are squared, with the same items in rows and columns, incidence matrices have the first set of elements in rows and the second set in columns. Hence if we have a bipartite network of 10 friends going to Cinema Club four times in total, we will get an incidence matrix of 10 by 4 elements. 
+While adjacency matrices are squared, with the same items in rows and columns, incidence matrices have the first set of elements in rows and the second set in columns. Hence, if we have a bipartite network of 10 friends going to the Cinema Club four times in total, we will get an incidence matrix of 10 by 4 elements. 
 
-You can import a bipartite network in the `network` package (that we need to run ERGMs with the `ergm` package) both using the edge list and the incidence matrix. 
+You can import a bipartite network in the `network` package (which we need to run ERGMs with the `ergm` package) using both the edge list and the incidence matrix. 
 
 Let's see how to do it with an incidence matrix. 
 
@@ -222,15 +223,15 @@ if (base::isFALSE(sum(network::get.vertex.attribute(kidsnet, 'vertex.names')) ==
 
 ```
 
-Let's take a look at our incidence matrix 
+Let's take a look at our incidence matrix.
 
 ```{r bip01, exercise = TRUE, exercise.setup = "load_IncMat"}
 mdata
 ```
 
-Our first set of nodes (rows) is constituted by 10 kids, while our second set is constituted by 4 playdates the kids go to (columns). 
+Our first set of nodes (rows) consists of 10 kids, while our second set consists of the 4 playdates the kids go to (columns). 
 
-Let's turn it into a `network` object. We need to specify that it is a bipartite and undirected network.
+Let's turn it into an object of class `network`. To do that, we need to specify that it is a bipartite, undirected network.
 
 
 ```{r bip02, exercise = TRUE, exercise.setup = "load_IncMat"}
@@ -240,9 +241,15 @@ kidsnet
 
 Ok, we are done! Is this enough? Well, no. Let's insert attributes. Shall we? 
 
-We already have three attributes stored in 3 vectors, respectively called "vertex.names", "Age", "Gender". 
+We already have three attributes stored in three vectors called "vertex.names", "Age", and "Gender". 
 
-We simply need to include them in the `network` object.
+We simply need to include them in the `network` object we already created.
+
+Pay attention to one thing: The attributes here refer to the kids, but the number of kids is 10, and the number of nodes in the network is 14. Hence, in order to make this work, the vectors containing the attributes will have information about the gender and age of the 10 kids, and NA stored for the parties, since this information does not exist for the parties, but the network expects a vector with 14 elements given that we have 14 nodes. If the attribute was about the party, we would still have 14 elements in the vector, with the first 4 describing the party and the last 10 coded as NA since an attribute for the party is not applicable to kids. For example, if the play-dates could be classified as good "G" or bad "B", we would have a vector like this one. 
+
+`party_quality <- c(G, B, B, G, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)`
+
+This is the logic.
 
 ```{r bip03, exercise = TRUE, exercise.setup = "load_IncMat"}
 
@@ -283,10 +290,9 @@ if (base::isFALSE(network::get.vertex.attribute(kidsnet, 'vertex.names')[1] == "
 
 
 
-At this point, you might really think we are done. Are we? In fact, we are not. We need to pass an extra attribute to the network so that it is crystal clear that we are dealing with a bipartite. 
+At this point, you might really think we are done. Are we? In fact, we are not. We need to pass an extra attribute to the network so it is crystal clear that we are dealing with a bipartite graph. 
 
 We are going to code an attribute named _"bipartite"_. The bipartite attribute needs to have the same dimension as the first partition. So in our case, it will be 10.
- 
 
 
 ```{r bip04readynet, exercise = TRUE, exercise.setup = "bip03"}
@@ -305,15 +311,15 @@ Let's fit Bipartite ERGMs using the 7-step flows!
 
 #### Step One
 
-As world experts in children behavior and play-date-ology (just kidding!), we are fully aware of the literature, and we specify three hypotheses
+As world experts in children's behavior and play-date-ology (just kidding!), we are fully aware of the literature, and we specify three hypotheses.
 
 1. Older kids go to more playdates
 2. There is homophily by gender (girls play with girls, boys play with boys)
-3. Some play dates have more attendees than others (some sort of popularity effect)
+3. Some playdates have more attendees than others (some sort of popularity effect)
 
 #### Step two
 
-Let's Inspect our data. 
+Let's inspect our data. 
 
 First, we should get to know our attributes.
 
@@ -329,11 +335,9 @@ class(network::get.vertex.attribute(kidsnet, "Gender"))
 
 ```
 
-Do you see those NAs at the end of the vectors? The reason why there are there is because the attributes make sense only for kids and not for play dates, but `network` stores information in this way. Be careful to understand the data architecture of bipartite graphs in `network`; otherwise, you might get into errors that require painful debugging sessions!
+Do you see those NAs at the end of the vectors? That's what we discussed before. Once more, they are there because the attributes make sense only for kids, not for play dates, but `network` stores information this way. Be careful to understand the data architecture of bipartite graphs in `network`; otherwise, you might get into errors that require painful debugging sessions!
 
-
-
-Then, we get acquainted with some network structural features, such as degree
+Then, we get acquainted with some network structural features, such as degree.
 
 ```{r bip06, exercise = TRUE, exercise.setup = "bip04readynet"}
 
@@ -366,7 +370,7 @@ summary(kidsnet ~ b2star(2:10))
 
 ```
 
-Have you realized that you can specify the effects both focusing on one partition or the other? Make sure you pay close attention to this!
+Have you realized that you can specify the terms, both focusing on one partition or the other? Make sure you pay close attention to this!
 
 Hence, we can now specify our terms, 
 
@@ -374,18 +378,18 @@ H1. `b1cov("Age")`
 H2. `b1nodematch("Gender")`
 H3. some stars or degree terms
 
-Remember that the bipartite terms are different from the unimodal one. The main difference is that you can specify them for one partition or the other, according to your research questions and hypotheses. 
+Remember that the bipartite terms are different from the unimodal ones. The main difference is that you can specify them for one partition or the other, according to your research questions and hypotheses. 
 
-Do you want to explain kids behavior or play dates occurrence? 
+Do you want to explain kids' behavior or the occurrence of play dates? You can do either or both
 
-You can explore them using the function:
+You can find all the terms you need using the function:
 
 `ergm::search.ergmTerms(categories = 'bipartite')`
 
 #### Step 3
 
 
-First baseline models and dyadic independent exploratory models
+First, we run baseline models and dyadic independent exploratory models to get a sense of how the data will behave.
 
 
 ```{r bip07, exercise = TRUE, exercise.setup = "bip04readynet"}
@@ -403,14 +407,13 @@ summary(m2)
 ```
 
 
-Now we can run dyadic dependent exploratory models. Since the dyadic dependent involves a simulation, they are computationally more intense. To reduce the computational time and make the model work better, we can try to do two things. 
+Now we can run dyadic dependent exploratory models. Since the dyadic dependent involves a simulation, it is computationally more intensive. To reduce computational time and improve model performance, we can try two things. 
 
-First, we should constraint the model. For instance, in the example below, I'm asking the simulation to exclude networks with nodes having degrees lower than 1 (isolate) and larger than 14 (max N nodes) since they would be unrealistic in the current situation that we are exploring.
+First, we should constrain the model. For instance, in the example below, I'm asking the simulation to exclude networks with nodes having degrees lower than 1 (isolates) and larger than 14 (max N nodes) since they would be unrealistic in the current situation that we are exploring. Careful not to specify the model too much, since the simulation still needs the freedom to move.
 
-Second, we can control the model specifying how the simulation should run (but we know how to do this already!).
+Second, we can control the model by specifying how the simulation should run (but we already know how to do this!).
 
 Let's get to it.
-
 
 
 ```{r bip08, exercise = TRUE, exercise.setup = "bip04readynet"}
@@ -436,7 +439,7 @@ _ALERT:_
 
 THIS MODEL USES PARALLELIZATION. CHECK YOUR NUMBER OF CORES BEFORE RUNNING. 
 
-If you have more than two cores, you can increase the number below and make it faster. 
+If you have more than three cores, you can increase the number below and make it faster. 
 
 
 ```{r bip09finMod, exercise = TRUE, exercise.setup = "bip04readynet"}
@@ -456,21 +459,23 @@ summary(m4)
 
 #### Step four
 
-Let's assume that we selected our best model comparing AIC and BIC across them, and we now move on to check the MCMC diagnostics.
+Let's assume we selected our best model by comparing AIC and BIC and making sure that all hypotheses are included in the model specification, and we now move on to check the MCMC diagnostics.
 
-Is this model good? By running `ergm::mcmc.diagnostics(m4)` you would get something like the image below
+Is this model good? By running `ergm::mcmc.diagnostics(m4)` you would get something like the image below.
+
+
 
 
 ![](images/m4MCMCdianostics.png){width=100%}
 
 
-If and only if you think that the model is good enough, you can move to the goodness of fit. Otherwise, get back and try a different model specification (getting back to steps 1, 2, 3).
+If and only if you think the model is good enough, you can move on to goodness of fit. Otherwise, go back and try a different model specification (getting back to steps 1, 2, 3).
 
 
 
 #### Step 5
 
-Is the goodness of fit good? If and only if you think that the model is good enough, you can move to the interpretation of results! Otherwise, get back and try a different model specification (getting back to steps 1, 2, 3).
+Is the goodness of fit good? If and only if you think that the model is good enough, you can move to the interpretation of results! Otherwise, go back and try a different model specification (getting back to steps 1, 2, 3).
 
 ```{r bip11, exercise = TRUE, exercise.setup = "bip09finMod"}
 
@@ -487,7 +492,7 @@ Let's assume that it is good enough for now so that we can move on...
 
 The model we run (m4) seems nice enough to read results according to steps 4 and 5. Ok, let's read the results!
 
-Let's look at coefficients and odd ratios first.
+Let's look at coefficients and odds ratios first.
 
 ```{r bip12, exercise = TRUE, exercise.setup = "bip09finMod"}
 
@@ -496,13 +501,12 @@ snafun::stat_ef_int(m4, type = "odds")
 
 ```
 
-The only significant term in the model is `nodematch` by gender. Interpreting the coefficient, we know that kids of the same gender tend to attend the same playdates. The extent to which kids go to a certain party (form edges) increases if the kids are both girls or boys.
+The only significant term in the model is `nodematch` by gender. Interpreting the coefficient, we know that kids of the same gender tend to attend the same playdates. The extent to which kids go to a certain party (form edges) increases if the kids are of the same gender.
 
-Interpreting the odds ratio ($2.375$), we know that this effect is really strong since the OR is much larger than 1. 
-
-Note: you might have slightly different odds since the model is stochastic!
+Interpreting the odds ratio (this is stochastic, but by exponentiating the coefficient you should get a number similar to $2.375$), we know that this effect is really strong since the OR is much larger than 1. 
 
 Let's look at probabilities.
+
 
 ```{r bip13, exercise = TRUE, exercise.setup = "bip09finMod"}
 
@@ -510,9 +514,9 @@ snafun::stat_ef_int(m4, type = "prob")
 
 ```
 
-Looking at the probabilities, we know that the probability of kids of the same gender attending the same play date is 70.4 % ($0.704*100$). Waw! this is really a strong effect, and it is in line with the OR, just easier to interpret!
+Looking at the probabilities, we know that the probability of kids of the same gender attending the same play date is 70.4 % ($0.704*100$). Wow! This is really a strong effect, and it is in line with the OR, just easier to interpret!
 
-Note: you might have slightly different probabilities since the model is stochastic!
+Note: again, you might have slightly different probabilities since the model is stochastic!
 
 ### Step 7
 
@@ -522,23 +526,24 @@ Enough about bipartite! We can now move to mystery tour part two: the weighted E
 
 ## Weighted ERGMs
 
-Here we go with weighted networks! This kind of network is also expressed as an adjacency matrix. Still, rather than having a matrix populated by 0s and 1s, we have a matrix populated by any other number representing a weight. These weights imply that some edges might define stronger relationships than others. 
 
-Even if any graph can have a weight, with weighted ERGMs, we can only analyze fully connected graphs.
+Here we go with weighted networks! This kind of network is also expressed as an adjacency matrix. Still, rather than having a matrix populated by 0s and 1s, we have a matrix populated by other numbers representing weights. These weights imply that some edges might define stronger relationships than others. 
+
+Even if any graph can have weights, with weighted ERGMs we can only analyze fully connected graphs.
 
 The type of weight makes a real difference. 
 
 If the weight attributed to the edges of a fully connected graph is a count variable, we can run an ERGM using a variant of the `ergm` package called `ergm.count`. 
 
-This would work in a situation when we have three waves of friendship data that we recode as 
+This would work in a situation where we have three waves of friendship data that we recode as 
 
 * friends for 1 year - weight 1
 * friends for 2 years - weight 2
 * friends for 3 years - weight 3
 
-This is a count variable. The weight must be larger than 0 (non-negative), and it cannot be in between the categories that it describes.
+This is a count variable. The weight must be larger than 0 (non-negative), and it cannot fall between the categories it describes.
 
-However, weight can express many other realities that need more complex definitions, such as the money export between countries measured in dollars. The `GERGM` package can handle both the count weight and the more complex cases, and for this reason, we are going to move out of the `statnet` environment for this kind of models. 
+However, weight can express many other realities that need more complex definitions, such as the money export between countries measured in dollars. The `GERGM` package can handle both the count weight and the more complex cases, and for this reason, we are going to move out of the `statnet` environment for this kind of model. 
 
 
 Let's take a look at a real case study published by 
@@ -547,6 +552,7 @@ Let's take a look at a real case study published by
 `“Stochastic weighted graphs: Flexible model specification and simulation”. Social Networks, 49, 37–47.`
 
 We have 17 countries exchanging money with each other (international trade) in 2005.
+
 
 ```{r weightloadData, echo = FALSE}
 
@@ -615,7 +621,7 @@ if (base::isFALSE(base::round(sum(net_exports_2005[2,2:17],3)) == 3 &
 ```
 
 
-This is how this weighted network looks like
+This is how this weighted network looks.
 
 ```{r weight01, exercise = TRUE, exercise.setup = "weightloadData"}
 
@@ -630,7 +636,7 @@ plot(lending,
 
 ### Importing the Data
 
-The `GERGM` package does things in its own way with its own environment, it does not rely either on `igraph` not `network` formats. 
+The `GERGM` package works in its own way, with its own environment; it does not rely on either `igraph` or `network` formats. 
 Hence, you need to pass row data (weighted adjacency matrices and data frames) to this model. 
 
 
@@ -653,7 +659,7 @@ covariate_data_2005
 
 ### Running a weighted ERGM
 
-Ok, let's move on with this research using our seven-steps flow. 
+Ok, let's move on with this research using our seven-step flow. 
 
 #### Step one (Theory/Questions/Hypotheses)
 
@@ -663,19 +669,20 @@ As usual, let's assume that we are experts in international trade and fully awar
 * 2. The GDP is associated with the probability of sending more money (high weight ties)
 * 3. The GDP is associated with the probability of receiving more money (high weight ties)
 
-#### Term Specicifation
+#### Term Specification
+
 The terms are a bit different than the `ergm` package, but not that much.
 
 * 1. `mutual`
 * 2. `sender`
 * 3. `receiver`
 
-Unlike the `ergm` set up, in the `GERGM` one, we can attach an attribute to the sender and receiver effects.
+Unlike the `ergm` setup, in the `GERGM` one, we can attach an attribute to the sender and receiver effects.
 
 ### Step two (Data Exploration)
 
 
-Let's explore the covariates we have in our data set.
+Let's explore the covariates in our dataset.
 
 
 ```{r weight04, exercise = TRUE, exercise.setup = "weightloadData"}
@@ -704,7 +711,7 @@ Note1: In the `GERGM` environment, you specify the formula of the ERGM before ru
 
 Note2: In the `GERGM` environment, a baseline model with `edges` only does not work. Hence, try directly with the other variables.
 
-NOTE3: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
+NOTE3: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it directly in `RStudio`. You can load the data using the `data` function. 
 
 `data("lending_2005", package = "GERGM")`
 
@@ -769,7 +776,7 @@ m1 <- GERGM::gergm(formula1,
 
 
 _NOTE:_
-I inserted a burn-in of 1000 and simulated 5000 networks. I used this set up to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
+I inserted a burn-in of 1000 and simulated 5000 networks. I used this setup to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
 
 
 
@@ -801,24 +808,24 @@ m2 <- GERGM::gergm(formula2,
 
 
 _NOTE:_
-I inserted a burn-in of 1000 and simulated 5000 networks. I used this set up to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
+I inserted a burn-in of 1000 and simulated 5000 networks. I used this setup to speed up computation within the tutorial. You will need to increase these numbers to something like 10k and 40k (or more) when you will use these models for real!
 
 
-Is this model good enough? Let's analyse the diagnostics!
+Is this model good enough? Let's examine the diagnostics!
 
 
 #### Step four (MCMC diagnostics)
 
-Even if the `GERGM` models automatically prints info about the quality of the model, it is possible to reprint them separately too. 
+Even if the `GERGM` model automatically prints information about the model's quality while running, it is also possible to reprint it separately. 
 
-Here we can reprint and observe the MCMC diagnostics.
+Here, we can reprint and observe the MCMC diagnostics.
 
 ```{r weight09, exercise = TRUE, exercise.setup = "weight08"}
 GERGM::Trace_Plot(m2)
 ```
 
 
-Since this model is different from the regular ERGM, the trace plot doesn't need to be centered at 0. Instead, there is a black line telling you where the trace plot should be centered. Does this look good to you? 
+Since this model is different from the regular ERGM, the trace plot doesn't need to be centered at 0. Instead, a black line indicates where the trace plot should be centered. Does this look good to you? 
 
 ```{r testquiz, echo = FALSE}
 learnr::quiz(learnr::question("Does the trace plot look good to you?",
@@ -871,7 +878,7 @@ if (base::isFALSE(q1in$answers[[3]]$correct)) {
 
 ```
 
-Since our MCMC diagnostics are not good enough, let's move on to the GOF, just to learn how to look at it!
+Since our MCMC diagnostics aren't good enough, let's move on to the GOF to learn how to interpret it!
 
 
 #### Step five (Goodness of Fit)
@@ -933,7 +940,7 @@ if (base::isFALSE(q1in$answers[[2]]$correct)) {
 
 ```
 
-The MCMC diagnostics and GOF in this model are not the best. It might be due to the small size of the simulation. Hence, if this happens to you, try to increase the burn-in and the number of chains before trashing the entire model. However, this cannot be done within the tutorial. Play around with these models in your Rstudio environment. Here is the code to load the data, again :)
+The MCMC diagnostics and GOF in this model are not the best. It might be due to the small size of the simulation. If this happens to you, try increasing the burn-in and the number of chains before trashing the entire model. However, this cannot be done within the tutorial. Play around with these models in your RStudio environment. Here is the code to load the data, again :)
 
 `data("lending_2005", package = "GERGM")`
 
@@ -943,9 +950,9 @@ The MCMC diagnostics and GOF in this model are not the best. It might be due to 
 
 #### Step Six 
 
-How about the results? Well, this model is pretty bad, but let's learn how to explore them anyway, pretending that it is ok!
+How about the results? Well, this model is pretty bad, but let's learn how to explore the results anyway, pretending it is okay!
 
-The package already provides an inbuilt estimates plot. Red means significant, while the other colors mean the opposite. But a table with coefficient could be nice too, right? Here we go.
+The package already provides an inbuilt estimates plot. Red means significant, while the other colors mean the opposite. But a table with coefficients could be nice too, right? Here we go.
 
 ```{r weight11, exercise = TRUE, exercise.setup = "weight08"}
 
@@ -956,16 +963,16 @@ GERGM::Estimate_Plot(m2)
 
 ```
 
-Mutual is not significant so, apparently, trade is a one-way operation. But sender and receiver for what concerns GDP are! It seems that if we take GDP into account, we can predict the intensity of the trade relationship (the weight of the edge). In fact, here, we don't only predict the existence of an edge but also the strength of the edge. GDP seems to be positively associated with trade. Countries with higher GDP trade more, both are sending and receiving goods. It makes sense, right? 
+Mutual is not significant, so apparently the trade is a one-way operation. But sender and receiver as far as GDP are concerned! It seems that if we take GDP into account, we can predict the intensity of the trade relationship (the weight of the edge). In fact, here, we don't only predict the existence of an edge but also the strength of the edge. GDP seems to be positively associated with trade. Countries with higher GDP trade more, both sending and receiving goods. It makes sense, right? 
 
-How much does GDP influence the relationships between nodes? Well, up to you to check odds ratios and probabilities to find out :)
+How much does GDP influence the relationships between nodes? Well, up to you to check odds ratios and probabilities to find out. I leave this to you since you are already a pro :)
 
 
 ## Conclusion
 
 Our magical mystery tour is coming to an end. Now you can fly back home like a rocket with your advanced ERGM graduation hat!
 
-Be ready to jump into a time machine with temporal ERGM (TERGM) next week!
+Be ready to jump into a time machine with temporal ERGM (TERGM) in the next tutorial!
 
 ![](images/Rocket-Dog.jpg){width=75%}
 
