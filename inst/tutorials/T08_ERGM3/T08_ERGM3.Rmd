@@ -245,9 +245,9 @@ We already have three attributes stored in three vectors called "vertex.names", 
 
 We simply need to include them in the `network` object we already created.
 
-Pay attention to one thing: The attributes here refer to the kids, but the number of kids is 10, and the number of nodes in the network is 14. Hence, in order to make this work, the vectors containing the attributes will have information about the gender and age of the 10 kids, and NA stored for the parties, since this information does not exist for the parties, but the network expects a vector with 14 elements given that we have 14 nodes. If the attribute was about the party, we would still have 14 elements in the vector, with the first 4 describing the party and the last 10 coded as NA since an attribute for the party is not applicable to kids. For example, if the play-dates could be classified as good "G" or bad "B", we would have a vector like this one. 
+Pay attention to one thing: The attributes here refer to the kids, but the number of kids is 10, and the number of nodes in the network is 14. Hence, in order to make this work, the vectors containing the attributes will have information about the gender and age of the 10 kids, and NA stored for the play-dates, since this information does not exist for the play-dates, but the network expects a vector with 14 elements given that we have 14 nodes. If the attribute was about the play-dates, we would still have 14 elements in the vector, with the first 4 describing the play-dates and the last 10 coded as NA since an attribute for the play-dates is not applicable to kids. For example, if the play-dates could be classified as good "G" or bad "B", we would have a vector like this one. 
 
-`party_quality <- c(G, B, B, G, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)`
+`playdates_quality <- c('G', 'B', 'B', 'G', 'NA', 'NA', 'NA', 'NA', 'NA', 'NA', 'NA', 'NA', 'NA', 'NA')`
 
 This is the logic.
 
